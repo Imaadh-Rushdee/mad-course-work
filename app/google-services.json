@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "840027186851",
+    "project_id": "madcoursework-f1015",
+    "storage_bucket": "madcoursework-f1015.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840027186851:android:d891aeb5608b54ec844116",
+        "android_client_info": {
+          "package_name": "com.nibm.madcoursework"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD47qcEwMEDE9KsE31zdsmE5kzAZHRLicg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
