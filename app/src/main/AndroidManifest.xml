@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pizzamaniaapp">
         <activity
+            android:name=".orderPayment"
+            android:exported="false" />
+        <activity
+            android:name=".ongoingOrder"
+            android:exported="false" />
+        <activity
+            android:name=".orderDetails"
+            android:exported="false" />
+        <activity
+            android:name=".deliveryPartnerDashboard"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
