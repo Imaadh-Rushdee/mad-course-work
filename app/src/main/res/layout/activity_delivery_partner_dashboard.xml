@@ -1,10 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".deliveryPartnerDashboard">
+    >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF5722"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10px">
+
+        <!-- App Logo on the left -->
+        <ImageView
+            android:id="@+id/logoImg"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:contentDescription="app-logo"
+            android:src="@drawable/logo" />
+
+        <!-- Text in the middle -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/beachday"
+            android:gravity="center"
+            android:text="Pizza Mania"
+            android:textColor="#FFFFFF"
+            android:textSize="80px" /> <!-- custom font -->
+
+        <!-- Profile Icon on the right -->
+        <ImageButton
+            android:id="@+id/profileImg"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:background="@null"
+            android:contentDescription="Profile"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80px"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome "
+            android:id="@+id/welocmeTxt"
+            android:textSize="45px"
+            android:fontFamily="@font/frank"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Partner_name"
+            android:id="@+id/driver_name"
+            android:textSize="45px"
+            android:fontFamily="@font/frank"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="!"
+            android:id="@+id/symbol"
+            android:textSize="45px"
+            android:fontFamily="@font/frank"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50px"
+        android:orientation="vertical">
+
+        <!-- TextView for "No Orders" -->
+        <TextView
+            android:id="@+id/tvNoOrders"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="No Orders Available!"
+            android:textSize="18sp"
+            android:textColor="#808080"/>
+
+        <!-- Scrollable container for orders -->
+        <ScrollView
+            android:id="@+id/scrollOrders"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"> <!-- Hidden initially -->
+
+            <LinearLayout
+                android:id="@+id/ordersContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <!-- Add order cards here -->
+
+            </LinearLayout>
+        </ScrollView>
+
+        <ImageButton
+            android:id="@+id/refreshIcon"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:src="@drawable/refresh"
+            android:background="@null"
+            android:contentDescription="refresh"
+            android:scaleType="centerCrop"
+            android:layout_margin="60px"
+            android:layout_gravity="end"/>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
