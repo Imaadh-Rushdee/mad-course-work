@@ -43,10 +43,10 @@ public class orderDetails extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_order_details);
 
         // Initialize UI
-        txtOrderId = findViewById(R.id.txtOrderId);
-        txtCustomerName = findViewById(R.id.txtCustomerName);
-        txtAddress = findViewById(R.id.txtAddress);
-        txtTotalPrice = findViewById(R.id.txtTotalPrice);
+        txtOrderId = findViewById(R.id.orderId);
+        txtCustomerName = findViewById(R.id.customerName);
+        txtAddress = findViewById(R.id.address);
+        txtTotalPrice = findViewById(R.id.totalAmount);
         txtDistanceTime = findViewById(R.id.txtDistanceTime);
 
         // Get data from intent
@@ -56,10 +56,10 @@ public class orderDetails extends AppCompatActivity implements OnMapReadyCallbac
         String totalPrice = getIntent().getStringExtra("totalPrice");
 
         // Set dummy data in TextViews
-        txtOrderId.setText("Order ID: " + orderId);
-        txtCustomerName.setText("Customer: " + customerName);
-        txtAddress.setText("Address: " + address);
-        txtTotalPrice.setText("Total: $" + totalPrice);
+        txtOrderId.setText(orderId);
+        txtCustomerName.setText(customerName);
+        txtAddress.setText(address);
+        txtTotalPrice.setText("Rs." + totalPrice);
 
         // Map setup
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
