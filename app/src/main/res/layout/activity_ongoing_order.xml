@@ -11,15 +11,17 @@
         android:background="#FF5722"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="10px">
 
+        <!-- App Logo on the left -->
         <ImageView
             android:id="@+id/logoImg"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="100px"
+            android:layout_height="100px"
             android:contentDescription="app-logo"
             android:src="@drawable/logo" />
 
+        <!-- Text in the middle -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
@@ -29,12 +31,13 @@
             android:gravity="center"
             android:text="Pizza Mania"
             android:textColor="#FFFFFF"
-            android:textSize="80px" />
+            android:textSize="80px" /> <!-- custom font -->
 
+        <!-- Profile Icon on the right -->
         <ImageButton
             android:id="@+id/profileImg"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="100px"
+            android:layout_height="100px"
             android:background="@null"
             android:contentDescription="Profile"
             android:scaleType="centerCrop"
