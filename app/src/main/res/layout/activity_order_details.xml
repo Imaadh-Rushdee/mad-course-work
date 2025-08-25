@@ -209,6 +209,7 @@
             android:text="Accept"
             android:backgroundTint="#388E3C"
             android:textColor="@color/white"
+            android:onClick="acceptOrder"
             android:layout_marginLeft="30px"
             />
     </LinearLayout>

@@ -1,9 +1,11 @@
 package com.example.pizza_mania_app;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -135,4 +137,10 @@ public class orderDetails extends AppCompatActivity implements OnMapReadyCallbac
             }
         }).start();
     }
+
+    public void acceptOrder(View view) {
+        Intent intent = new Intent(this, ongoingOrder.class);
+        startActivity(intent);
+    }
+
 }
