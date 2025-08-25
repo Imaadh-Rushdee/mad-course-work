@@ -43,8 +43,11 @@ dependencies {
 
     // ✅ Firebase Analytics
     implementation("com.google.firebase:firebase-analytics")
-
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
     // ✅ Firestore (Add this)
+    implementation("com.google.maps.android:android-maps-utils:3.4.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.google.firebase:firebase-firestore")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     testImplementation(libs.junit)

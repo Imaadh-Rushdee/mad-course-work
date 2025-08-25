@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    android:id="@+id/main"
     android:layout_height="match_parent"
     >
 
@@ -89,7 +90,8 @@
             android:gravity="center"
             android:text="No Orders Available!"
             android:textSize="18sp"
-            android:textColor="#808080"/>
+            android:textColor="#808080"
+            android:visibility="gone"/>
 
         <!-- Scrollable container for orders -->
         <ScrollView
@@ -97,7 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:visibility="gone"> <!-- Hidden initially -->
+            android:visibility="visible"> <!-- Hidden initially -->
 
             <LinearLayout
                 android:id="@+id/ordersContainer"

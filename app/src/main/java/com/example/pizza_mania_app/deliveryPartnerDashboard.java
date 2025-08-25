@@ -1,7 +1,9 @@
 package com.example.pizza_mania_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,17 +14,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 public class deliveryPartnerDashboard extends AppCompatActivity {
 
-    private TextView riderName, riderEmail;
     private LinearLayout ordersContainer;
-
-    private FirebaseFirestore db;
-    private String partnerId = "partner_001"; // You can get this from login session
+    private TextView tvNoOrders;
+    private ImageButton refreshIcon;
+    private TextView partnerNameText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,75 +33,87 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
             return insets;
         });
 
-        // Initialize Firebase
-        db = FirebaseFirestore.getInstance();
+        ordersContainer = findViewById(R.id.ordersContainer);
+        tvNoOrders = findViewById(R.id.tvNoOrders);
+        refreshIcon = findViewById(R.id.refreshIcon);
+        partnerNameText = findViewById(R.id.driver_name);
 
-        // Initialize UI components
-        riderName = findViewById(R.id.welcomeText);
-        riderEmail = findViewById(R.id.welcomeText);
-        ordersContainer = findViewById(R.id.ordersRecyclerView);
+        partnerNameText.setText("Welcome Partner!");
 
-        // Load data
-        getDeliveryPartnerDetails();
-        getDeliveryOrders();
+        // Show a dummy order card for now
+        showDummyOrder();
+
+        // Refresh button listener (just shows toast for now)
+        refreshIcon.setOnClickListener(v -> Toast.makeText(this, "Refreshing orders...", Toast.LENGTH_SHORT).show());
     }
 
-    private void getDeliveryPartnerDetails() {
-        db.collection("delivery_partners").document(partnerId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        String name = documentSnapshot.getString("name");
-                        String email = documentSnapshot.getString("email");
+    private void showDummyOrder() {
+        // Hide "No Orders" text
+        tvNoOrders.setVisibility(View.GONE);
 
-                        riderName.setText(name);
-                        riderEmail.setText(email);
-                    } else {
-                        Toast.makeText(this, "Partner details not found", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to load details: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        // Show scroll container
+        findViewById(R.id.scrollOrders).setVisibility(View.VISIBLE);
+
+        // Inflate dummy card
+        View card = getLayoutInflater().inflate(R.layout.order_card, ordersContainer, false);
+
+        // Set dummy values
+        TextView tvOrderId = card.findViewById(R.id.tvOrderId);
+        TextView tvCustomerName = card.findViewById(R.id.tvCustomerName);
+        TextView tvOrderStatus = card.findViewById(R.id.tvOrderStatus);
+
+        tvOrderId.setText("Order ID: 123");
+        tvCustomerName.setText("Customer: John Doe");
+        tvOrderStatus.setText("Status: Pending");
+
+        // Click listener to open order details
+        card.setOnClickListener(v -> {
+            Intent intent = new Intent(deliveryPartnerDashboard.this, orderDetails.class);
+
+            // Pass dummy data
+            intent.putExtra("orderId", "123");
+            intent.putExtra("customerName", "John Doe");
+            intent.putExtra("address", "123 Main Street, Colombo");
+            intent.putExtra("totalPrice", "2500");
+
+            startActivity(intent);
+        });
+
+        // Add card to container
+        ordersContainer.addView(card);
     }
 
-    private void getDeliveryOrders() {
-        db.collection("orders")
-                .whereEqualTo("partner_id", partnerId)
-                .whereEqualTo("status", "assigned")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    ordersContainer.removeAllViews(); // Clear old orders
 
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        String orderId = doc.getId();
-                        String customerName = doc.getString("customer_name");
-                        String address = doc.getString("address");
-                        String amount = doc.getString("amount");
+    // You can reuse this later for backend data
+    private void addOrderCard(String orderId, String customerName, String address, String totalPrice) {
+        // Inflate the XML layout
+        View card = getLayoutInflater().inflate(R.layout.order_card, ordersContainer, false);
 
-                        // Create a simple card view dynamically
-                        View orderCard = getLayoutInflater().inflate(R.layout.order_card, null);
-                        TextView orderTitle = orderCard.findViewById(R.id.orderTitle);
-                        TextView orderDetails = orderCard.findViewById(R.id.orderDetails);
+        // Find the TextViews inside the card
+        TextView tvOrderId = card.findViewById(R.id.tvOrderId);
+        TextView tvCustomerName = card.findViewById(R.id.tvCustomerName);
+        TextView tvOrderStatus = card.findViewById(R.id.tvOrderStatus);
 
-                        orderTitle.setText("Order ID: " + orderId);
-                        orderDetails.setText("Customer: " + customerName + "\nAddress: " + address + "\nAmount: $" + amount);
+        // Set the text dynamically
+        tvOrderId.setText("Order ID: " + orderId);
+        tvCustomerName.setText("Customer: " + customerName);
+        tvOrderStatus.setText("Status: Pending");
 
-                        // Click event for the order card
-                        orderCard.setOnClickListener(v -> onOrderClick(orderId));
+        // Add click listener to open order details
+        card.setOnClickListener(v -> {
+            Intent intent = new Intent(deliveryPartnerDashboard.this, orderDetails.class);
 
-                        ordersContainer.addView(orderCard);
-                    }
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to load orders: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            // Pass dummy data (replace with real DB values later)
+            intent.putExtra("orderId", orderId);
+            intent.putExtra("customerName", customerName);
+            intent.putExtra("address", address);
+            intent.putExtra("totalPrice", totalPrice);
+
+            startActivity(intent);
+        });
+
+        // Add the card to the container
+        ordersContainer.addView(card);
     }
 
-    public void onOrderClick(String orderId) {
-        Toast.makeText(this, "Clicked Order: " + orderId, Toast.LENGTH_SHORT).show();
-        // Here you can start a new activity to show order details
-    }
-
-    public void refreshOrders(View view) {
-        getDeliveryOrders();
-    }
 }
