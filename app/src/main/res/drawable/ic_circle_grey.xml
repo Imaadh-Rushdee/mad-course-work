@@ -1,0 +1,8 @@
+<!-- res/drawable/ic_circle_grey.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <size
+        android:width="60dp"
+        android:height="60dp" />
+    <solid android:color="#BDBDBD" /> <!-- Grey color -->
+</shape>
