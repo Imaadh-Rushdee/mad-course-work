@@ -1,7 +1,9 @@
-package com.example.pizza_mania_app;
+package com.example.pizza_mania_app.deliveryPartner;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -10,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.pizza_mania_app.R;
 
 public class ongoingOrder extends AppCompatActivity {
 
@@ -53,5 +57,10 @@ public class ongoingOrder extends AppCompatActivity {
             statusCompletedIcon.setImageResource(R.drawable.ic_circle_green);
             completeOrder.setEnabled(true); // Enable button when completed
         }, 10000); // 10 sec after load
+    }
+
+    public void completeOrder(View view) {
+        Intent intent = new Intent(this, orderPayment.class);
+        startActivity(intent);
     }
 }

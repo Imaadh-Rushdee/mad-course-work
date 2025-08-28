@@ -202,15 +202,15 @@
             android:backgroundTint="#B71C1C"
             android:textColor="@color/white"
             />
+
         <Button
             android:id="@+id/acceptOrder"
             android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="Accept"
-            android:backgroundTint="#388E3C"
-            android:textColor="@color/white"
-            android:onClick="acceptOrder"
+            android:layout_height="match_parent"
             android:layout_marginLeft="30px"
-            />
+            android:backgroundTint="#388E3C"
+            android:onClick="acceptOrder"
+            android:text="Accept"
+            android:textColor="@color/white" />
     </LinearLayout>
 </LinearLayout>

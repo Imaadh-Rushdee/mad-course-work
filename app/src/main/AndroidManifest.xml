@@ -23,16 +23,16 @@
             android:name=".SetupActivity"
             android:exported="false"></activity>
         <activity
-            android:name=".orderPayment"
+            android:name=".deliveryPartner.orderPayment"
             android:exported="false" />
         <activity
-            android:name=".ongoingOrder"
+            android:name=".deliveryPartner.ongoingOrder"
             android:exported="false" />
         <activity
-            android:name=".orderDetails"
+            android:name=".deliveryPartner.orderDetails"
             android:exported="false" />
         <activity
-            android:name=".deliveryPartnerDashboard"
+            android:name=".deliveryPartner.deliveryPartnerDashboard"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
