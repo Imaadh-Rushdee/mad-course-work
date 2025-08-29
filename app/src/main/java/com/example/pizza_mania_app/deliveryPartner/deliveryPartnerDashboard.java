@@ -8,114 +8,139 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.pizza_mania_app.R;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class deliveryPartnerDashboard extends AppCompatActivity {
 
-    private LinearLayout ordersContainer;
-    private TextView tvNoOrders;
-    private ImageButton refreshIcon;
-    private TextView partnerNameText;
+    private LinearLayout ordersContainer; // Layout where order cards will be added
+    private TextView tvNoOrders;          // Message shown when no orders are found
+    private ImageButton refreshIcon;      // Refresh button to reload orders
+    private TextView partnerNameText;     // To display partner name
+
+    private FirebaseFirestore db;         // Firestore reference
+
+    // Example partner details (In real app: get these from login)
+    private String partnerBranchId = "branch_001";
+    private String partnerName = "John Doe";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_delivery_partner_dashboard);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        // Initialize views
         ordersContainer = findViewById(R.id.ordersContainer);
         tvNoOrders = findViewById(R.id.tvNoOrders);
         refreshIcon = findViewById(R.id.refreshIcon);
         partnerNameText = findViewById(R.id.driver_name);
 
-        partnerNameText.setText("Welcome Partner!");
+        // Set welcome message
+        partnerNameText.setText("Welcome " + partnerName + "!");
 
-        // Show a dummy order card for now
-        showDummyOrder();
+        // Initialize Firestore
+        db = FirebaseFirestore.getInstance();
 
-        // Refresh button listener (just shows toast for now)
-        refreshIcon.setOnClickListener(v -> Toast.makeText(this, "Refreshing orders...", Toast.LENGTH_SHORT).show());
-    }
+        // Load orders from Firestore
+        loadOrdersFromFirestore();
 
-    private void showDummyOrder() {
-        // Hide "No Orders" text
-        tvNoOrders.setVisibility(View.GONE);
+        // Listen for real-time changes in Firestore
+        listenOrdersRealtime();
 
-        // Show scroll container
-        findViewById(R.id.scrollOrders).setVisibility(View.VISIBLE);
-
-        // Inflate dummy card
-        View card = getLayoutInflater().inflate(R.layout.order_card, ordersContainer, false);
-
-        // Set dummy values
-        TextView tvOrderId = card.findViewById(R.id.tvOrderId);
-        TextView tvCustomerName = card.findViewById(R.id.tvCustomerName);
-        TextView tvOrderStatus = card.findViewById(R.id.tvOrderStatus);
-
-        tvOrderId.setText("Order ID: 123");
-        tvCustomerName.setText("Customer: John Doe");
-        tvOrderStatus.setText("Status: Pending");
-
-        // Click listener to open order details
-        card.setOnClickListener(v -> {
-            Intent intent = new Intent(deliveryPartnerDashboard.this, orderDetails.class);
-
-            // Pass dummy data
-            intent.putExtra("orderId", "123");
-            intent.putExtra("customerName", "John Doe");
-            intent.putExtra("address", "123 Main Street, Colombo");
-            intent.putExtra("totalPrice", "2500");
-
-            startActivity(intent);
+        // Refresh button click → reload orders
+        refreshIcon.setOnClickListener(v -> {
+            Toast.makeText(this, "Refreshing orders...", Toast.LENGTH_SHORT).show();
+            ordersContainer.removeAllViews(); // Clear existing orders
+            loadOrdersFromFirestore();       // Reload
         });
-
-        // Add card to container
-        ordersContainer.addView(card);
     }
 
-
-    // You can reuse this later for backend data
-    private void addOrderCard(String orderId, String customerName, String address, String totalPrice) {
-        // Inflate the XML layout
+    /**
+     * Add a single order card to the UI
+     */
+    private void addOrderCard(String orderId, String customerName, String address, String totalPrice, String status) {
+        // Inflate order_card.xml layout
         View card = getLayoutInflater().inflate(R.layout.order_card, ordersContainer, false);
 
-        // Find the TextViews inside the card
+        // Get views inside the card
         TextView tvOrderId = card.findViewById(R.id.tvOrderId);
         TextView tvCustomerName = card.findViewById(R.id.tvCustomerName);
         TextView tvOrderStatus = card.findViewById(R.id.tvOrderStatus);
 
-        // Set the text dynamically
+        // Set data
         tvOrderId.setText("Order ID: " + orderId);
         tvCustomerName.setText("Customer: " + customerName);
-        tvOrderStatus.setText("Status: Pending");
+        tvOrderStatus.setText("Status: " + status);
 
-        // Add click listener to open order details
+        // When user clicks the card → go to orderDetails page
         card.setOnClickListener(v -> {
             Intent intent = new Intent(deliveryPartnerDashboard.this, orderDetails.class);
-
-            // Pass dummy data (replace with real DB values later)
             intent.putExtra("orderId", orderId);
             intent.putExtra("customerName", customerName);
             intent.putExtra("address", address);
             intent.putExtra("totalPrice", totalPrice);
-
+            intent.putExtra("status", status);
             startActivity(intent);
         });
 
         // Add the card to the container
         ordersContainer.addView(card);
+        tvNoOrders.setVisibility(View.GONE); // Hide "No orders" message
     }
 
+    /**
+     * Load all pending delivery orders from Firestore
+     */
+    private void loadOrdersFromFirestore() {
+        db.collection("orders")
+                .whereEqualTo("branchId", partnerBranchId)      // Orders for this branch only
+                .whereEqualTo("status", "pending")             // Only pending orders
+                .whereEqualTo("deliveryType", "delivery")      // Only delivery orders
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (querySnapshot.isEmpty()) {
+                        tvNoOrders.setVisibility(View.VISIBLE); // Show "No orders" message
+                        return;
+                    }
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        addOrderCard(
+                                doc.getId(),
+                                doc.getString("customerName"),
+                                doc.getString("delivery_address"),
+                                doc.getDouble("total").toString(),
+                                doc.getString("status")
+                        );
+                    }
+                });
+    }
+
+    /**
+     * Real-time updates for new or updated orders
+     */
+    private void listenOrdersRealtime() {
+        db.collection("orders")
+                .whereEqualTo("branchId", partnerBranchId)
+                .whereEqualTo("status", "pending")
+                .whereEqualTo("deliveryType", "delivery")
+                .addSnapshotListener((snapshots, error) -> {
+                    if (error != null || snapshots == null) return;
+
+                    // Clear and reload the list when changes happen
+                    ordersContainer.removeAllViews();
+                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                        DocumentSnapshot doc = dc.getDocument();
+                        addOrderCard(
+                                doc.getId(),
+                                doc.getString("customerName"),
+                                doc.getString("delivery_address"),
+                                doc.getDouble("total").toString(),
+                                doc.getString("status")
+                        );
+                    }
+                });
+    }
 }

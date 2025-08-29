@@ -17,11 +17,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pizzamaniaapp">
         <activity
-            android:name=".customerDashboard"
+            android:name=".profile"
             android:exported="false" />
         <activity
-            android:name=".SetupActivity"
-            android:exported="false"></activity>
+            android:name=".admin.transactions"
+            android:exported="false" />
+        <activity
+            android:name=".admin.orders"
+            android:exported="false" />
+        <activity
+            android:name=".admin.adminDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".customer.orderInvoice"
+            android:exported="false" />
+        <activity
+            android:name=".customer.orderTracking"
+            android:exported="false" />
+        <activity
+            android:name=".customer.confirmOrder"
+            android:exported="false" />
+        <activity
+            android:name=".customer.cart"
+            android:exported="false" />
+        <activity
+            android:name=".menu"
+            android:exported="false" />
+        <activity
+            android:name=".customer.customerDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".signUp"
+            android:exported="false" />
+        <activity
+            android:name=".loginPage"
+            android:exported="false" />
         <activity
             android:name=".deliveryPartner.orderPayment"
             android:exported="false" />
@@ -40,9 +70,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
