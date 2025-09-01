@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">pizza-mania-app</string>
+    <string name="app_logo">App Logo</string>
+    <string name="pizza_mania">Pizza Mania</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account_register">Don’t have an account? Register</string>
 </resources>
