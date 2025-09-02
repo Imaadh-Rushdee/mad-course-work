@@ -1,146 +1,30 @@
 package com.example.pizza_mania_app.deliveryPartner;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.pizza_mania_app.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.PolyUtil;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-public class orderDetails extends AppCompatActivity implements OnMapReadyCallback {
-
-    private GoogleMap mMap;
-    private FusedLocationProviderClient fusedLocationClient;
-    private LatLng customerLocation = new LatLng(6.9271, 79.8612); // Example: Colombo
-
-    private TextView txtOrderId, txtCustomerName, txtAddress, txtTotalPrice, txtDistanceTime;
+public class orderDetails extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_order_details);
-
-        // Initialize UI
-        txtOrderId = findViewById(R.id.orderId);
-        txtCustomerName = findViewById(R.id.customerName);
-        txtAddress = findViewById(R.id.address);
-        txtTotalPrice = findViewById(R.id.totalAmount);
-        txtDistanceTime = findViewById(R.id.txtDistanceTime);
-
-        // Get data from intent
-        String orderId = getIntent().getStringExtra("orderId");
-        String customerName = getIntent().getStringExtra("customerName");
-        String address = getIntent().getStringExtra("address");
-        String totalPrice = getIntent().getStringExtra("totalPrice");
-
-        // Set dummy data in TextViews
-        txtOrderId.setText(orderId);
-        txtCustomerName.setText(customerName);
-        txtAddress.setText(address);
-        txtTotalPrice.setText("Rs." + totalPrice);
-
-        // Map setup
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return;
-        }
-
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
-            if (location != null) {
-                LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-
-                mMap.addMarker(new MarkerOptions()
-                        .position(currentLocation)
-                        .title("Your Location")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-
-                mMap.addMarker(new MarkerOptions()
-                        .position(customerLocation)
-                        .title("Customer Location"));
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
-
-                drawRoute(currentLocation, customerLocation);
-            }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
         });
-    }
 
-    private void drawRoute(LatLng origin, LatLng destination) {
-        new Thread(() -> {
-            try {
-                String url = "https://maps.googleapis.com/maps/api/directions/json?origin="
-                        + origin.latitude + "," + origin.longitude
-                        + "&destination=" + destination.latitude + "," + destination.longitude
-                        + "&key=YOUR_GOOGLE_MAPS_API_KEY";
-
-                HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) sb.append(line);
-                br.close();
-
-                JSONObject json = new JSONObject(sb.toString());
-                JSONArray routes = json.getJSONArray("routes");
-                if (routes.length() > 0) {
-                    JSONObject route = routes.getJSONObject(0);
-                    JSONObject leg = route.getJSONArray("legs").getJSONObject(0);
-                    String distance = leg.getJSONObject("distance").getString("text");
-                    String duration = leg.getJSONObject("duration").getString("text");
-                    String polyline = route.getJSONObject("overview_polyline").getString("points");
-
-                    runOnUiThread(() -> {
-                        txtDistanceTime.setText("Distance: " + distance + ", ETA: " + duration);
-                        mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(polyline)).width(8).color(0xFF2196F3));
-                    });
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-    public void acceptOrder(View view) {
-        Intent intent = new Intent(this, ongoingOrder.class);
-        startActivity(intent);
     }
 
 }
