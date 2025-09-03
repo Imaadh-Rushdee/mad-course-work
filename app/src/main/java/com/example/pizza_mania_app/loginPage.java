@@ -17,7 +17,6 @@ import com.example.pizza_mania_app.deliveryPartner.ongoingOrder;
 public class loginPage extends AppCompatActivity {
 
     private EditText etUsername, etPassword;
-    private Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class loginPage extends AppCompatActivity {
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
+        Button btnLogin = findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(v -> {
             String username = etUsername.getText().toString().trim();
