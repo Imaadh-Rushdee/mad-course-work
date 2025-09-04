@@ -14,6 +14,7 @@ import com.example.pizza_mania_app.R;
 
 public class orderPayment extends AppCompatActivity {
 
+    private int orderId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,10 +25,18 @@ public class orderPayment extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        orderId = getIntent().getIntExtra("orderId",-1);
     }
 
+    public void setDetadils() {
+
+    }
     public void completePayment(View view) {
         Intent intent = new Intent(this, deliveryPartnerDashboard.class);
         startActivity(intent);
+    }
+
+    public void downloadReceipt() {
+
     }
 }

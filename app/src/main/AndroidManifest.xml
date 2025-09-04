@@ -17,9 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pizzamaniaapp">
         <activity
-            android:name=".setupactivity"
-            android:exported="false" />
-        <activity
             android:name=".profile"
             android:exported="false" />
         <activity
@@ -66,6 +63,10 @@
             android:exported="false" />
         <activity
             android:name=".deliveryPartner.deliveryPartnerDashboard"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".welcomePage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -73,7 +74,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="YOUR_API_KEY_HERE" />
