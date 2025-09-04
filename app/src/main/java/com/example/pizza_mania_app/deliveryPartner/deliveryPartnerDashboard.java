@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,68 +45,68 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
         profilePic = findViewById(R.id.profileImg);
 
         partnerId = getIntent().getIntExtra("partnerId", -1);
-        db = openOrCreateDatabase("pizza_mania.db",MODE_PRIVATE, null);
+        db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
         setPartnerData(partnerId);
         setOrderData();
     }
 
-    public void setPartnerData(int partnerId) {
-
-        Cursor cursor = db.rawQuery("SELECT * FROM users WHERE userId=?", new String[]{String.valueOf(partnerId)});
-        if(cursor.moveToFirst()){
+    private void setPartnerData(int partnerId) {
+        Cursor cursor = db.rawQuery("SELECT * FROM users WHERE user_id=?", new String[]{String.valueOf(partnerId)});
+        if (cursor.moveToFirst()) {
             String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-            String phone_number = cursor.getString(cursor.getColumnIndexOrThrow("phone_number"));
+            String phone = cursor.getString(cursor.getColumnIndexOrThrow("phone"));
             String email = cursor.getString(cursor.getColumnIndexOrThrow("email"));
-            String profilePicUrl = cursor.getString(cursor.getColumnIndexOrThrow("profile_pic"));
-
 
             partnerName.setText(name);
 
-            if(profilePicUrl != null && !profilePicUrl.isEmpty()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(profilePicUrl);
-                if(bitmap != null) {
-                    profilePic.setImageBitmap(bitmap);
-                }
-                else {
+            int picIndex = cursor.getColumnIndex("profile_pic"); // safer than getColumnIndexOrThrow
+            if (picIndex != -1) {
+                String profilePicUrl = cursor.getString(picIndex);
+                if (profilePicUrl != null && !profilePicUrl.isEmpty()) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(profilePicUrl);
+                    if (bitmap != null) {
+                        profilePic.setImageBitmap(bitmap);
+                    } else {
+                        profilePic.setImageResource(R.drawable.profile);
+                    }
+                } else {
                     profilePic.setImageResource(R.drawable.profile);
                 }
-            }
-            else {
-                profilePic.setImageResource(R.drawable.profile);
+            } else {
+                profilePic.setImageResource(R.drawable.profile); // fallback
             }
         }
         cursor.close();
     }
-    public void setOrderData() {
 
+
+    private void setOrderData() {
         LinearLayout container = findViewById(R.id.ordersContainer);
         container.removeAllViews();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE order_type=?", new String[]{"delivery"});
+        // Fix column name and query
+        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE order_status=?", new String[]{"pending"}); // Example: only pending deliveries
 
-        while(cursor.moveToNext()){
-
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+        while (cursor.moveToNext()) {
+            int orderId = cursor.getInt(cursor.getColumnIndexOrThrow("order_id"));
             String customerName = cursor.getString(cursor.getColumnIndexOrThrow("customer_name"));
-            String deliveryAddress = cursor.getString(cursor.getColumnIndexOrThrow("delivery_address"));
+            String deliveryAddress = cursor.getString(cursor.getColumnIndexOrThrow("order_address"));
             double orderTotal = cursor.getDouble(cursor.getColumnIndexOrThrow("total"));
 
             LinearLayout card = (LinearLayout) getLayoutInflater().inflate(R.layout.order_card, container, false);
-            TextView orderId = card.findViewById(R.id.cardOrderId);
-            TextView orderCustomerName = card.findViewById(R.id.orderCustomerName);
-            TextView orderDeliveryAddress = card.findViewById(R.id.orderCustomerAddress);
-            TextView orderTotalAmount = card.findViewById(R.id.orderTotalAmount);
+            TextView tvOrderId = card.findViewById(R.id.cardOrderId);
+            TextView tvCustomerName = card.findViewById(R.id.orderCustomerName);
+            TextView tvDeliveryAddress = card.findViewById(R.id.orderCustomerAddress);
+            TextView tvOrderTotal = card.findViewById(R.id.orderTotalAmount);
 
-            orderId.setText(String.valueOf(id));
-            orderCustomerName.setText(customerName);
-            orderDeliveryAddress.setText(deliveryAddress);
-            orderTotalAmount.setText(String.valueOf(orderTotal));
-            card.setOnClickListener(view -> onClickOrder(id));
+            tvOrderId.setText(String.valueOf(orderId));
+            tvCustomerName.setText(customerName);
+            tvDeliveryAddress.setText(deliveryAddress);
+            tvOrderTotal.setText(String.valueOf(orderTotal));
 
+            card.setOnClickListener(view -> onClickOrder(orderId));
             container.addView(card);
         }
-
-
         cursor.close();
     }
 
@@ -116,13 +115,10 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
         super.onResume();
         setOrderData();
     }
-    public void onClickOrder(int clickedOrderId) {
+
+    private void onClickOrder(int clickedOrderId) {
         Intent intent = new Intent(this, orderDetails.class);
         intent.putExtra("orderId", clickedOrderId);
         startActivity(intent);
     }
-    public void onClickProfile() {
-
-    }
-
 }

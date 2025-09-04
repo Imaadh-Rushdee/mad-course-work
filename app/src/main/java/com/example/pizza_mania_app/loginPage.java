@@ -1,6 +1,8 @@
 package com.example.pizza_mania_app;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,11 +14,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.pizza_mania_app.deliveryPartner.ongoingOrder;
+import com.example.pizza_mania_app.admin.adminDashboard;
+import com.example.pizza_mania_app.deliveryPartner.deliveryPartnerDashboard;
+import com.example.pizza_mania_app.customer.customerDashboard;
 
 public class loginPage extends AppCompatActivity {
 
     private EditText etUsername, etPassword;
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,23 +39,62 @@ public class loginPage extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
 
+        // Open DB
+        db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
+
         btnLogin.setOnClickListener(v -> {
-            String username = etUsername.getText().toString().trim();
+            String email = etUsername.getText().toString().trim();  // username is email
             String password = etPassword.getText().toString().trim();
 
-            if (username.isEmpty() || password.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show();
             } else {
-                // Dummy validation (replace with Firebase/DB later)
-                if (username.equals("admin") && password.equals("1234")) {
-                    Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(loginPage.this, ongoingOrder.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
-                }
+                loginUser(email, password);
             }
         });
+    }
+
+    /**
+     * Validate login with DB and redirect according to role
+     */
+    private void loginUser(String email, String password) {
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM users WHERE email=? AND password=?",
+                new String[]{email, password});
+
+        if (cursor.moveToFirst()) {
+            String role = cursor.getString(cursor.getColumnIndexOrThrow("role"));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            int userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id"));
+
+            Toast.makeText(this, "Welcome " + name, Toast.LENGTH_SHORT).show();
+
+            // Navigate to dashboard according to role
+            Intent intent;
+            switch (role.toLowerCase()) {
+                case "admin":
+                    intent = new Intent(loginPage.this, adminDashboard.class);
+                    break;
+                case "driver":
+                    intent = new Intent(loginPage.this, deliveryPartnerDashboard.class);
+                    intent.putExtra("partnerId", userId);
+                    break;
+                case "customer":
+                    intent = new Intent(loginPage.this, customerDashboard.class);
+                    break;
+                default:
+                    Toast.makeText(this, "Unknown role: " + role, Toast.LENGTH_SHORT).show();
+                    cursor.close();
+                    return;
+            }
+
+            startActivity(intent);
+            finish();
+
+        } else {
+            Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+        }
+
+        cursor.close();
     }
 }
