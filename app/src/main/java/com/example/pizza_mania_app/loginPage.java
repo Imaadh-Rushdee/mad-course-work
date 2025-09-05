@@ -14,9 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.pizza_mania_app.admin.adminDashboard;
 import com.example.pizza_mania_app.deliveryPartner.deliveryPartnerDashboard;
-import com.example.pizza_mania_app.customer.customerDashboard;
 
 public class loginPage extends AppCompatActivity {
 
@@ -74,13 +72,15 @@ public class loginPage extends AppCompatActivity {
             switch (role.toLowerCase()) {
                 case "admin":
                     intent = new Intent(loginPage.this, menu.class);
+                    intent.putExtra("userRole", "admin");
                     break;
                 case "driver":
                     intent = new Intent(loginPage.this, deliveryPartnerDashboard.class);
                     intent.putExtra("partnerId", userId);
                     break;
                 case "customer":
-                    intent = new Intent(loginPage.this, customerDashboard.class);
+                    intent = new Intent(loginPage.this, menu.class);
+                    intent.putExtra("userRole", "user");
                     break;
                 default:
                     Toast.makeText(this, "Unknown role: " + role, Toast.LENGTH_SHORT).show();
