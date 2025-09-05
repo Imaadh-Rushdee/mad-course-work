@@ -73,7 +73,7 @@ public class loginPage extends AppCompatActivity {
             Intent intent;
             switch (role.toLowerCase()) {
                 case "admin":
-                    intent = new Intent(loginPage.this, adminDashboard.class);
+                    intent = new Intent(loginPage.this, menu.class);
                     break;
                 case "driver":
                     intent = new Intent(loginPage.this, deliveryPartnerDashboard.class);
