@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -44,9 +45,6 @@
             android:name=".menu"
             android:exported="false" />
         <activity
-            android:name=".customer.customerDashboard"
-            android:exported="false" />
-        <activity
             android:name=".signUp"
             android:exported="false" />
         <activity
@@ -76,7 +74,7 @@
         </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY_HERE" />
+            android:value="AIzaSyCldldEy5A5sk7K3-RkyHhoCH86XeToP8s" />
     </application>
 
 </manifest>

@@ -199,6 +199,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Back"
+            android:onClick="onClickBack"
             android:backgroundTint="#B71C1C"
             android:textColor="@color/white"
             />
@@ -209,7 +210,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="30px"
             android:backgroundTint="#388E3C"
-            android:onClick="acceptOrder"
+            android:onClick="onClickAcceptOrder"
             android:text="Accept"
             android:textColor="@color/white" />
     </LinearLayout>

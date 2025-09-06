@@ -85,7 +85,7 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
         container.removeAllViews();
 
         // Fix column name and query
-        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE order_status=?", new String[]{"pending"}); // Example: only pending deliveries
+        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE order_status=? AND order_type=?", new String[]{"ready","delivery"});// Example: only pending deliveries
 
         while (cursor.moveToNext()) {
             int orderId = cursor.getInt(cursor.getColumnIndexOrThrow("order_id"));
