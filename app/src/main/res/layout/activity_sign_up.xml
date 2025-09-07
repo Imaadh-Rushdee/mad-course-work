@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/create_account"
-            android:textColor="#FF5722"
+            android:textColor="#4CAF50"
             android:textSize="28sp"
             android:fontFamily="@font/beachday"
             android:layout_marginBottom="30dp"/>
@@ -121,7 +121,7 @@
             android:text="@string/sign_ups"
             android:textSize="18sp"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#FF5722"
+            android:backgroundTint="#4CAF50"
             android:layout_marginBottom="15dp"/>
 
         <!-- Back to Login -->
@@ -131,6 +131,6 @@
             android:layout_height="wrap_content"
             android:text="@string/already_have_an_account_login"
             android:textSize="14sp"
-            android:textColor="#FF5722"/>
+            android:textColor="#4CAF50"/>
     </LinearLayout>
 </ScrollView>
