@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -80,6 +81,9 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
     }
 
 
+    public void refreshButton(View view){
+        setOrderData();
+    }
     private void setOrderData() {
         LinearLayout container = findViewById(R.id.ordersContainer);
         container.removeAllViews();
@@ -117,7 +121,7 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
     }
 
     private void onClickOrder(int clickedOrderId) {
-        Intent intent = new Intent(this, orderDetails.class);
+        Intent intent = new Intent(this, orderDetailsMaps.class);
         intent.putExtra("orderId", clickedOrderId);
         startActivity(intent);
     }

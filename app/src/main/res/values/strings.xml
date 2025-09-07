@@ -8,4 +8,6 @@
     <string name="don_t_have_an_account_register">Don’t have an account? Register</string>
     <string name="sign_up">Sign Up</string>
     <string name="continue_as_guest">Continue as Guest</string>
+    <string name="title_activity_ongoing_order_maps">ongoingOrderMaps</string>
+    <string name="title_activity_order_details_maps">orderDetailsMaps</string>
 </resources>

@@ -116,13 +116,14 @@
         <ImageButton
             android:id="@+id/refreshIcon"
             android:layout_width="100px"
-            android:layout_height="100px"
-            android:src="@drawable/refresh"
+            android:layout_height="36dp"
+            android:layout_gravity="end"
+            android:layout_margin="60px"
             android:background="@null"
             android:contentDescription="refresh"
+            android:onClick="refreshButton"
             android:scaleType="centerCrop"
-            android:layout_margin="60px"
-            android:layout_gravity="end"/>
+            android:src="@drawable/refresh" />
 
     </LinearLayout>
 
