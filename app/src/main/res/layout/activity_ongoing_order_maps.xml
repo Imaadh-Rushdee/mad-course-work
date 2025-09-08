@@ -1,38 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main">
+
+    <!-- Navigation Panel (Hidden by default) -->
+    <LinearLayout
+        android:id="@+id/navigationPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/nextInstructionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Loading directions..."
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/distanceToInstructionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <!-- Map Fragment -->
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_margin="15dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-    <!-- Distance/ETA Text -->
-    <TextView
-        android:id="@+id/txtDistanceTime"
+    <!-- Status Information -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Loading route..."
-        android:textSize="16sp"
-        android:padding="10dp" />
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#FFFFFF">
 
-    <!-- Order Status Indicators -->
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Preparing for delivery..."
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/distanceText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Distance: Calculating..."
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="4dp" />
+
+        <TextView
+            android:id="@+id/etaText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ETA: Calculating..."
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="4dp" />
+
+    </LinearLayout>
+
+    <!-- Order Status Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:weightSum="2">
+        android:padding="20dp"
+        android:background="#F5F5F5">
 
         <!-- Ready Status -->
         <LinearLayout
@@ -42,18 +94,21 @@
             android:orientation="vertical"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/statusReadyIcon"
+            <ImageButton
+                android:id="@+id/readyButton"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_circle_grey" />
+                android:background="@android:drawable/btn_default"
+                android:scaleType="fitCenter"
+                android:enabled="false" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ready"
                 android:textSize="16sp"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="8dp" />
+
         </LinearLayout>
 
         <!-- Completed Status -->
@@ -64,29 +119,41 @@
             android:orientation="vertical"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/statusCompletedIcon"
+            <ImageButton
+                android:id="@+id/completedButton"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_circle_grey" />
+                android:background="@android:drawable/btn_default"
+                android:scaleType="fitCenter"
+                android:enabled="false" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Completed"
                 android:textSize="16sp"
-                android:layout_marginTop="5dp" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_marginTop="8dp" />
 
-    <!-- Complete Order Button -->
-    <Button
-        android:id="@+id/completeOrder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Complete Order"
-        android:enabled="false"
-        android:onClick="completeOrder"
-        android:layout_margin="10dp" />
+        </LinearLayout>
+
+        <!-- Center Location Button -->
+        <ImageButton
+            android:id="@+id/centerLocationButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:drawable/btn_default"
+            android:scaleType="fitCenter"
+            android:layout_marginStart="16dp" />
+
+        <!-- Voice Toggle Button -->
+        <ImageButton
+            android:id="@+id/voiceToggleButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:drawable/btn_default"
+            android:scaleType="fitCenter"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
 
 </LinearLayout>
