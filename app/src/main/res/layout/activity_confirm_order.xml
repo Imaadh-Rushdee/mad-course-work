@@ -9,7 +9,48 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="20dp">
+        android:padding="10dp">
+
+
+        <!-- App Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FF5722"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10px">
+
+            <!-- App Logo on the left -->
+            <ImageView
+                android:id="@+id/logoImg"
+                android:layout_width="100px"
+                android:layout_height="100px"
+                android:contentDescription="app-logo"
+                android:src="@drawable/logo" />
+
+            <!-- Text in the middle -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/beachday"
+                android:gravity="center"
+                android:text="Pizza Mania"
+                android:textColor="#FFFFFF"
+                android:textSize="80px" /> <!-- custom font -->
+
+            <!-- Profile Icon on the right -->
+            <ImageButton
+                android:id="@+id/profileImg"
+                android:layout_width="100px"
+                android:layout_height="100px"
+                android:background="@null"
+                android:contentDescription="Profile"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile" />
+        </LinearLayout>
 
         <!-- Header -->
         <TextView
