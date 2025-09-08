@@ -7,9 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +24,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.pizza_mania_app.R;
 import com.example.pizza_mania_app.helperClasses.deliveryOrders;
+import com.example.pizza_mania_app.profile;
 
 import java.util.ArrayList;
 
@@ -29,7 +35,9 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
     private int partnerId;
     private int partnerBranchId;
     private TextView partnerName;
-    private ImageButton profilePic;
+
+    private ImageView profileImage;   // For showing the photo
+    private Spinner profileSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +52,41 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
         });
 
         partnerName = findViewById(R.id.driver_name);
-        profilePic = findViewById(R.id.profileImg);
+        profileImage = findViewById(R.id.profileImage);    // For displaying photo
+        profileSpinner = findViewById(R.id.profileSpinner); // For menu dropdown
+
+        // Simple spinner setup
+        String[] options = {"Menu", "Profile", "Logout"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.custom_spinner_layout, options);
+        profileSpinner.setAdapter(adapter);
+
+        profileSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 1) {
+                    // Profile - do whatever you want
+                    Toast.makeText(deliveryPartnerDashboard.this, "Profile clicked", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(deliveryPartnerDashboard.this, profile.class);
+                    startActivity(intent);
+
+                } else if (position == 2) {
+                    // Logout - go back to login
+                    finish();
+                }
+                profileSpinner.setSelection(0); // Reset to "Menu"
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
 
         partnerId = getIntent().getIntExtra("partnerId", -1);
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
         setPartnerData(partnerId);
         setOrderData();
     }
-
     private void setPartnerData(int partnerId) {
         Cursor cursor = db.rawQuery("SELECT * FROM users WHERE user_id=?", new String[]{String.valueOf(partnerId)});
         if (cursor.moveToFirst()) {
@@ -68,15 +103,15 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
                 if (profilePicUrl != null && !profilePicUrl.isEmpty()) {
                     Bitmap bitmap = BitmapFactory.decodeFile(profilePicUrl);
                     if (bitmap != null) {
-                        profilePic.setImageBitmap(bitmap);
+                        profileImage.setImageBitmap(bitmap);
                     } else {
-                        profilePic.setImageResource(R.drawable.profile);
+                        profileImage.setImageResource(R.drawable.profile);
                     }
                 } else {
-                    profilePic.setImageResource(R.drawable.profile);
+                    profileImage.setImageResource(R.drawable.profile);
                 }
             } else {
-                profilePic.setImageResource(R.drawable.profile); // fallback
+                profileImage.setImageResource(R.drawable.profile); // fallback
             }
         }
         cursor.close();

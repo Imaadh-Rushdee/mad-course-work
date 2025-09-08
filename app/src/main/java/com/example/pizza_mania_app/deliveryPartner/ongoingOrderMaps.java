@@ -10,7 +10,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +38,8 @@ public class ongoingOrderMaps extends FragmentActivity implements OnMapReadyCall
 
     private GoogleMap mMap;
     private TextView statusText;
-    private ImageButton readyButton, completedButton;
+    private Button readyButton, completedButton;
+    private ImageView readyImage, completeImage;
 
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -63,6 +66,9 @@ public class ongoingOrderMaps extends FragmentActivity implements OnMapReadyCall
         completedButton.setEnabled(false);
         statusText.setText("Preparing for delivery...");
 
+        readyImage = findViewById(R.id.readyImage);
+        completeImage = findViewById(R.id.completedImage);
+        readyImage.setImageResource(R.drawable.ic_circle_green);
         readyButton.setOnClickListener(v -> openGoogleMaps());
         completedButton.setOnClickListener(v -> completeOrder());
 
@@ -161,6 +167,7 @@ public class ongoingOrderMaps extends FragmentActivity implements OnMapReadyCall
 
         if (!hasArrivedAtCustomer && results[0] <= 100f) { // 100 meters
             hasArrivedAtCustomer = true;
+            completeImage.setImageResource(R.drawable.ic_circle_green);
             completedButton.setEnabled(true);
             statusText.setText("Arrived at customer!");
         }

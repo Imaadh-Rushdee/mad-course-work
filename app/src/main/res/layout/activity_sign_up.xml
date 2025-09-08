@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FDFDFD"
     android:fillViewport="true"
-    android:gravity="center"
-    android:orientation="vertical"
     android:padding="20dp">
 
     <LinearLayout
@@ -15,16 +12,14 @@
         android:gravity="center"
         android:padding="20dp">
 
-        <!-- App Logo -->
         <ImageView
             android:id="@+id/logoImg"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginBottom="20dp"
             android:src="@drawable/logo"
-            android:contentDescription="@string/app_logo"/>
+            android:contentDescription="@string/app_logo" />
 
-        <!-- Title -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
@@ -33,9 +28,9 @@
             android:textColor="#4CAF50"
             android:textSize="28sp"
             android:fontFamily="@font/beachday"
-            android:layout_marginBottom="30dp"/>
+            android:layout_marginBottom="30dp" />
 
-        <!-- Full Name -->
+        <!-- Name -->
         <EditText
             android:id="@+id/etName"
             android:layout_width="match_parent"
@@ -46,7 +41,7 @@
             android:background="@drawable/edittext_bg"
             android:drawableStart="@drawable/ic_user"
             android:drawablePadding="10dp"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
 
         <!-- Email -->
         <EditText
@@ -59,7 +54,7 @@
             android:background="@drawable/edittext_bg"
             android:drawableStart="@drawable/ic_email"
             android:drawablePadding="10dp"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress" />
 
         <!-- Password -->
         <EditText
@@ -72,7 +67,7 @@
             android:background="@drawable/edittext_bg"
             android:drawableStart="@drawable/ic_lock"
             android:drawablePadding="10dp"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
 
         <!-- Confirm Password -->
         <EditText
@@ -85,9 +80,9 @@
             android:background="@drawable/edittext_bg"
             android:drawableStart="@drawable/ic_lock"
             android:drawablePadding="10dp"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
 
-        <!-- Mobile Number -->
+        <!-- Phone -->
         <EditText
             android:id="@+id/etPhone"
             android:layout_width="match_parent"
@@ -96,24 +91,17 @@
             android:padding="12dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/edittext_bg"
-            android:drawableStart="@drawable/ic_lock"
             android:drawablePadding="10dp"
-            android:inputType="numberDecimal"/>
+            android:inputType="phone" />
 
-        <!-- Default Address -->
-        <EditText
-            android:id="@+id/etAddress"
+        <!-- Google Places Autocomplete -->
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/default_address"
-            android:padding="12dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/edittext_bg"
-            android:drawableStart="@drawable/ic_location"
-            android:drawablePadding="10dp"
-            android:inputType="textPostalAddress"/>
+            android:layout_marginBottom="20dp" />
 
-        <!-- Sign Up Button -->
         <Button
             android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
@@ -122,15 +110,14 @@
             android:textSize="18sp"
             android:textColor="#FFFFFF"
             android:backgroundTint="#4CAF50"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="15dp" />
 
-        <!-- Back to Login -->
         <TextView
             android:id="@+id/tvLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/already_have_an_account_login"
             android:textSize="14sp"
-            android:textColor="#4CAF50"/>
+            android:textColor="#4CAF50" />
     </LinearLayout>
 </ScrollView>

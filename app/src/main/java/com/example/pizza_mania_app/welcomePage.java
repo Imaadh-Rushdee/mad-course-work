@@ -71,6 +71,8 @@ public class welcomePage extends AppCompatActivity {
                     "phone TEXT, " +
                     "password TEXT, " +
                     "role TEXT, " +
+                    "address TEXT, " +
+                    "profile_pic BLOB, " +
                     "branch_id INTEGER, " +
                     "FOREIGN KEY(branch_id) REFERENCES branches(branch_id))");
 

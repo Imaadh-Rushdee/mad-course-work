@@ -27,10 +27,12 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildFeatures {
         viewBinding = true
     }
@@ -42,23 +44,27 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
-    // ✅ Firebase BOM
+    // Firebase BOM
     implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
 
-    // ✅ Firebase Analytics
-    implementation("com.google.firebase:firebase-analytics")
+    // Maps & Places
     implementation("com.google.android.gms:play-services-maps:18.1.0")
-    // ✅ Firestore (Add this)
-    implementation("com.google.maps.android:android-maps-utils:3.4.0")
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
-    implementation("com.google.android.gms:play-services-location:21.0.1")
+        implementation("com.google.android.gms:play-services-location:21.0.1")
+        implementation("com.google.android.libraries.places:places:3.5.0")
+
+    // Firestore
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.maps.android:android-maps-utils:3.4.0")
+
+    // UI
     implementation("de.hdodenhof:circleimageview:3.1.0")
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
+
+    // Firebase Auth
     implementation(libs.firebase.auth)
     implementation(libs.credentials)
     implementation(libs.credentials.play.services.auth)
     implementation(libs.googleid)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

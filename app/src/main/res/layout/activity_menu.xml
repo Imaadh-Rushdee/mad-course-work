@@ -4,50 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FF5722"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10px">
+        android:padding="20px">
 
-        <!-- App Logo -->
+        <!-- App Logo on the left -->
         <ImageView
             android:id="@+id/logoImg"
             android:layout_width="100px"
             android:layout_height="100px"
+            android:contentDescription="app-logo"
             android:src="@drawable/logo" />
 
-        <!-- Title -->
+        <!-- Text in the middle -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/beachday"
             android:gravity="center"
             android:text="Pizza Mania"
             android:textColor="#FFFFFF"
-            android:textSize="80px" />
-
-        <!-- Profile Icon -->
-        <ImageButton
-            android:id="@+id/profileImg"
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:background="@null"
-            android:src="@drawable/profile" />
-
-        <!-- Cart Icon (only for customers) -->
-        <ImageButton
-            android:id="@+id/cartImg"
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:background="@null"
-            android:src="@drawable/cart"
-            android:visibility="gone" />
+            android:textSize="80px" /> <!-- custom font -->
 
     </LinearLayout>
 
@@ -75,5 +58,12 @@
             android:orientation="vertical"
             android:padding="12dp" />
     </ScrollView>
+    <ImageButton
+        android:id="@+id/cartImg"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:background="@null"
+        android:src="@drawable/cart"
+        android:visibility="gone" />
 
 </LinearLayout>
