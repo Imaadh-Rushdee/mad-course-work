@@ -1,4 +1,4 @@
-package com.example.pizza_mania_app;
+package com.example.pizza_mania_app.customer;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -13,6 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.pizza_mania_app.R;
+import com.example.pizza_mania_app.menu;
 
 public class confirmOrder extends AppCompatActivity {
 
