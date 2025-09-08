@@ -22,8 +22,6 @@ public class confirmOrder extends AppCompatActivity {
     private SQLiteDatabase db;
 
     private TextView tvAddress, tvTotalAmount;
-    private RadioGroup paymentMethodGroup;
-    private RadioButton rbCash, rbCard;
     private Spinner spinnerBranch;
     private Button btnConfirmOrder, btnChangeAddress;
 
@@ -42,9 +40,6 @@ public class confirmOrder extends AppCompatActivity {
 
         tvAddress = findViewById(R.id.tvAddress);
         tvTotalAmount = findViewById(R.id.tvTotalAmount);
-        paymentMethodGroup = findViewById(R.id.paymentMethodGroup);
-        rbCash = findViewById(R.id.rbCash);
-        rbCard = findViewById(R.id.rbCard);
         spinnerBranch = findViewById(R.id.spinnerBranch);
         btnConfirmOrder = findViewById(R.id.btnConfirmOrder);
         btnChangeAddress = findViewById(R.id.btnChangeAddress);
@@ -61,23 +56,21 @@ public class confirmOrder extends AppCompatActivity {
 
         // Confirm Order button
         btnConfirmOrder.setOnClickListener(v -> {
-            String paymentMethod = rbCash.isChecked() ? "Cash" : "Card";
             String address = tvAddress.getText().toString();
             String branch = spinnerBranch.getSelectedItem().toString();
 
-            insertOrder(customerName, orderCart, address, totalAmount, paymentMethod, branch);
+            insertOrder(customerName, orderCart, address, totalAmount, branch);
         });
     }
 
-    private void insertOrder(String customerName, String cart, String address, double total, String paymentMethod, String branch) {
+    private void insertOrder(String customerName, String cart, String address, double total, String branch) {
         try {
             ContentValues orderValues = new ContentValues();
             orderValues.put("customer_name", customerName);
             orderValues.put("order_cart", cart);
             orderValues.put("order_address", address);
-            orderValues.put("address_latitude", 0.0);  // Replace with actual lat if using map
+            orderValues.put("address_latitude", 0.0);  // Replace with actual lat
             orderValues.put("address_longitude", 0.0);
-            orderValues.put("payment_method", paymentMethod);
             orderValues.put("order_date", "2025-09-07");
             orderValues.put("order_time", "01:00 PM");
             orderValues.put("total", total);
@@ -87,7 +80,7 @@ public class confirmOrder extends AppCompatActivity {
             long orderId = db.insert("orders", null, orderValues);
             if (orderId != -1) {
                 Toast.makeText(this, "Order Confirmed! ✅", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(confirmOrder.this, menu.class)); // Go to menu or home
+                startActivity(new Intent(confirmOrder.this, menu.class)); // Go to menu
                 finish();
             } else {
                 Toast.makeText(this, "Failed to confirm order ❌", Toast.LENGTH_SHORT).show();

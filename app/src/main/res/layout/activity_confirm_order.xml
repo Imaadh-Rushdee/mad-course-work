@@ -61,7 +61,8 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:paddingBottom="20dp"/>
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"/>
 
         <!-- Payment Method -->
         <TextView
@@ -72,28 +73,16 @@
             android:textStyle="bold"
             android:paddingBottom="10dp"/>
 
-        <RadioGroup
-            android:id="@+id/paymentMethodGroup"
+        <TextView
+            android:id="@+id/rbCash"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:gravity="start"
+            android:text="@string/cash" />
 
-            <RadioButton
-                android:id="@+id/rbCash"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cash"
-                android:checked="true"/>
-
-            <RadioButton
-                android:id="@+id/rbCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/card"
-                android:layout_marginStart="20dp"/>
-        </RadioGroup>
 
         <!-- Delivery Address -->
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
