@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#FFF3E0">
+
+    <EditText
+        android:id="@+id/etStaffName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Staff Name"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"/>
+
+    <EditText
+        android:id="@+id/etStaffRole"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Role"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnAddStaff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Staff"
+        android:backgroundTint="#FF5722"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/btnUpdateStaff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Staff"
+        android:backgroundTint="#FF9800"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/btnDeleteStaff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Staff"
+        android:backgroundTint="#D32F2F"
+        android:textColor="@android:color/white"/>
+</LinearLayout>
