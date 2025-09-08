@@ -37,11 +37,10 @@ public class loginPage extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
 
-        // Open DB
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
         btnLogin.setOnClickListener(v -> {
-            String email = etUsername.getText().toString().trim();  // username is email
+            String email = etUsername.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
             if (email.isEmpty() || password.isEmpty()) {
@@ -52,9 +51,6 @@ public class loginPage extends AppCompatActivity {
         });
     }
 
-    /**
-     * Validate login with DB and redirect according to role
-     */
     private void loginUser(String email, String password) {
         Cursor cursor = db.rawQuery(
                 "SELECT * FROM users WHERE email=? AND password=?",
@@ -64,23 +60,26 @@ public class loginPage extends AppCompatActivity {
             String role = cursor.getString(cursor.getColumnIndexOrThrow("role"));
             String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
             int userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id"));
+            int userBranchId = cursor.getInt(cursor.getColumnIndexOrThrow("branch_id")); // <-- get branch id
 
             Toast.makeText(this, "Welcome " + name, Toast.LENGTH_SHORT).show();
 
-            // Navigate to dashboard according to role
             Intent intent;
             switch (role.toLowerCase()) {
                 case "admin":
                     intent = new Intent(loginPage.this, menu.class);
                     intent.putExtra("userRole", "admin");
+                    intent.putExtra("branchId", userBranchId); // pass branchId
                     break;
                 case "driver":
                     intent = new Intent(loginPage.this, deliveryPartnerDashboard.class);
                     intent.putExtra("partnerId", userId);
+                    intent.putExtra("branchId", userBranchId); // optional for driver
                     break;
                 case "customer":
                     intent = new Intent(loginPage.this, menu.class);
                     intent.putExtra("userRole", "user");
+                    intent.putExtra("branchId", userBranchId); // pass branchId
                     break;
                 default:
                     Toast.makeText(this, "Unknown role: " + role, Toast.LENGTH_SHORT).show();

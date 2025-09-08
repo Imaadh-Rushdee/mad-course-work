@@ -27,6 +27,7 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
     ArrayList<deliveryOrders> orders = new ArrayList<>();
     private SQLiteDatabase db;
     private int partnerId;
+    private int partnerBranchId;
     private TextView partnerName;
     private ImageButton profilePic;
 
@@ -59,6 +60,7 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
             String email = cursor.getString(cursor.getColumnIndexOrThrow("email"));
 
             partnerName.setText(name);
+            partnerBranchId = cursor.getInt(cursor.getColumnIndexOrThrow("branch_id"));
 
             int picIndex = cursor.getColumnIndex("profile_pic"); // safer than getColumnIndexOrThrow
             if (picIndex != -1) {
@@ -79,8 +81,6 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
         }
         cursor.close();
     }
-
-
     public void refreshButton(View view){
         setOrderData();
     }
@@ -89,7 +89,7 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
         container.removeAllViews();
 
         // Fix column name and query
-        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE order_status=? AND order_type=?", new String[]{"ready","delivery"});// Example: only pending deliveries
+        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE order_status=? AND order_type=? AND branch_id=?", new String[]{"ready","delivery",String.valueOf(partnerBranchId)});// Example: only pending deliveries
 
         while (cursor.moveToNext()) {
             int orderId = cursor.getInt(cursor.getColumnIndexOrThrow("order_id"));

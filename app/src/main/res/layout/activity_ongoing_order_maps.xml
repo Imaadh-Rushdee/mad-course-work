@@ -136,24 +136,6 @@
 
         </LinearLayout>
 
-        <!-- Center Location Button -->
-        <ImageButton
-            android:id="@+id/centerLocationButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@android:drawable/btn_default"
-            android:scaleType="fitCenter"
-            android:layout_marginStart="16dp" />
-
-        <!-- Voice Toggle Button -->
-        <ImageButton
-            android:id="@+id/voiceToggleButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@android:drawable/btn_default"
-            android:scaleType="fitCenter"
-            android:layout_marginStart="8dp" />
-
     </LinearLayout>
 
 </LinearLayout>

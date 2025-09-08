@@ -100,10 +100,6 @@ public class orderPayment extends AppCompatActivity {
         }
     }
 
-    /**
-     * Called when "Download Receipt" button is clicked
-     * Skeleton method to generate receipt PDF
-     */
     public void downloadReceipt(View view){
         Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE order_id=?",
                 new String[]{String.valueOf(orderId)});
