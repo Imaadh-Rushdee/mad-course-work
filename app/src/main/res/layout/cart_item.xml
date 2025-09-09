@@ -3,13 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:gravity="center_vertical">
 
+    <!-- Item Image -->
+    <ImageView
+        android:id="@+id/itemImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo" /> <!-- default image -->
+
+    <!-- Checkbox -->
     <CheckBox
         android:id="@+id/cbSelect"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp" />
 
+    <!-- Item Details -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"

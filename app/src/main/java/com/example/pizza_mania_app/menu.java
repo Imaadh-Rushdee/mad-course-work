@@ -59,7 +59,7 @@ public class menu extends AppCompatActivity {
         menuContainer = findViewById(R.id.menuContainer);
         btnNewItem = findViewById(R.id.btnNewItem);
         cartImg = findViewById(R.id.cartImg);
-        userId = getIntent().getStringExtra("userID");
+        userId = getIntent().getStringExtra("userId");
         userRole = getIntent().getStringExtra("userRole");
         branchId = getIntent().getIntExtra("branchId", 1);
 
@@ -149,7 +149,9 @@ public class menu extends AppCompatActivity {
             btnEdit.setVisibility(Button.GONE);
             btnRemove.setVisibility(Button.GONE);
 
-            btnAdd.setOnClickListener(v -> Toast.makeText(this, name + " added to cart!", Toast.LENGTH_SHORT).show());
+            btnAdd.setOnClickListener(v -> {
+                addToCart(itemId);  // quantity = 1 automatically
+            });
         }
 
         menuContainer.addView(card);
@@ -261,4 +263,34 @@ public class menu extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
     }
+
+    // Call this when user clicks Add to Cart
+    private void addToCart(int itemId) {
+        // 1. Check if the customer already has a cart
+        Cursor cursor = db.rawQuery("SELECT cart_id FROM carts WHERE user_id=?", new String[]{String.valueOf(userId)});
+        int cartId;
+
+        if (cursor.moveToFirst()) {
+            // Existing cart found
+            cartId = cursor.getInt(cursor.getColumnIndexOrThrow("cart_id"));
+        } else {
+            // No cart yet → create one
+            ContentValues cartValues = new ContentValues();
+            cartValues.put("user_id", userId);
+            cartId = (int) db.insert("carts", null, cartValues);
+        }
+        cursor.close();
+
+        // 2. Insert new row for this item
+        ContentValues itemValues = new ContentValues();
+        itemValues.put("cart_id", cartId);
+        itemValues.put("item_id", itemId);
+        itemValues.put("quantity", 1);
+
+        db.insert("cart_items", null, itemValues);
+
+        Toast.makeText(this, "Item added to cart!", Toast.LENGTH_SHORT).show();
+    }
+
 }
+

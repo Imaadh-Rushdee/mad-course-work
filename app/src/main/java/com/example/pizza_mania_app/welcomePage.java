@@ -102,21 +102,25 @@ public class welcomePage extends AppCompatActivity {
                     "payment_status TEXT, " +
                     "FOREIGN KEY(order_id) REFERENCES orders(order_id))");
 
-            // Inside createDatabase()
-            db.execSQL("CREATE TABLE IF NOT EXISTS cart (" +
+            // Create carts table
+            db.execSQL("CREATE TABLE IF NOT EXISTS carts (" +
                     "cart_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "user_id INTEGER, " +
-                    "created_at TEXT, " +
-                    "FOREIGN KEY(user_id) REFERENCES users(user_id))");
+                    "user_id INTEGER NOT NULL, " +
+                    "created_at TEXT DEFAULT (datetime('now','localtime')), " +
+                    "FOREIGN KEY(user_id) REFERENCES users(user_id)" +
+                    ");");
 
+// Create cart_items table
             db.execSQL("CREATE TABLE IF NOT EXISTS cart_items (" +
                     "cart_item_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "cart_id INTEGER, " +
-                    "item_id INTEGER, " +
+                    "cart_id INTEGER NOT NULL, " +
+                    "item_id INTEGER NOT NULL, " +
                     "quantity INTEGER DEFAULT 1, " +
                     "checked INTEGER DEFAULT 0, " +  // for checkbox state
-                    "FOREIGN KEY(cart_id) REFERENCES cart(cart_id), " +
-                    "FOREIGN KEY(item_id) REFERENCES menu_items(item_id))");
+                    "FOREIGN KEY(cart_id) REFERENCES carts(cart_id), " +
+                    "FOREIGN KEY(item_id) REFERENCES menu_items(item_id)" +
+                    ");");
+
 
             // Menu table
             db.execSQL("CREATE TABLE IF NOT EXISTS menu_items (" +

@@ -6,15 +6,79 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Display Order Type -->
+    <TextView
+        android:id="@+id/tvOrderType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Order Type: Delivery"
+        android:textSize="16sp"
+        android:padding="8dp"/>
+
+    <!-- Display Address -->
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Address: 123 Colombo Street"
+        android:textSize="16sp"
+        android:padding="8dp"/>
+
+    <!-- Display Branch -->
+    <TextView
+        android:id="@+id/tvBranch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Branch: Colombo"
+        android:textSize="16sp"
+        android:padding="8dp"/>
+
+    <!-- Cart items -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="8dp">
 
         <LinearLayout
             android:id="@+id/cartContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
-
     </ScrollView>
+
+    <!-- Total price -->
+    <TextView
+        android:id="@+id/tvTotal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total: Rs. 0"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Back" />
+
+        <Button
+            android:id="@+id/btnPlaceOrder"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Place Order"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
 </LinearLayout>

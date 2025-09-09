@@ -40,4 +40,14 @@
     <string name="default_address">Default Address</string>
     <string name="sign_ups">Sign Up</string>
     <string name="already_have_an_account_login">Already have an account? Login</string>
+    <string-array name="order_types">
+        <item>Delivery</item>
+        <item>Pick-up</item>
+    </string-array>
+
+    <!-- Branch options for pickup -->
+    <string-array name="branches">
+        <item>Colombo</item>
+        <item>Galle</item>
+    </string-array>
 </resources>
