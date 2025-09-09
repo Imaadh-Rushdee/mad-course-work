@@ -78,7 +78,8 @@ public class loginPage extends AppCompatActivity {
                     break;
                 case "customer":
                     intent = new Intent(loginPage.this, menu.class);
-                    intent.putExtra("userRole", "user");
+                    intent.putExtra("userRole", "customer");
+                    intent.putExtra("userId", userId);
                     intent.putExtra("branchId", userBranchId); // pass branchId
                     break;
                 default:

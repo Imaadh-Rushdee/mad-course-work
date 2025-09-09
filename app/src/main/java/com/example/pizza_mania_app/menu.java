@@ -34,6 +34,7 @@ public class menu extends AppCompatActivity {
     private LinearLayout menuContainer;
     private SQLiteDatabase db;
     private String userRole;
+    private String userId;
     private int branchId;
     private Button btnNewItem;
     private ImageButton cartImg;
@@ -58,7 +59,7 @@ public class menu extends AppCompatActivity {
         menuContainer = findViewById(R.id.menuContainer);
         btnNewItem = findViewById(R.id.btnNewItem);
         cartImg = findViewById(R.id.cartImg);
-
+        userId = getIntent().getStringExtra("userID");
         userRole = getIntent().getStringExtra("userRole");
         branchId = getIntent().getIntExtra("branchId", 1);
 
@@ -79,6 +80,7 @@ public class menu extends AppCompatActivity {
             cartImg.setVisibility(Button.VISIBLE);
             cartImg.setOnClickListener(v -> {
                 Intent intent = new Intent(menu.this, cart.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             });
         } else {

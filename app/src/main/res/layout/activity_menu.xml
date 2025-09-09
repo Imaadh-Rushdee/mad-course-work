@@ -1,69 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <!-- Main vertical content -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FF5722"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="20px">
-
-        <!-- App Logo on the left -->
-        <ImageView
-            android:id="@+id/logoImg"
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:contentDescription="app-logo"
-            android:src="@drawable/logo" />
-
-        <!-- Text in the middle -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/beachday"
-            android:gravity="center"
-            android:text="Pizza Mania"
-            android:textColor="#FFFFFF"
-            android:textSize="80px" /> <!-- custom font -->
-
-    </LinearLayout>
-
-    <!-- New Item button (for admins) -->
-    <Button
-        android:id="@+id/btnNewItem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="➕ Add New Item"
-        android:backgroundTint="#FF5722"
-        android:textColor="#FFFFFF"
-        android:layout_margin="8dp"
-        android:visibility="gone" />
-
-    <!-- Scrollable menu list -->
-    <ScrollView
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:orientation="vertical">
 
+        <!-- Header -->
         <LinearLayout
-            android:id="@+id/menuContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp" />
-    </ScrollView>
+            android:background="#FF5722"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="20px">
+
+            <!-- App Logo on the left -->
+            <ImageView
+                android:id="@+id/logoImg"
+                android:layout_width="100px"
+                android:layout_height="100px"
+                android:contentDescription="app-logo"
+                android:src="@drawable/logo" />
+
+            <!-- Text in the middle -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/beachday"
+                android:gravity="center"
+                android:text="Pizza Mania"
+                android:textColor="#FFFFFF"
+                android:textSize="80px" /> <!-- custom font -->
+
+        </LinearLayout>
+
+        <!-- New Item button -->
+        <Button
+            android:id="@+id/btnNewItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="➕ Add New Item"
+            android:backgroundTint="#FF5722"
+            android:textColor="#FFFFFF"
+            android:layout_margin="8dp"
+            android:visibility="gone" />
+
+        <!-- Scrollable menu list -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/menuContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp" />
+
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- Floating cart button -->
     <ImageButton
         android:id="@+id/cartImg"
-        android:layout_width="100px"
-        android:layout_height="100px"
-        android:background="@null"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:background="@drawable/round_button_bg"
+        android:scaleType="centerInside"
         android:src="@drawable/cart"
-        android:visibility="gone" />
+        android:contentDescription="Cart"
+        android:visibility="visible" />
 
-</LinearLayout>
+</FrameLayout>

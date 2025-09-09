@@ -180,6 +180,15 @@ public class welcomePage extends AppCompatActivity {
             values.put("branch_id", 1);
             db.insert("users", null, values);
 
+            values.clear();
+            values.put("name", "Customer");
+            values.put("email", "cus@pizza.com");
+            values.put("phone", "0722222222");
+            values.put("password", "123");
+            values.put("role", "customer");
+            values.put("branch_id", 1);
+            db.insert("users", null, values);
+
             // Driver 2
             values.clear();
             values.put("name", "Driver Two");

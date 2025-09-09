@@ -17,7 +17,7 @@ public class cart extends AppCompatActivity {
 
     private SQLiteDatabase db;
     private LinearLayout cartContainer;
-    private int userId = 1; // TODO: pass logged-in userId dynamically
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class cart extends AppCompatActivity {
 
         cartContainer = findViewById(R.id.cartContainer);
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
-
+        userId = getIntent().getIntExtra("userId", 0);
         loadCartItems(userId);
     }
 
@@ -75,6 +75,14 @@ public class cart extends AppCompatActivity {
             }
             c.close();
         }
+        else {
+            TextView emptyMsg = new TextView(this);
+            emptyMsg.setText("Nothing to display here");
+            emptyMsg.setTextSize(18f);
+            emptyMsg.setPadding(16, 16, 16, 16);
+            cartContainer.addView(emptyMsg);
+        }
+
         cartCursor.close();
     }
 }
