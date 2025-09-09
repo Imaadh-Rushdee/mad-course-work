@@ -1,10 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customer.confirmOrder">
+    android:background="#FDFDFD">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="10dp">
+
+
+        <!-- App Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FF5722"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10px">
+
+            <!-- App Logo on the left -->
+            <ImageView
+                android:id="@+id/logoImg"
+                android:layout_width="100px"
+                android:layout_height="100px"
+                android:contentDescription="app-logo"
+                android:src="@drawable/logo" />
+
+            <!-- Text in the middle -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/beachday"
+                android:gravity="center"
+                android:text="Pizza Mania"
+                android:textColor="#FFFFFF"
+                android:textSize="80px" /> <!-- custom font -->
+
+            <!-- Profile Icon on the right -->
+            <ImageButton
+                android:id="@+id/profileImg"
+                android:layout_width="100px"
+                android:layout_height="100px"
+                android:background="@null"
+                android:contentDescription="Profile"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile" />
+        </LinearLayout>
+
+        <!-- Header -->
+        <TextView
+            android:id="@+id/tvOrderConfirmTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_your_order"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"/>
+
+        <!-- Payment Method -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/payment_method"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/rbCash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/cash" />
+
+
+        <!-- Delivery Address -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/delivery_address"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/colombo_mount_lavinia_no_63"/>
+
+            <Button
+                android:id="@+id/btnChangeAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/change"
+                android:backgroundTint="#FF5722"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+
+        <!-- Branch Confirmation -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_branch"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerBranch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Total Amount -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/total_amount"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvTotalAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rs_5000"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- Confirm Button -->
+        <Button
+            android:id="@+id/btnConfirmOrder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_order"
+            android:backgroundTint="#388E3C"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+</ScrollView>

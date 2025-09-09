@@ -117,26 +117,49 @@ public class orderDetailsMaps extends AppCompatActivity implements OnMapReadyCal
     }
 
     private void acceptOrder() {
-        executorService.execute(() -> {
-            try {
-                SQLiteDatabase db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
-                db.execSQL("UPDATE orders SET order_status='ongoing' WHERE order_id=?",
-                        new Object[]{orderId});
-                db.close();
+        // First, get driver's last known location
+        if (!checkLocationPermission()) {
+            Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                mainHandler.post(() -> {
-                    Intent intent = new Intent(this, ongoingOrderMaps.class);
-                    intent.putExtra("orderId", orderId);
-                    startActivity(intent);
-                    finish();
+        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                double driverLat = location.getLatitude();
+                double driverLng = location.getLongitude();
+
+                executorService.execute(() -> {
+                    try {
+                        SQLiteDatabase db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
+                        db.execSQL("UPDATE orders SET order_status='ongoing' WHERE order_id=?",
+                                new Object[]{orderId});
+                        db.close();
+
+                        mainHandler.post(() -> {
+                            Intent intent = new Intent(this, ongoingOrderMaps.class);
+                            intent.putExtra("orderId", orderId);
+                            intent.putExtra("driverLat", driverLat);   // send driver latitude
+                            intent.putExtra("driverLng", driverLng);   // send driver longitude
+                            intent.putExtra("customerLat", customerLocation.latitude);
+                            intent.putExtra("customerLng", customerLocation.longitude);
+                            startActivity(intent);
+                            finish();
+                        });
+                    } catch (Exception e) {
+                        mainHandler.post(() ->
+                                Toast.makeText(this, "Error accepting order", Toast.LENGTH_SHORT).show()
+                        );
+                    }
                 });
-            } catch (Exception e) {
-                mainHandler.post(() ->
-                        Toast.makeText(this, "Error accepting order", Toast.LENGTH_SHORT).show()
-                );
+
+            } else {
+                Toast.makeText(this, "Unable to get driver location", Toast.LENGTH_SHORT).show();
             }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Error retrieving location", Toast.LENGTH_SHORT).show();
         });
     }
+
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {

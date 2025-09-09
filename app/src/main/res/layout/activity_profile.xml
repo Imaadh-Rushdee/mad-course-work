@@ -1,10 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile">
+    android:background="#FDFCFC"
+    android:fillViewport="true"
+    android:padding="20dp"
+    android:gravity="center">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="20dp">
+
+        <!-- Profile Picture -->
+        <ImageView
+            android:id="@+id/imgProfile"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_profile_placeholder"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/profile_picture"
+            android:background="@drawable/circle_bg"
+            android:padding="5dp" />
+
+        <!-- Username -->
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/john_wick"
+            android:textColor="#FF5722"
+            android:textSize="24sp"
+            android:fontFamily="@font/beachday"
+            android:layout_marginBottom="30dp" />
+
+        <!-- Edit Details -->
+        <LinearLayout
+            android:id="@+id/llEditDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/card_bg"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="@string/edit_details_icon"
+                app:tint="#FF5722" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_details"
+                android:textSize="16sp"
+                android:textColor="#333333"
+                android:layout_marginStart="15dp" />
+        </LinearLayout>
+
+        <!-- Manage Addresses -->
+        <LinearLayout
+            android:id="@+id/llManageAddresses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/card_bg"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_location"
+                android:contentDescription="@string/manage_addresses_icon"
+                app:tint="#FF5722" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/manage_addresses"
+                android:textSize="16sp"
+                android:textColor="#333333"
+                android:layout_marginStart="15dp" />
+        </LinearLayout>
+
+        <!-- Saved Cards -->
+        <LinearLayout
+            android:id="@+id/llSavedCards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/card_bg"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_card"
+                android:contentDescription="@string/saved_cards_icon"
+                app:tint="#FF5722" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/saved_cards"
+                android:textSize="16sp"
+                android:textColor="#333333"
+                android:layout_marginStart="15dp" />
+        </LinearLayout>
+
+        <!-- Default Branch -->
+        <LinearLayout
+            android:id="@+id/llDefaultBranch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/card_bg"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_branch"
+                android:contentDescription="@string/default_branch_icon"
+                app:tint="#FF5722" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default_branch"
+                android:textSize="16sp"
+                android:textColor="#333333"
+                android:layout_marginStart="15dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

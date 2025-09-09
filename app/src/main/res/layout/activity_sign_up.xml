@@ -1,10 +1,123 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".signUp">
+    android:background="#FDFDFD"
+    android:fillViewport="true"
+    android:padding="20dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/logoImg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/logo"
+            android:contentDescription="@string/app_logo" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_account"
+            android:textColor="#4CAF50"
+            android:textSize="28sp"
+            android:fontFamily="@font/beachday"
+            android:layout_marginBottom="30dp" />
+
+        <!-- Name -->
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/full_name"
+            android:padding="12dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittext_bg"
+            android:drawableStart="@drawable/ic_user"
+            android:drawablePadding="10dp"
+            android:inputType="textPersonName" />
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:padding="12dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittext_bg"
+            android:drawableStart="@drawable/ic_email"
+            android:drawablePadding="10dp"
+            android:inputType="textEmailAddress" />
+
+        <!-- Password -->
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/passwords"
+            android:padding="12dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittext_bg"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="10dp"
+            android:inputType="textPassword" />
+
+        <!-- Confirm Password -->
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/confirm_password"
+            android:padding="12dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittext_bg"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="10dp"
+            android:inputType="textPassword" />
+
+        <!-- Phone -->
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/mobile_number"
+            android:padding="12dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edittext_bg"
+            android:drawablePadding="10dp"
+            android:inputType="phone" />
+
+        <!-- Google Places Autocomplete -->
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_ups"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#4CAF50"
+            android:layout_marginBottom="15dp" />
+
+        <TextView
+            android:id="@+id/tvLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/already_have_an_account_login"
+            android:textSize="14sp"
+            android:textColor="#4CAF50" />
+    </LinearLayout>
+</ScrollView>

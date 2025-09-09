@@ -13,7 +13,7 @@
         android:background="#FF5722"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10px">
+        android:padding="20px">
 
         <!-- App Logo on the left -->
         <ImageView
@@ -35,15 +35,30 @@
             android:textColor="#FFFFFF"
             android:textSize="80px" /> <!-- custom font -->
 
-        <!-- Profile Icon on the right -->
-        <ImageButton
-            android:id="@+id/profileImg"
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:background="@null"
-            android:contentDescription="Profile"
-            android:scaleType="centerCrop"
-            android:src="@drawable/profile" />
+        <!-- Profile Spinner -->
+        <!-- Profile Section with both image and dropdown -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Profile Image -->
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="80px"
+                android:layout_height="80px"
+                android:src="@drawable/profile"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="10px"/>
+
+            <!-- Menu Spinner -->
+            <Spinner
+                android:id="@+id/profileSpinner"
+                android:layout_width="40dp"
+                android:layout_height="80px" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -126,8 +141,5 @@
             android:src="@drawable/refresh" />
 
     </LinearLayout>
-
-
-
 
 </LinearLayout>

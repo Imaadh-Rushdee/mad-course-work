@@ -10,9 +10,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +24,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.pizza_mania_app.customer.cart;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -32,18 +34,22 @@ public class menu extends AppCompatActivity {
     private LinearLayout menuContainer;
     private SQLiteDatabase db;
     private String userRole;
+    private String userId;
+    private int branchId;
     private Button btnNewItem;
+    private ImageButton cartImg;
 
     private static final int REQUEST_CAMERA = 100;
     private static final int REQUEST_GALLERY = 200;
-    private ImageView tempImageView;   // to preview image inside dialog
-    private byte[] selectedImageBytes; // store image as bytes temporarily
+    private ImageView tempImageView;
+    private byte[] selectedImageBytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -52,60 +58,39 @@ public class menu extends AppCompatActivity {
 
         menuContainer = findViewById(R.id.menuContainer);
         btnNewItem = findViewById(R.id.btnNewItem);
-
-        // Get user role from login (e.g., "admin" or "user")
+        cartImg = findViewById(R.id.cartImg);
+        userId = getIntent().getStringExtra("userID");
         userRole = getIntent().getStringExtra("userRole");
+        branchId = getIntent().getIntExtra("branchId", 1);
 
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
-        createMenuTableIfNotExists();
-        insertSampleMenuItems();
+
         loadMenuItems();
 
-        // Show "Add New Item" button only for admin
+        // Show Add New Item button for admins
         if ("admin".equals(userRole)) {
-            btnNewItem.setVisibility(View.VISIBLE);
-            btnNewItem.setOnClickListener(v -> showAddOrEditDialog(null, null, 0, 0, null));
+            btnNewItem.setVisibility(Button.VISIBLE);
+            btnNewItem.setOnClickListener(v -> showAddOrEditDialog(null, null, 0, null, null));
         } else {
-            btnNewItem.setVisibility(View.GONE);
+            btnNewItem.setVisibility(Button.GONE);
         }
-    }
 
-    private void createMenuTableIfNotExists() {
-        db.execSQL("CREATE TABLE IF NOT EXISTS menu_items (" +
-                "item_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name TEXT, " +
-                "description TEXT, " +
-                "price REAL, " +
-                "image BLOB)");
-    }
-
-    private void insertSampleMenuItems() {
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM menu_items", null);
-        if (cursor.moveToFirst() && cursor.getInt(0) == 0) {
-            ContentValues values = new ContentValues();
-            values.put("name", "Margherita Pizza");
-            values.put("description", "Classic cheese & tomato");
-            values.put("price", 1200);
-            db.insert("menu_items", null, values);
-
-            values = new ContentValues();
-            values.put("name", "Pepperoni Pizza");
-            values.put("description", "Loaded with pepperoni");
-            values.put("price", 1500);
-            db.insert("menu_items", null, values);
-
-            values = new ContentValues();
-            values.put("name", "BBQ Chicken Pizza");
-            values.put("description", "Chicken + BBQ sauce");
-            values.put("price", 1800);
-            db.insert("menu_items", null, values);
+        // Show cart icon for customers
+        if ("customer".equals(userRole)) {
+            cartImg.setVisibility(Button.VISIBLE);
+            cartImg.setOnClickListener(v -> {
+                Intent intent = new Intent(menu.this, cart.class);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
+            });
+        } else {
+            cartImg.setVisibility(Button.GONE);
         }
-        cursor.close();
     }
 
     private void loadMenuItems() {
         menuContainer.removeAllViews();
-        Cursor cursor = db.rawQuery("SELECT * FROM menu_items", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM menu_items WHERE branch_id=?", new String[]{String.valueOf(branchId)});
 
         while (cursor.moveToNext()) {
             int itemId = cursor.getInt(cursor.getColumnIndexOrThrow("item_id"));
@@ -116,19 +101,19 @@ public class menu extends AppCompatActivity {
 
             addMenuItem(itemId, name, desc, price, imageBytes);
         }
-
         cursor.close();
     }
 
     private void addMenuItem(int itemId, String name, String desc, double price, byte[] imageBytes) {
-        LinearLayout card = (LinearLayout) getLayoutInflater()
-                .inflate(R.layout.menu_item, menuContainer, false);
+        LinearLayout card = (LinearLayout) getLayoutInflater().inflate(R.layout.menu_item, menuContainer, false);
 
         TextView tvName = card.findViewById(R.id.itemName);
         TextView tvDesc = card.findViewById(R.id.itemDesc);
         TextView tvPrice = card.findViewById(R.id.itemPrice);
         ImageView img = card.findViewById(R.id.itemImage);
         Button btnAdd = card.findViewById(R.id.btnAdd);
+        Button btnEdit = card.findViewById(R.id.btnEdit);
+        Button btnRemove = card.findViewById(R.id.btnRemove);
 
         tvName.setText(name);
         tvDesc.setText(desc);
@@ -137,41 +122,40 @@ public class menu extends AppCompatActivity {
         if (imageBytes != null) {
             Bitmap bmp = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
             img.setImageBitmap(bmp);
-        } else {
-            img.setImageResource(R.drawable.logo); // fallback
-        }
-
-        btnAdd.setOnClickListener(v ->
-                Toast.makeText(this, name + " added to cart!", Toast.LENGTH_SHORT).show()
-        );
-
-        // Admin controls: Edit & Remove buttons
-        Button btnEdit = card.findViewById(R.id.btnEdit);
-        Button btnRemove = card.findViewById(R.id.btnRemove);
+        } else img.setImageResource(R.drawable.logo);
 
         if ("admin".equals(userRole)) {
-            btnEdit.setVisibility(View.VISIBLE);
-            btnRemove.setVisibility(View.VISIBLE);
+            btnAdd.setVisibility(Button.GONE);
+            btnEdit.setVisibility(Button.VISIBLE);
+            btnRemove.setVisibility(Button.VISIBLE);
 
-            btnEdit.setOnClickListener(v ->
-                    showAddOrEditDialog(name, desc, price, itemId, imageBytes)
-            );
+            btnEdit.setOnClickListener(v -> showAddOrEditDialog(name, desc, price, itemId, imageBytes));
 
             btnRemove.setOnClickListener(v -> {
-                db.delete("menu_items", "item_id=?", new String[]{String.valueOf(itemId)});
-                Toast.makeText(this, name + " removed!", Toast.LENGTH_SHORT).show();
-                loadMenuItems();
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete Item")
+                        .setMessage("Are you sure you want to delete " + name + "?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            db.delete("menu_items", "item_id=?", new String[]{String.valueOf(itemId)});
+                            Toast.makeText(this, name + " removed!", Toast.LENGTH_SHORT).show();
+                            loadMenuItems();
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             });
 
         } else {
-            btnEdit.setVisibility(View.GONE);
-            btnRemove.setVisibility(View.GONE);
+            btnAdd.setVisibility(Button.VISIBLE);
+            btnEdit.setVisibility(Button.GONE);
+            btnRemove.setVisibility(Button.GONE);
+
+            btnAdd.setOnClickListener(v -> Toast.makeText(this, name + " added to cart!", Toast.LENGTH_SHORT).show());
         }
 
         menuContainer.addView(card);
     }
 
-    // 🔹 Add or Edit dialog (shared)
+    // Add/Edit dialog
     private void showAddOrEditDialog(String oldName, String oldDesc, double oldPrice, Integer itemId, byte[] oldImage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(itemId == null ? "Add New Item" : "Edit Item");
@@ -180,17 +164,17 @@ public class menu extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(40, 30, 40, 10);
 
-        final EditText etName = new EditText(this);
+        EditText etName = new EditText(this);
         etName.setHint("Item Name");
         if (oldName != null) etName.setText(oldName);
         layout.addView(etName);
 
-        final EditText etDesc = new EditText(this);
+        EditText etDesc = new EditText(this);
         etDesc.setHint("Description");
         if (oldDesc != null) etDesc.setText(oldDesc);
         layout.addView(etDesc);
 
-        final EditText etPrice = new EditText(this);
+        EditText etPrice = new EditText(this);
         etPrice.setHint("Price");
         etPrice.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
         if (oldPrice > 0) etPrice.setText(String.valueOf(oldPrice));
@@ -217,29 +201,23 @@ public class menu extends AppCompatActivity {
             String name = etName.getText().toString().trim();
             String desc = etDesc.getText().toString().trim();
             String priceStr = etPrice.getText().toString().trim();
-
             if (name.isEmpty() || desc.isEmpty() || priceStr.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             double price = Double.parseDouble(priceStr);
 
             ContentValues values = new ContentValues();
             values.put("name", name);
             values.put("description", desc);
             values.put("price", price);
+            values.put("branch_id", branchId);
             if (selectedImageBytes != null) values.put("image", selectedImageBytes);
 
-            if (itemId == null) {
-                db.insert("menu_items", null, values);
-                Toast.makeText(this, "Item added: " + name, Toast.LENGTH_SHORT).show();
-            } else {
-                db.update("menu_items", values, "item_id=?", new String[]{String.valueOf(itemId)});
-                Toast.makeText(this, "Item updated: " + name, Toast.LENGTH_SHORT).show();
-            }
+            if (itemId == null) db.insert("menu_items", null, values);
+            else db.update("menu_items", values, "item_id=?", new String[]{String.valueOf(itemId)});
 
-            selectedImageBytes = null; // reset
+            selectedImageBytes = null;
             loadMenuItems();
         });
 
@@ -247,19 +225,15 @@ public class menu extends AppCompatActivity {
         builder.show();
     }
 
-    // 🔹 Choose image (camera/gallery)
     private void showImagePicker() {
         String[] options = {"Camera", "Gallery"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Image");
         builder.setItems(options, (dialog, which) -> {
-            if (which == 0) { // Camera
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, REQUEST_CAMERA);
-            } else { // Gallery
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, REQUEST_GALLERY);
-            }
+            Intent intent;
+            if (which == 0) intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            else intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, which == 0 ? REQUEST_CAMERA : REQUEST_GALLERY);
         });
         builder.show();
     }
@@ -267,20 +241,14 @@ public class menu extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == RESULT_OK && data != null) {
             Bitmap bitmap = null;
-            if (requestCode == REQUEST_CAMERA) {
-                bitmap = (Bitmap) data.getExtras().get("data");
-            } else if (requestCode == REQUEST_GALLERY) {
+            if (requestCode == REQUEST_CAMERA) bitmap = (Bitmap) data.getExtras().get("data");
+            else if (requestCode == REQUEST_GALLERY) {
                 Uri uri = data.getData();
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                try { bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri); }
+                catch (IOException e) { e.printStackTrace(); }
             }
-
             if (bitmap != null) {
                 tempImageView.setImageBitmap(bitmap);
                 selectedImageBytes = bitmapToBytes(bitmap);
@@ -288,7 +256,6 @@ public class menu extends AppCompatActivity {
         }
     }
 
-    // Convert bitmap -> byte[]
     private byte[] bitmapToBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
