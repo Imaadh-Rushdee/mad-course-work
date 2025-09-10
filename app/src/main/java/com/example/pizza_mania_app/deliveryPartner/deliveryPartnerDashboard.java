@@ -56,20 +56,21 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
         profileSpinner = findViewById(R.id.profileSpinner); // For menu dropdown
 
         // Simple spinner setup
-        String[] options = {"Menu", "Profile", "Logout"};
+        String[] options = {"Profile", "Logout"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.custom_spinner_layout, options);
         profileSpinner.setAdapter(adapter);
 
         profileSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 1) {
+                if (position == 0) {
                     // Profile - do whatever you want
                     Toast.makeText(deliveryPartnerDashboard.this, "Profile clicked", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(deliveryPartnerDashboard.this, profile.class);
+                    intent.putExtra("userId", partnerId);
                     startActivity(intent);
 
-                } else if (position == 2) {
+                } else if (position == 1) {
                     // Logout - go back to login
                     finish();
                 }
