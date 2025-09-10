@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.pizza_mania_app.admin.AdminDashboardActivity;
 import com.example.pizza_mania_app.deliveryPartner.deliveryPartnerDashboard;
 
 public class loginPage extends AppCompatActivity {
@@ -68,7 +69,7 @@ public class loginPage extends AppCompatActivity {
             Intent intent;
             switch (role.toLowerCase()) {
                 case "admin":
-                    intent = new Intent(loginPage.this, menu.class);
+                    intent = new Intent(loginPage.this, AdminDashboardActivity.class);
                     intent.putExtra("userRole", "admin");
                     intent.putExtra("branchId", userBranchId); // pass branchId
                     break;

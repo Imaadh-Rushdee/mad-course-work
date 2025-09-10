@@ -53,7 +53,7 @@
             android:name=".admin.orders"
             android:exported="false" />
         <activity
-            android:name=".admin.adminDashboard"
+            android:name=".admin.AdminDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".customer.orderInvoice"
