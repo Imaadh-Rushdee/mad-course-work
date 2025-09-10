@@ -59,6 +59,7 @@ public class loginPage extends AppCompatActivity {
         if (cursor.moveToFirst()) {
             String role = cursor.getString(cursor.getColumnIndexOrThrow("role"));
             String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            String address = cursor.getString(cursor.getColumnIndexOrThrow("address"));
             int userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id"));
             int userBranchId = cursor.getInt(cursor.getColumnIndexOrThrow("branch_id")); // <-- get branch id
 
@@ -77,10 +78,11 @@ public class loginPage extends AppCompatActivity {
                     intent.putExtra("branchId", userBranchId); // optional for driver
                     break;
                 case "customer":
-                    intent = new Intent(loginPage.this, menu.class);
+                    intent = new Intent(loginPage.this, OrderSetupActivity.class);
                     intent.putExtra("userRole", "customer");
                     intent.putExtra("userId", String.valueOf(userId));
-                    intent.putExtra("branchId", userBranchId); // pass branchId
+                    intent.putExtra("defaultBranchId", userBranchId); // pass branchId
+                    intent.putExtra("defaultAddress", address); // pass branchId
                     break;
                 default:
                     Toast.makeText(this, "Unknown role: " + role, Toast.LENGTH_SHORT).show();

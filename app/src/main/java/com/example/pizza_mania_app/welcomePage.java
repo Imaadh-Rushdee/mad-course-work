@@ -171,6 +171,15 @@ public class welcomePage extends AppCompatActivity {
             values.put("phone", "0711111111");
             values.put("password", "admin123");
             values.put("role", "admin");
+            values.put("branch_id", 2);
+            db.insert("users", null, values);
+
+            values.clear();
+            values.put("name", "Admin User");
+            values.put("email", "admin@pizza.com");
+            values.put("phone", "0711111111");
+            values.put("password", "123");
+            values.put("role", "admin");
             values.put("branch_id", 1);
             db.insert("users", null, values);
 
@@ -186,11 +195,22 @@ public class welcomePage extends AppCompatActivity {
 
             values.clear();
             values.put("name", "Customer");
-            values.put("email", "cus@pizza.com");
+            values.put("email", "cu");
             values.put("phone", "0722222222");
             values.put("password", "123");
             values.put("role", "customer");
+            values.put("address", "92 Raja Mawatha Rd, Dehiwala-Mount Lavinia");
             values.put("branch_id", 1);
+            db.insert("users", null, values);
+
+            values.clear();
+            values.put("name", "Customer");
+            values.put("email", "cus");
+            values.put("phone", "0722222222");
+            values.put("password", "123");
+            values.put("role", "customer");
+            values.put("address", "92 Raja Mawatha Rd, Dehiwala-Mount Lavinia");
+            values.put("branch_id", 2);
             db.insert("users", null, values);
 
             // Driver 2

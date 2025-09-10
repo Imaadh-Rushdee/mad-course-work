@@ -17,6 +17,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pizza_mania_app.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
 
@@ -26,10 +27,10 @@ public class cart extends AppCompatActivity {
     private LinearLayout cartContainer;
     private TextView tvTotal, tvOrderType, tvAddress, tvBranch;
     private Button btnBack, btnPlaceOrder;
-    private String userId;
-    private String orderType, address, branch;
+    private String userId, orderType, address, branch;
+    private double lat = 0.0, lng = 0.0; // optional LatLng
 
-    private HashMap<Integer, Double> itemTotals = new HashMap<>();
+    private final HashMap<Integer, Double> itemTotals = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +41,12 @@ public class cart extends AppCompatActivity {
         // Get passed data
         userId = getIntent().getStringExtra("userId");
         orderType = getIntent().getStringExtra("orderType");
-        address = getIntent().getStringExtra("address");
+        address = getIntent().getStringExtra("userAddress");
         branch = getIntent().getStringExtra("branch");
+        lat = getIntent().getDoubleExtra("lat", 0.0);
+        lng = getIntent().getDoubleExtra("lng", 0.0);
 
-        // Views
+        // Initialize views
         cartContainer = findViewById(R.id.cartContainer);
         tvTotal = findViewById(R.id.tvTotal);
         tvOrderType = findViewById(R.id.tvOrderType);
@@ -52,10 +55,10 @@ public class cart extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
 
-        // Display passed data
-        tvOrderType.setText("Order Type: " + orderType);
-        tvAddress.setText("Address: " + address);
-        tvBranch.setText("Branch: " + branch);
+        // Display passed info
+        tvOrderType.setText("Order Type: " + (orderType != null ? orderType : "N/A"));
+        tvAddress.setText("Address: " + (address != null ? address : "N/A"));
+        tvBranch.setText("Branch: " + (branch != null ? branch : "N/A"));
 
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
@@ -122,6 +125,7 @@ public class cart extends AppCompatActivity {
 
                 cartContainer.addView(itemView);
             }
+
             c.close();
             updateTotal();
         } else {
@@ -150,8 +154,11 @@ public class cart extends AppCompatActivity {
 
         Toast.makeText(this,
                 "Order placed successfully!\n" +
-                        orderType + ": " + address + "\nBranch: " + branch,
-                Toast.LENGTH_SHORT).show();
+                        "Order Type: " + orderType + "\n" +
+                        "Address: " + address + "\n" +
+                        "Branch: " + branch +
+                        (lat != 0.0 && lng != 0.0 ? "\nLatLng: " + lat + ", " + lng : ""),
+                Toast.LENGTH_LONG).show();
 
         // Delete only selected items
         for (Integer cartItemId : itemTotals.keySet()) {

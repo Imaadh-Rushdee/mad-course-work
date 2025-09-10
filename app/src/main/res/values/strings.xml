@@ -44,10 +44,5 @@
         <item>Delivery</item>
         <item>Pick-up</item>
     </string-array>
-
     <!-- Branch options for pickup -->
-    <string-array name="branches">
-        <item>Colombo</item>
-        <item>Galle</item>
-    </string-array>
 </resources>
