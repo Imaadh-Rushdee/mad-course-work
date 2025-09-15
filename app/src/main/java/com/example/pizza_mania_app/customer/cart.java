@@ -1,5 +1,7 @@
 package com.example.pizza_mania_app.customer;
 
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -152,19 +154,60 @@ public class cart extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(this,
-                "Order placed successfully!\n" +
-                        "Order Type: " + orderType + "\n" +
-                        "Address: " + address + "\n" +
-                        "Branch: " + branch +
-                        (lat != 0.0 && lng != 0.0 ? "\nLatLng: " + lat + ", " + lng : ""),
-                Toast.LENGTH_LONG).show();
+        // 1. Insert new order
+        ContentValues orderValues = new ContentValues();
+        orderValues.put("customer_name", userId); // ideally link to users table
+        orderValues.put("order_address", address);
+        orderValues.put("address_latitude", lat);
+        orderValues.put("address_longitude", lng);
+        orderValues.put("payment_method", "Cash on Delivery"); // or dynamic
+        orderValues.put("order_date", String.valueOf(System.currentTimeMillis())); // replace with formatted date
+        orderValues.put("order_time", "Now");
+        orderValues.put("total", getCurrentTotal());
+        orderValues.put("order_status", "pending");
+        orderValues.put("order_type", orderType);
+        orderValues.put("branch_id", branch); // make sure branch is numeric
 
-        // Delete only selected items
+        long orderId = db.insert("orders", null, orderValues);
+
+        // 2. Insert selected items into order_items
         for (Integer cartItemId : itemTotals.keySet()) {
+            Cursor c = db.rawQuery(
+                    "SELECT ci.item_id, ci.quantity, m.price FROM cart_items ci " +
+                            "JOIN menu_items m ON ci.item_id = m.item_id " +
+                            "WHERE ci.cart_item_id=?",
+                    new String[]{String.valueOf(cartItemId)});
+            if (c.moveToFirst()) {
+                int itemId = c.getInt(0);
+                int qty = c.getInt(1);
+                double price = c.getDouble(2);
+
+                ContentValues itemValues = new ContentValues();
+                itemValues.put("order_id", orderId);
+                itemValues.put("item_id", itemId);
+                itemValues.put("quantity", qty);
+                itemValues.put("price", price);
+                db.insert("order_items", null, itemValues);
+            }
+            c.close();
+
+            // delete from cart once added to order
             db.execSQL("DELETE FROM cart_items WHERE cart_item_id=?", new Object[]{cartItemId});
         }
 
+        Toast.makeText(this, "Order placed successfully!", Toast.LENGTH_LONG).show();
+
         loadCartItems(userId);
+        Intent intent = new Intent(cart.this, orderTracking.class);
+        intent.putExtra("orderId", orderId);
+        intent.putExtra("userId", userId);
+        startActivity(intent);
     }
+
+    private double getCurrentTotal() {
+        double total = 0;
+        for (double val : itemTotals.values()) total += val;
+        return total;
+    }
+
 }

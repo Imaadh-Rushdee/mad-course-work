@@ -176,7 +176,7 @@ public class welcomePage extends AppCompatActivity {
 
             values.clear();
             values.put("name", "Admin User");
-            values.put("email", "admin@pizza.com");
+            values.put("email", "admin123@pizza.com");
             values.put("phone", "0711111111");
             values.put("password", "123");
             values.put("role", "admin");
