@@ -27,10 +27,8 @@
             android:text="@string/create_account"
             android:textColor="#4CAF50"
             android:textSize="28sp"
-            android:fontFamily="@font/beachday"
             android:layout_marginBottom="30dp" />
 
-        <!-- Name -->
         <EditText
             android:id="@+id/etName"
             android:layout_width="match_parent"
@@ -39,11 +37,8 @@
             android:padding="12dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/edittext_bg"
-            android:drawableStart="@drawable/ic_user"
-            android:drawablePadding="10dp"
             android:inputType="textPersonName" />
 
-        <!-- Email -->
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
@@ -52,11 +47,8 @@
             android:padding="12dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/edittext_bg"
-            android:drawableStart="@drawable/ic_email"
-            android:drawablePadding="10dp"
             android:inputType="textEmailAddress" />
 
-        <!-- Password -->
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
@@ -65,11 +57,8 @@
             android:padding="12dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/edittext_bg"
-            android:drawableStart="@drawable/ic_lock"
-            android:drawablePadding="10dp"
             android:inputType="textPassword" />
 
-        <!-- Confirm Password -->
         <EditText
             android:id="@+id/etConfirmPassword"
             android:layout_width="match_parent"
@@ -78,11 +67,8 @@
             android:padding="12dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/edittext_bg"
-            android:drawableStart="@drawable/ic_lock"
-            android:drawablePadding="10dp"
             android:inputType="textPassword" />
 
-        <!-- Phone -->
         <EditText
             android:id="@+id/etPhone"
             android:layout_width="match_parent"
@@ -91,16 +77,38 @@
             android:padding="12dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/edittext_bg"
-            android:drawablePadding="10dp"
             android:inputType="phone" />
 
-        <!-- Google Places Autocomplete -->
-        <fragment
-            android:id="@+id/autocomplete_fragment"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        <TextView
+            android:id="@+id/tvSelectedLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp" />
+            android:text="No location selected"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:background="@drawable/edittext_bg"
+            android:padding="12dp"
+            android:layout_marginBottom="15dp" />
+
+        <Button
+            android:id="@+id/btnGetLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get Current Location"
+            android:textSize="16sp"
+            android:backgroundTint="#2196F3"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="15dp" />
+
+        <Button
+            android:id="@+id/btnPickLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick Location on Map"
+            android:textSize="16sp"
+            android:backgroundTint="#FF9800"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="15dp" />
 
         <Button
             android:id="@+id/btnSignUp"

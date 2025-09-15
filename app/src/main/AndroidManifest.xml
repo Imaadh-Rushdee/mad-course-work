@@ -17,9 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Pizzamaniaapp">
-        <activity
-            android:name=".OrderSetupActivity"
-            android:exported="false" />
+
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -35,6 +33,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCldldEy5A5sk7K3-RkyHhoCH86XeToP8s" />
 
+        <activity
+            android:name=".helperClasses.SelectLocationActivity"
+            android:exported="false"
+            android:label="@string/title_activity_select_location" />
+        <activity
+            android:name=".OrderSetupActivity"
+            android:exported="false" />
         <activity
             android:name=".deliveryPartner.orderDetailsMaps"
             android:exported="false"
