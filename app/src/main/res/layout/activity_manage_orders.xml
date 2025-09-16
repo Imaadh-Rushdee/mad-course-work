@@ -3,24 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
-    android:background="#FFF3E0">
+    android:padding="24dp"
+    android:background="#FFFFFF">
 
     <EditText
         android:id="@+id/etOrderId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Order ID"
-        android:padding="12dp"
-        android:layout_marginBottom="12dp"/>
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_bg"/>
 
     <EditText
         android:id="@+id/etOrderStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Order Status"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"/>
+        android:padding="16dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edittext_bg"/>
 
     <Button
         android:id="@+id/btnAddOrder"
@@ -28,8 +30,9 @@
         android:layout_height="wrap_content"
         android:text="Add Order"
         android:backgroundTint="#FF5722"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="12dp"/>
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"
+        android:padding="14dp"/>
 
     <Button
         android:id="@+id/btnUpdateOrder"
@@ -37,8 +40,9 @@
         android:layout_height="wrap_content"
         android:text="Update Order"
         android:backgroundTint="#FF9800"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="12dp"/>
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"
+        android:padding="14dp"/>
 
     <Button
         android:id="@+id/btnDeleteOrder"
@@ -46,5 +50,6 @@
         android:layout_height="wrap_content"
         android:text="Delete Order"
         android:backgroundTint="#D32F2F"
-        android:textColor="@android:color/white"/>
+        android:textColor="#FFFFFF"
+        android:padding="14dp"/>
 </LinearLayout>

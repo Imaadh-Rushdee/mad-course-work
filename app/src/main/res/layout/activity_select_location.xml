@@ -2,18 +2,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Google Map Fragment -->
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <!-- Confirm Location Button -->
     <Button
         android:id="@+id/btnConfirmLocation"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="Confirm Location"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="#4CAF50"
-        android:textColor="#FFFFFF"/>
+        android:textColor="#FFFFFF"
+        android:padding="14dp"
+        android:textSize="18sp"
+        android:elevation="4dp"
+        android:gravity="center"/>
 </RelativeLayout>

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFF3E0"
+    android:background="#FFFFFF"
     android:padding="16dp">
 
     <TextView
@@ -40,58 +40,59 @@
         android:layout_marginTop="12dp"
         android:orientation="horizontal"
         android:weightSum="4"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
 
         <Button
             android:id="@+id/btnAddItem"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
+            android:layout_marginEnd="4dp"
             android:backgroundTint="#FF5722"
             android:text="Add"
+            android:textColor="#FFFFFF"
             android:gravity="center"
-            android:singleLine="true"
             android:ellipsize="none"
-            android:textColor="@android:color/white" />
+            android:singleLine="true"/>
 
         <Button
             android:id="@+id/btnReadItem"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
-            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:backgroundTint="#FF9800"
             android:text="Read"
+            android:textColor="#FFFFFF"
             android:gravity="center"
-            android:singleLine="true"
             android:ellipsize="none"
-            android:textColor="@android:color/white" />
+            android:singleLine="true"/>
 
         <Button
             android:id="@+id/btnUpdateItem"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
-            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:backgroundTint="#4CAF50"
             android:text="Update"
+            android:textColor="#FFFFFF"
             android:gravity="center"
-            android:singleLine="true"
             android:ellipsize="none"
-            android:textColor="@android:color/white" />
+            android:singleLine="true"/>
 
         <Button
             android:id="@+id/btnDeleteItem"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
-            android:layout_marginStart="4dp"
             android:backgroundTint="#F44336"
             android:text="Delete"
+            android:textColor="#FFFFFF"
             android:gravity="center"
-            android:singleLine="true"
             android:ellipsize="none"
-            android:textColor="@android:color/white" />
+            android:singleLine="true"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

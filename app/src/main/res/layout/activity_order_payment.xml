@@ -4,279 +4,284 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:fillViewport="true"
+    android:background="#FDFDFD"
     tools:context=".deliveryPartner.orderPayment">
 
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="#FF5722"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="20dp">
 
-        <!-- Header -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FF5722"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="20px">
+        <ImageView
+            android:id="@+id/logoImg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="app-logo"
+            android:src="@drawable/logo" />
 
-            <!-- App Logo on the left -->
-            <ImageView
-                android:id="@+id/logoImg"
-                android:layout_width="100px"
-                android:layout_height="100px"
-                android:contentDescription="app-logo"
-                android:src="@drawable/logo" />
-
-            <!-- Text in the middle -->
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/beachday"
-                android:gravity="center"
-                android:text="Pizza Mania"
-                android:textColor="#FFFFFF"
-                android:textSize="80px" />
-        </LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="15dp"
-    android:orientation="vertical">
-        <!-- Congratulation Message -->
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="CONGRATULATIONS"
+            android:layout_weight="1"
+            android:fontFamily="@font/beachday"
             android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="28sp"
-            android:layout_marginTop="30dp"/>
+            android:text="Pizza Mania"
+            android:textColor="#FFFFFF"
+            android:textSize="36sp"/>
+    </LinearLayout>
 
-        <!-- Order Details -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:padding="8dp">
+            android:orientation="vertical">
 
-            <!-- Order ID -->
+            <!-- Congratulation Message -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CONGRATULATIONS"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="28sp"
+                android:layout_marginTop="30dp"/>
+
+            <!-- Order Details -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:padding="8dp">
+
+                <!-- Order ID -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Order ID: "
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/orderId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="020"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- Customer Name -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Customer Name: "
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/customerName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="John Cena"/>
+                </LinearLayout>
+
+                <!-- Cart Items -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cart: "
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/orderItem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sausage Pizza(2)"/>
+                </LinearLayout>
+
+                <!-- Delivery Address -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Address: "
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Colombo, Mount Lavinia, No 63"/>
+                </LinearLayout>
+
+                <!-- Payment Method -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Payment Method: "
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/paymentMethod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cash"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- Order Date -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Order Date: "
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/orderDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2025-20-10"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- Order Time -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Order Time: "
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/orderTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2.15 p.m"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- Total Amount -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Total Amount: "
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/totalAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rs. 5000"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Action Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingVertical="8dp">
+                android:gravity="center"
+                android:layout_marginTop="30dp"
+                android:weightSum="2">
 
-                <TextView
+                <Button
+                    android:id="@+id/btnPaymentComplete"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Order ID: "
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                    android:text="Payment Complete"
+                    android:backgroundTint="#4CAF50"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:padding="12dp"
+                    android:onClick="completePayment"
+                    android:layout_marginEnd="8dp"/>
 
-                <TextView
-                    android:id="@+id/orderId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="020"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <!-- Customer Name -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
+                <Button
+                    android:id="@+id/btnDownloadReceipt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Customer Name: "
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/customerName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="John Cena"/>
+                    android:text="Download Receipt"
+                    android:backgroundTint="#2196F3"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:padding="12dp"
+                    android:layout_marginStart="8dp"/>
             </LinearLayout>
 
-            <!-- Cart Items -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Cart: "
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/orderItem"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sausage Pizza(2)"/>
-            </LinearLayout>
-
-            <!-- Delivery Address -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Address: "
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Colombo, Mount Lavinia, No 63"/>
-            </LinearLayout>
-
-            <!-- Total Amount -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Payment Method: "
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/paymentMethod"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cash"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Order Date: "
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/orderDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2025-20-10"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Order Time: "
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/orderTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2.15 p.m"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Total Amount: "
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/totalAmount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rs. 5000"
-                    android:textStyle="bold"/>
-            </LinearLayout>
         </LinearLayout>
-
-        <!-- Action Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:weightSum="2">
-
-            <Button
-                android:id="@+id/btnPaymentComplete"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Payment Complete"
-                android:backgroundTint="#4CAF50"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:padding="12dp"
-                android:enabled="true"
-                android:onClick="completePayment"/>
-
-            <Button
-                android:id="@+id/btnDownloadReceipt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Download Receipt"
-                android:backgroundTint="#2196F3"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:padding="12dp"
-                android:layout_marginStart="16dp"/>
-        </LinearLayout>
-
-    </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

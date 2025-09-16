@@ -18,7 +18,7 @@
             android:text="Order ID: "
             android:textSize="20sp"
             android:textStyle="bold"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="12dp"/>
 
         <TextView
             android:id="@+id/tvCustomerName"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="Customer: "
             android:textSize="18sp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="12dp"/>
 
         <TextView
             android:id="@+id/tvOrderCart"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="Order Items: "
             android:textSize="16sp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="12dp"/>
 
         <TextView
             android:id="@+id/tvTotalAmount"
@@ -43,7 +43,7 @@
             android:text="Total: Rs. "
             android:textSize="18sp"
             android:textStyle="bold"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="12dp"/>
 
         <TextView
             android:id="@+id/tvOrderAddress"
@@ -59,6 +59,7 @@
             android:layout_height="wrap_content"
             android:text="Back to Menu"
             android:backgroundTint="#FF5722"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white"
+            android:padding="14dp"/>
     </LinearLayout>
 </ScrollView>
