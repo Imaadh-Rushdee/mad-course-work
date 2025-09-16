@@ -15,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pizza_mania_app.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class confirmOrder extends AppCompatActivity {
 
@@ -61,8 +63,8 @@ public class confirmOrder extends AppCompatActivity {
         loadTotalAmount();
         loadBranches(branchIdFromMenu);
 
-        // Change address button
-        btnChangeAddress.setOnClickListener(v -> tvAddress.setText("New Address, Colombo")); // replace with map picker if needed
+        // Change address button (replace with map picker later if needed)
+        btnChangeAddress.setOnClickListener(v -> tvAddress.setText("New Address, Colombo"));
 
         // Confirm order button
         btnConfirmOrder.setOnClickListener(v -> {
@@ -80,10 +82,15 @@ public class confirmOrder extends AppCompatActivity {
         });
     }
 
+    /** Load total amount from cart **/
     private void loadTotalAmount() {
         totalAmount = 0;
         Cursor cartCursor = db.rawQuery(
-                "SELECT ci.quantity, m.price FROM carts c JOIN cart_items ci ON c.cart_id=ci.cart_id JOIN menu_items m ON ci.item_id=m.item_id WHERE c.user_id=?",
+                "SELECT ci.quantity, m.price " +
+                        "FROM carts c " +
+                        "JOIN cart_items ci ON c.cart_id=ci.cart_id " +
+                        "JOIN menu_items m ON ci.item_id=m.item_id " +
+                        "WHERE c.user_id=?",
                 new String[]{userId});
 
         if (cartCursor.moveToFirst()) {
@@ -96,6 +103,7 @@ public class confirmOrder extends AppCompatActivity {
         tvTotalAmount.setText("Rs. " + totalAmount);
     }
 
+    /** Load branch list into spinner **/
     private void loadBranches(int branchIdFromMenu) {
         branchNames.clear();
         branchIds.clear();
@@ -120,37 +128,64 @@ public class confirmOrder extends AppCompatActivity {
         }
     }
 
+    /** Insert order into DB **/
     private void insertOrder(String address, int branchId) {
+        // 1. Get customer name
+        String customerName = "";
+        Cursor userCursor = db.rawQuery("SELECT name FROM users WHERE user_id=?", new String[]{userId});
+        if (userCursor.moveToFirst()) {
+            customerName = userCursor.getString(0);
+        }
+        userCursor.close();
+
+        // 2. Build cart summary
+        StringBuilder cartSummary = new StringBuilder();
+        totalAmount = 0;
+
+        Cursor items = db.rawQuery(
+                "SELECT m.item_name, ci.quantity, m.price " +
+                        "FROM carts c " +
+                        "JOIN cart_items ci ON c.cart_id = ci.cart_id " +
+                        "JOIN menu_items m ON ci.item_id = m.item_id " +
+                        "WHERE c.user_id=?",
+                new String[]{userId});
+
+        if (items.moveToFirst()) {
+            do {
+                String itemName = items.getString(0);
+                int quantity = items.getInt(1);
+                double price = items.getDouble(2);
+
+                double itemTotal = price * quantity;
+                totalAmount += itemTotal;
+
+                cartSummary.append(itemName)
+                        .append(" x ").append(quantity)
+                        .append(" (Rs.").append(itemTotal).append(")\n");
+            } while (items.moveToNext());
+        }
+        items.close();
+
+        // 3. Insert into orders
         ContentValues orderValues = new ContentValues();
-        orderValues.put("customer_name", userId);
+        orderValues.put("customer_name", customerName);
+        orderValues.put("order_cart", cartSummary.toString());
         orderValues.put("order_address", address);
         orderValues.put("total", totalAmount);
         orderValues.put("order_status", "pending");
         orderValues.put("order_type", orderType);
-        orderValues.put("branch_id", branchId); // only branch_id stored
+        orderValues.put("branch_id", branchId);
+        orderValues.put("order_date", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        orderValues.put("order_time", new SimpleDateFormat("HH:mm:ss").format(new Date()));
 
         long orderId = db.insert("orders", null, orderValues);
 
+        // 4. If success, clear cart
         if (orderId != -1) {
-            Cursor items = db.rawQuery(
-                    "SELECT ci.item_id, ci.quantity, m.price FROM carts c JOIN cart_items ci ON c.cart_id=ci.cart_id JOIN menu_items m ON ci.item_id=m.item_id WHERE c.user_id=?",
-                    new String[]{userId});
-
-            if (items.moveToFirst()) {
-                do {
-                    ContentValues itemValues = new ContentValues();
-                    itemValues.put("order_id", orderId);
-                    itemValues.put("item_id", items.getInt(0));
-                    itemValues.put("quantity", items.getInt(1));
-                    itemValues.put("price", items.getDouble(2));
-                    db.insert("order_items", null, itemValues);
-                } while (items.moveToNext());
-            }
-            items.close();
-
             db.execSQL("DELETE FROM cart_items WHERE cart_id IN (SELECT cart_id FROM carts WHERE user_id=?)", new String[]{userId});
-
             Toast.makeText(this, "Order Confirmed!", Toast.LENGTH_SHORT).show();
+
+            // 5. Go to tracking page
             Intent intent = new Intent(this, orderTracking.class);
             intent.putExtra("orderId", orderId);
             startActivity(intent);

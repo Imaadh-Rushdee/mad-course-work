@@ -23,8 +23,8 @@ public class welcomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Delete old database for fresh start (optional)
-        deleteDatabase("pizza_mania.db");
+        // ❌ Remove this line, it deletes the database every launch
+        // deleteDatabase("pizza_mania.db");
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome_page);
@@ -44,6 +44,7 @@ public class welcomePage extends AppCompatActivity {
         btnLoginWelcome.setOnClickListener(v -> startActivity(new Intent(welcomePage.this, loginPage.class)));
         btnSignUp.setOnClickListener(v -> startActivity(new Intent(welcomePage.this, signUp.class)));
     }
+
 
     /** DB Creation + Sample Inserts */
     private void createDatabase() {
