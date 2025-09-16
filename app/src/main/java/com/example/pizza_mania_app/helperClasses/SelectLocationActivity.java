@@ -39,15 +39,18 @@ public class SelectLocationActivity extends AppCompatActivity implements OnMapRe
 
         Button btnConfirm = findViewById(R.id.btnConfirmLocation);
         btnConfirm.setOnClickListener(v -> {
-            if (!selectedAddress.isEmpty()) {
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("selected_address", selectedAddress);
-                setResult(RESULT_OK, resultIntent);
+            if (selectedLatLng != null && selectedAddress != null && !selectedAddress.isEmpty()) {
+                Intent result = new Intent();
+                result.putExtra("selected_address", selectedAddress);
+                result.putExtra("latitude", selectedLatLng.latitude);
+                result.putExtra("longitude", selectedLatLng.longitude);
+                setResult(RESULT_OK, result);
                 finish();
             } else {
                 Toast.makeText(this, "Please select a location", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     @Override
