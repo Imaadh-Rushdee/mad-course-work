@@ -50,13 +50,4 @@
         android:textSize="18sp"
         android:layout_marginBottom="15dp"/>
 
-    <!-- Guest Option -->
-    <TextView
-        android:id="@+id/tvGuest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/continue_as_guest"
-        android:textColor="#FF5722"
-        android:textSize="16sp"
-        android:layout_marginTop="20dp"/>
 </LinearLayout>

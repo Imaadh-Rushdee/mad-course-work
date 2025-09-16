@@ -40,16 +40,9 @@ public class welcomePage extends AppCompatActivity {
 
         Button btnLoginWelcome = findViewById(R.id.btnLoginWelcome);
         Button btnSignUp = findViewById(R.id.btnSignUp);
-        TextView tvGuest = findViewById(R.id.tvGuest);
 
         btnLoginWelcome.setOnClickListener(v -> startActivity(new Intent(welcomePage.this, loginPage.class)));
         btnSignUp.setOnClickListener(v -> startActivity(new Intent(welcomePage.this, signUp.class)));
-        tvGuest.setOnClickListener(v -> {
-            Intent intent = new Intent(welcomePage.this, menu.class);
-            intent.putExtra("userRole", "guest");
-            intent.putExtra("branchId", 1); // default guest branch
-            startActivity(intent);
-        });
     }
 
     /** DB Creation + Sample Inserts */

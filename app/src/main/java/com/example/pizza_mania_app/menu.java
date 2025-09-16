@@ -71,11 +71,11 @@ public class menu extends AppCompatActivity {
         userRole = getIntent().getStringExtra("userRole");
         branchId = getIntent().getIntExtra("branchId", 0);
         orderType = getIntent().getStringExtra("orderType");
-        branch = getIntent().getStringExtra("branch");
+        branch = getIntent().getStringExtra("branch"); // branch name from OrderSetupActivity
 
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
-        // Load menu items
+        // Load menu items for selected branch
         loadMenuItems();
 
         // Admin: show Add New Item button
@@ -89,25 +89,7 @@ public class menu extends AppCompatActivity {
         // Customer: show cart button
         if ("customer".equalsIgnoreCase(userRole)) {
             cartImg.setVisibility(Button.VISIBLE);
-            cartImg.setOnClickListener(v -> {
-                Intent intent = new Intent(menu.this, cart.class);
-                intent.putExtra("userId", userId);
-                intent.putExtra("branchId", branchId);
-                intent.putExtra("userAddress", getIntent().getStringExtra("defaultAddress"));
-                intent.putExtra("orderType", orderType);
-
-                // Optional: pass LatLng
-                String address = getIntent().getStringExtra("defaultAddress");
-                if (address != null) {
-                    LatLng latLng = GoogleMapsHelper.geocodeAddress(this, address);
-                    if (latLng != null) {
-                        intent.putExtra("lat", latLng.latitude);
-                        intent.putExtra("lng", latLng.longitude);
-                    }
-                }
-
-                startActivity(intent);
-            });
+            cartImg.setOnClickListener(v -> openCart());
         } else {
             cartImg.setVisibility(Button.GONE);
         }
@@ -235,7 +217,7 @@ public class menu extends AppCompatActivity {
             values.put("name", name);
             values.put("description", desc);
             values.put("price", price);
-            values.put("branch_id", branchId);
+            values.put("branch_id", branchId); // Correct branchId for this menu
             if (selectedImageBytes != null) values.put("image", selectedImageBytes);
 
             if (itemId == null) db.insert("menu_items", null, values);
@@ -270,8 +252,11 @@ public class menu extends AppCompatActivity {
             if (requestCode == REQUEST_CAMERA) bitmap = (Bitmap) data.getExtras().get("data");
             else if (requestCode == REQUEST_GALLERY) {
                 Uri uri = data.getData();
-                try { bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri); }
-                catch (IOException e) { e.printStackTrace(); }
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             if (bitmap != null) {
                 tempImageView.setImageBitmap(bitmap);
@@ -306,5 +291,25 @@ public class menu extends AppCompatActivity {
         db.insert("cart_items", null, itemValues);
 
         Toast.makeText(this, "Item added to cart!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void openCart() {
+        Intent intent = new Intent(menu.this, cart.class);
+        intent.putExtra("userId", userId);
+        intent.putExtra("branchId", branchId);
+        intent.putExtra("branch", branch);               // Pass branch name
+        intent.putExtra("userAddress", getIntent().getStringExtra("defaultAddress"));
+        intent.putExtra("orderType", orderType);
+
+        // Optional: pass LatLng
+        String address = getIntent().getStringExtra("defaultAddress");
+        if (address != null) {
+            LatLng latLng = GoogleMapsHelper.geocodeAddress(this, address);
+            if (latLng != null) {
+                intent.putExtra("lat", latLng.latitude);
+                intent.putExtra("lng", latLng.longitude);
+            }
+        }
+        startActivity(intent);
     }
 }

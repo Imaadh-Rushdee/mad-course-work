@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pizza_mania_app.R;
 
+import java.util.ArrayList;
+
 public class confirmOrder extends AppCompatActivity {
 
     private SQLiteDatabase db;
@@ -21,7 +24,12 @@ public class confirmOrder extends AppCompatActivity {
     private Spinner spinnerBranch;
     private Button btnConfirmOrder, btnChangeAddress;
     private String userId;
+    private String orderType;
     private double totalAmount = 0;
+
+    private ArrayList<String> branchNames = new ArrayList<>();
+    private ArrayList<Integer> branchIds = new ArrayList<>();
+    private int selectedBranchId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,43 +44,98 @@ public class confirmOrder extends AppCompatActivity {
         btnConfirmOrder = findViewById(R.id.btnConfirmOrder);
         btnChangeAddress = findViewById(R.id.btnChangeAddress);
 
+        // Get intent extras
         userId = getIntent().getStringExtra("userId");
-        tvAddress.setText(getIntent().getStringExtra("userAddress"));
+        orderType = getIntent().getStringExtra("orderType");
+        String address = getIntent().getStringExtra("userAddress");
+        int branchIdFromMenu = getIntent().getIntExtra("branchId", -1); // from menu
+
+        if (userId == null || address == null || orderType == null) {
+            Toast.makeText(this, "Missing order information!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        tvAddress.setText(address);
 
         loadTotalAmount();
+        loadBranches(branchIdFromMenu);
 
-        btnChangeAddress.setOnClickListener(v -> tvAddress.setText("New Address, Colombo"));
+        // Change address button
+        btnChangeAddress.setOnClickListener(v -> tvAddress.setText("New Address, Colombo")); // replace with map picker if needed
 
+        // Confirm order button
         btnConfirmOrder.setOnClickListener(v -> {
-            String address = tvAddress.getText().toString();
-            String branch = spinnerBranch.getSelectedItem().toString();
-            insertOrder(address, branch);
+            String finalAddress = tvAddress.getText() != null ? tvAddress.getText().toString() : "";
+
+            int position = spinnerBranch.getSelectedItemPosition();
+            if (position < 0 || position >= branchIds.size()) {
+                Toast.makeText(this, "Please select a branch!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            selectedBranchId = branchIds.get(position);
+
+            insertOrder(finalAddress, selectedBranchId);
         });
     }
 
     private void loadTotalAmount() {
-        Cursor cartCursor = db.rawQuery("SELECT ci.quantity, m.price FROM carts c JOIN cart_items ci ON c.cart_id=ci.cart_id JOIN menu_items m ON ci.item_id=m.item_id WHERE c.user_id=?", new String[]{userId});
+        totalAmount = 0;
+        Cursor cartCursor = db.rawQuery(
+                "SELECT ci.quantity, m.price FROM carts c JOIN cart_items ci ON c.cart_id=ci.cart_id JOIN menu_items m ON ci.item_id=m.item_id WHERE c.user_id=?",
+                new String[]{userId});
+
         if (cartCursor.moveToFirst()) {
             do {
                 totalAmount += cartCursor.getInt(0) * cartCursor.getDouble(1);
             } while (cartCursor.moveToNext());
         }
         cartCursor.close();
+
         tvTotalAmount.setText("Rs. " + totalAmount);
     }
 
-    private void insertOrder(String address, String branch) {
+    private void loadBranches(int branchIdFromMenu) {
+        branchNames.clear();
+        branchIds.clear();
+
+        Cursor cursor = db.rawQuery("SELECT branch_id, branch_name FROM branches", null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow("branch_id"));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow("branch_name"));
+            branchIds.add(id);
+            branchNames.add(name);
+        }
+        cursor.close();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, branchNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerBranch.setAdapter(adapter);
+
+        // Preselect the branch passed from menu
+        if (branchIdFromMenu > 0) {
+            int index = branchIds.indexOf(branchIdFromMenu);
+            if (index >= 0) spinnerBranch.setSelection(index);
+        }
+    }
+
+    private void insertOrder(String address, int branchId) {
         ContentValues orderValues = new ContentValues();
         orderValues.put("customer_name", userId);
         orderValues.put("order_address", address);
         orderValues.put("total", totalAmount);
         orderValues.put("order_status", "pending");
-        orderValues.put("order_type", "delivery");
+        orderValues.put("order_type", orderType);
+        orderValues.put("branch_id", branchId); // only branch_id stored
 
         long orderId = db.insert("orders", null, orderValues);
 
         if (orderId != -1) {
-            Cursor items = db.rawQuery("SELECT ci.item_id, ci.quantity, m.price FROM carts c JOIN cart_items ci ON c.cart_id=ci.cart_id JOIN menu_items m ON ci.item_id=m.item_id WHERE c.user_id=?", new String[]{userId});
+            Cursor items = db.rawQuery(
+                    "SELECT ci.item_id, ci.quantity, m.price FROM carts c JOIN cart_items ci ON c.cart_id=ci.cart_id JOIN menu_items m ON ci.item_id=m.item_id WHERE c.user_id=?",
+                    new String[]{userId});
+
             if (items.moveToFirst()) {
                 do {
                     ContentValues itemValues = new ContentValues();
@@ -88,7 +151,7 @@ public class confirmOrder extends AppCompatActivity {
             db.execSQL("DELETE FROM cart_items WHERE cart_id IN (SELECT cart_id FROM carts WHERE user_id=?)", new String[]{userId});
 
             Toast.makeText(this, "Order Confirmed!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, orderInvoice.class);
+            Intent intent = new Intent(this, orderTracking.class);
             intent.putExtra("orderId", orderId);
             startActivity(intent);
             finish();
