@@ -53,7 +53,8 @@ public class orderInvoice extends AppCompatActivity {
             tvCustomerName.setText("Customer: " + order.getString(order.getColumnIndexOrThrow("customer_name")));
             tvTotalAmount.setText("Total: Rs. " + order.getDouble(order.getColumnIndexOrThrow("total")));
             tvOrderAddress.setText("Address: " + order.getString(order.getColumnIndexOrThrow("order_address")));
+            tvOrderCart.setText("Items: " + order.getString(order.getColumnIndexOrThrow("order_cart")));
         }
         order.close();
-
-        StringBuilder cartItems
+    }
+}
