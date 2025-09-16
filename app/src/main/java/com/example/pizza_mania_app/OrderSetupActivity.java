@@ -110,6 +110,7 @@ public class OrderSetupActivity extends AppCompatActivity {
         });
     }
 
+    /*** Get current location using FusedLocationProviderClient (signUp style) ***/
     private void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -121,31 +122,29 @@ public class OrderSetupActivity extends AppCompatActivity {
 
         fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
             if (location != null) {
-                // Geocode in background
-                ExecutorService executor = Executors.newSingleThreadExecutor();
-                executor.execute(() -> {
-                    selectedAddress = getAddressFromLocation(location);
-                    selectedLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                selectedLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                selectedAddress = getAddressFromLocation(location);
 
-                    runOnUiThread(() -> tvDeliveryAddress.setText(selectedAddress));
-                });
+                tvDeliveryAddress.setText(selectedAddress);
+                Toast.makeText(this, "Location detected: " + selectedAddress, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Unable to get current location", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Unable to get current location. Try again.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private String getAddressFromLocation(Location location) {
+        String result = "";
         try {
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (addresses != null && !addresses.isEmpty()) {
-                return addresses.get(0).getAddressLine(0);
+                result = addresses.get(0).getAddressLine(0);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return location.getLatitude() + ", " + location.getLongitude();
+        return result;
     }
 
     private void launchMenu(String orderType, int branchId, String address, LatLng latLng) {
@@ -153,8 +152,11 @@ public class OrderSetupActivity extends AppCompatActivity {
 
         intent.putExtra("userId", userId);
         intent.putExtra("userRole", "customer");
-        intent.putExtra("branchId", branchId);       // Pass branch ID
+        intent.putExtra("branchId", branchId);
         intent.putExtra("orderType", orderType);
+
+        // Always send branch name
+        intent.putExtra("branch", spinnerBranch.getSelectedItem().toString());
 
         if (orderType.equalsIgnoreCase("Delivery")) {
             intent.putExtra("defaultAddress", address);
@@ -162,8 +164,6 @@ public class OrderSetupActivity extends AppCompatActivity {
                 intent.putExtra("lat", latLng.latitude);
                 intent.putExtra("lng", latLng.longitude);
             }
-        } else {
-            intent.putExtra("branch", spinnerBranch.getSelectedItem().toString()); // branch name
         }
 
         startActivity(intent);
