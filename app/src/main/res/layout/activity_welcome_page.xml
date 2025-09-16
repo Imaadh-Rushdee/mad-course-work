@@ -48,12 +48,7 @@
         android:text="@string/sign_up"
         android:backgroundTint="#4CAF50"
         android:textColor="#FFFFFF"
-<<<<<<< Updated upstream
-        android:textSize="18sp"
-        android:layout_marginBottom="15dp"/>
-=======
         android:textSize="16sp"
         android:stateListAnimator="@null" />
->>>>>>> Stashed changes
 
 </LinearLayout>
