@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,27 +13,21 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pizza_mania_app.R;
-import com.example.pizza_mania_app.menu;
 
 public class confirmOrder extends AppCompatActivity {
 
     private SQLiteDatabase db;
-
     private TextView tvAddress, tvTotalAmount;
     private Spinner spinnerBranch;
     private Button btnConfirmOrder, btnChangeAddress;
-
-    // Example default order info (replace with actual cart data from previous activity)
-    private String customerName = "John Cena";
-    private String orderCart = "Sausage Pizza(2)";
-    private double totalAmount = 5000.0;
+    private String userId;
+    private double totalAmount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_order);
 
-        // Open existing database
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
         tvAddress = findViewById(R.id.tvAddress);
@@ -44,49 +36,64 @@ public class confirmOrder extends AppCompatActivity {
         btnConfirmOrder = findViewById(R.id.btnConfirmOrder);
         btnChangeAddress = findViewById(R.id.btnChangeAddress);
 
-        // Set default values
-        tvAddress.setText("Colombo, Mount Lavinia, No 63");
-        tvTotalAmount.setText("Rs. " + totalAmount);
+        userId = getIntent().getStringExtra("userId");
+        tvAddress.setText(getIntent().getStringExtra("userAddress"));
 
+        loadTotalAmount();
 
-        // Change Address button
-        btnChangeAddress.setOnClickListener(v -> {
-            tvAddress.setText("New Address, Colombo");
-        });
+        btnChangeAddress.setOnClickListener(v -> tvAddress.setText("New Address, Colombo"));
 
-        // Confirm Order button
         btnConfirmOrder.setOnClickListener(v -> {
             String address = tvAddress.getText().toString();
             String branch = spinnerBranch.getSelectedItem().toString();
-
-            insertOrder(customerName, orderCart, address, totalAmount, branch);
+            insertOrder(address, branch);
         });
     }
 
-    private void insertOrder(String customerName, String cart, String address, double total, String branch) {
-        try {
-            ContentValues orderValues = new ContentValues();
-            orderValues.put("customer_name", customerName);
-            orderValues.put("order_cart", cart);
-            orderValues.put("order_address", address);
-            orderValues.put("address_latitude", 0.0);  // Replace with actual lat
-            orderValues.put("address_longitude", 0.0);
-            orderValues.put("order_date", "2025-09-07");
-            orderValues.put("order_time", "01:00 PM");
-            orderValues.put("total", total);
-            orderValues.put("order_status", "pending");
-            orderValues.put("order_type", "delivery");
+    private void loadTotalAmount() {
+        Cursor cartCursor = db.rawQuery("SELECT ci.quantity, m.price FROM carts c JOIN cart_items ci ON c.cart_id=ci.cart_id JOIN menu_items m ON ci.item_id=m.item_id WHERE c.user_id=?", new String[]{userId});
+        if (cartCursor.moveToFirst()) {
+            do {
+                totalAmount += cartCursor.getInt(0) * cartCursor.getDouble(1);
+            } while (cartCursor.moveToNext());
+        }
+        cartCursor.close();
+        tvTotalAmount.setText("Rs. " + totalAmount);
+    }
 
-            long orderId = db.insert("orders", null, orderValues);
-            if (orderId != -1) {
-                Toast.makeText(this, "Order Confirmed! ✅", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(confirmOrder.this, menu.class)); // Go to menu
-                finish();
-            } else {
-                Toast.makeText(this, "Failed to confirm order ❌", Toast.LENGTH_SHORT).show();
+    private void insertOrder(String address, String branch) {
+        ContentValues orderValues = new ContentValues();
+        orderValues.put("customer_name", userId);
+        orderValues.put("order_address", address);
+        orderValues.put("total", totalAmount);
+        orderValues.put("order_status", "pending");
+        orderValues.put("order_type", "delivery");
+
+        long orderId = db.insert("orders", null, orderValues);
+
+        if (orderId != -1) {
+            Cursor items = db.rawQuery("SELECT ci.item_id, ci.quantity, m.price FROM carts c JOIN cart_items ci ON c.cart_id=ci.cart_id JOIN menu_items m ON ci.item_id=m.item_id WHERE c.user_id=?", new String[]{userId});
+            if (items.moveToFirst()) {
+                do {
+                    ContentValues itemValues = new ContentValues();
+                    itemValues.put("order_id", orderId);
+                    itemValues.put("item_id", items.getInt(0));
+                    itemValues.put("quantity", items.getInt(1));
+                    itemValues.put("price", items.getDouble(2));
+                    db.insert("order_items", null, itemValues);
+                } while (items.moveToNext());
             }
-        } catch (Exception e) {
-            Toast.makeText(this, "DB Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            items.close();
+
+            db.execSQL("DELETE FROM cart_items WHERE cart_id IN (SELECT cart_id FROM carts WHERE user_id=?)", new String[]{userId});
+
+            Toast.makeText(this, "Order Confirmed!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, orderInvoice.class);
+            intent.putExtra("orderId", orderId);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(this, "Failed to confirm order.", Toast.LENGTH_SHORT).show();
         }
     }
 }

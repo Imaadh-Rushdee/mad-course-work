@@ -19,7 +19,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pizza_mania_app.R;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
 
@@ -30,7 +29,7 @@ public class cart extends AppCompatActivity {
     private TextView tvTotal, tvOrderType, tvAddress, tvBranch;
     private Button btnBack, btnPlaceOrder;
     private String userId, orderType, address, branch;
-    private double lat = 0.0, lng = 0.0; // optional LatLng
+    private double lat = 0.0, lng = 0.0;
 
     private final HashMap<Integer, Double> itemTotals = new HashMap<>();
 
@@ -40,7 +39,6 @@ public class cart extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cart);
 
-        // Get passed data
         userId = getIntent().getStringExtra("userId");
         orderType = getIntent().getStringExtra("orderType");
         address = getIntent().getStringExtra("userAddress");
@@ -48,7 +46,6 @@ public class cart extends AppCompatActivity {
         lat = getIntent().getDoubleExtra("lat", 0.0);
         lng = getIntent().getDoubleExtra("lng", 0.0);
 
-        // Initialize views
         cartContainer = findViewById(R.id.cartContainer);
         tvTotal = findViewById(R.id.tvTotal);
         tvOrderType = findViewById(R.id.tvOrderType);
@@ -57,7 +54,6 @@ public class cart extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
 
-        // Display passed info
         tvOrderType.setText("Order Type: " + (orderType != null ? orderType : "N/A"));
         tvAddress.setText("Address: " + (address != null ? address : "N/A"));
         tvBranch.setText("Branch: " + (branch != null ? branch : "N/A"));
@@ -68,7 +64,17 @@ public class cart extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
 
-        btnPlaceOrder.setOnClickListener(v -> placeOrder());
+        btnPlaceOrder.setOnClickListener(v -> {
+            if (itemTotals.isEmpty()) {
+                Toast.makeText(this, "Please select at least one item.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(cart.this, confirmOrder.class);
+            intent.putExtra("userId", userId);
+            intent.putExtra("orderType", orderType);
+            intent.putExtra("userAddress", address);
+            startActivity(intent);
+        });
     }
 
     private void loadCartItems(String userId) {
@@ -118,8 +124,7 @@ public class cart extends AppCompatActivity {
                 if (checked) itemTotals.put(cartItemId, price * qty);
 
                 cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    db.execSQL("UPDATE cart_items SET checked=? WHERE cart_item_id=?",
-                            new Object[]{isChecked ? 1 : 0, cartItemId});
+                    db.execSQL("UPDATE cart_items SET checked=? WHERE cart_item_id=?", new Object[]{isChecked ? 1 : 0, cartItemId});
                     if (isChecked) itemTotals.put(cartItemId, price * qty);
                     else itemTotals.remove(cartItemId);
                     updateTotal();
@@ -147,67 +152,4 @@ public class cart extends AppCompatActivity {
         for (double val : itemTotals.values()) total += val;
         tvTotal.setText("Total: Rs. " + total);
     }
-
-    private void placeOrder() {
-        if (itemTotals.isEmpty()) {
-            Toast.makeText(this, "Please select at least one item to place order.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // 1. Insert new order
-        ContentValues orderValues = new ContentValues();
-        orderValues.put("customer_name", userId); // ideally link to users table
-        orderValues.put("order_address", address);
-        orderValues.put("address_latitude", lat);
-        orderValues.put("address_longitude", lng);
-        orderValues.put("payment_method", "Cash on Delivery"); // or dynamic
-        orderValues.put("order_date", String.valueOf(System.currentTimeMillis())); // replace with formatted date
-        orderValues.put("order_time", "Now");
-        orderValues.put("total", getCurrentTotal());
-        orderValues.put("order_status", "pending");
-        orderValues.put("order_type", orderType);
-        orderValues.put("branch_id", branch); // make sure branch is numeric
-
-        long orderId = db.insert("orders", null, orderValues);
-
-        // 2. Insert selected items into order_items
-        for (Integer cartItemId : itemTotals.keySet()) {
-            Cursor c = db.rawQuery(
-                    "SELECT ci.item_id, ci.quantity, m.price FROM cart_items ci " +
-                            "JOIN menu_items m ON ci.item_id = m.item_id " +
-                            "WHERE ci.cart_item_id=?",
-                    new String[]{String.valueOf(cartItemId)});
-            if (c.moveToFirst()) {
-                int itemId = c.getInt(0);
-                int qty = c.getInt(1);
-                double price = c.getDouble(2);
-
-                ContentValues itemValues = new ContentValues();
-                itemValues.put("order_id", orderId);
-                itemValues.put("item_id", itemId);
-                itemValues.put("quantity", qty);
-                itemValues.put("price", price);
-                db.insert("order_items", null, itemValues);
-            }
-            c.close();
-
-            // delete from cart once added to order
-            db.execSQL("DELETE FROM cart_items WHERE cart_item_id=?", new Object[]{cartItemId});
-        }
-
-        Toast.makeText(this, "Order placed successfully!", Toast.LENGTH_LONG).show();
-
-        loadCartItems(userId);
-        Intent intent = new Intent(cart.this, orderTracking.class);
-        intent.putExtra("orderId", orderId);
-        intent.putExtra("userId", userId);
-        startActivity(intent);
-    }
-
-    private double getCurrentTotal() {
-        double total = 0;
-        for (double val : itemTotals.values()) total += val;
-        return total;
-    }
-
 }
