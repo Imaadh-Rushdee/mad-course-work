@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.pizza_mania_app.R;
+import com.example.pizza_mania_app.menu;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
@@ -37,8 +38,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
         });
 
         btnMenu.setOnClickListener(v -> {
-            Intent i = new Intent(this, ManageItemsActivity.class);
+            Intent i = new Intent(this, menu.class);
             i.putExtra("userId", userId);
+            i.putExtra("userRole","admin");
+            i.putExtra("branch","colombo");
             i.putExtra("branchId", branchId);
             startActivity(i);
         });
