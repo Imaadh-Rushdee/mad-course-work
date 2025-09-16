@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -53,8 +55,9 @@ public class signUp extends AppCompatActivity {
         TextView tvLogin = findViewById(R.id.tvLogin);
 
         // Initialize the new Places API
+        //Animation Places = null;
         if (!Places.isInitialized()) {
-            Places.initializeWithNewPlacesApiEnabled(getApplicationContext(), "AIzaSyCldldEy5A5sk7K3-RkyHhoCH86XeToP8s");
+            Places.initializeWithNewPlacesApiEnabled (getApplicationContext(), "AIzaSyCldldEy5A5sk7K3-RkyHhoCH86XeToP8s");
         }
 
         // Autocomplete fragment

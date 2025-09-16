@@ -1,20 +1,20 @@
 package com.example.pizza_mania_app.admin;
 
-public class Item {
+public class Order {
     private long id;
     private String name;
-    private double price;
+    private String status;
 
-    public Item(long id, String name, double price) {
+    public Order(long id, String name, String status) {
         this.id = id;
         this.name = name;
-        this.price = price;
+        this.status = status;
     }
 
     public long getId() { return id; }
     public String getName() { return name; }
-    public double getPrice() { return price; }
+    public String getStatus() { return status; }
 
     public void setName(String name) { this.name = name; }
-    public void setPrice(double price) { this.price = price; }
+    public void setStatus(String status) { this.status = status; }
 }
