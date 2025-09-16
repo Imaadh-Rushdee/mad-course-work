@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/orderCard"
@@ -6,44 +7,58 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@drawable/order_card_background"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="12dp"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:elevation="4dp">
 
+    <!-- Order ID -->
     <TextView
         android:id="@+id/cardOrderId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Order #123"
         android:textStyle="bold"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textColor="#333333"/>
 
+    <!-- Customer Name -->
     <TextView
         android:id="@+id/orderCustomerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Customer: John Doe"
-        android:textSize="14sp"/>
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_marginTop="4dp"/>
 
+    <!-- Customer Address -->
+    <TextView
+        android:id="@+id/orderCustomerAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address: 123 Street, City"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_marginTop="2dp"/>
+
+    <!-- Order Status -->
     <TextView
         android:id="@+id/tvOrderStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Status: Pending"
         android:textSize="14sp"
-        android:textColor="#FF5722"/>
-    <TextView
-        android:id="@+id/orderCustomerAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status: Pending"
-        android:textSize="14sp"
-        android:textColor="#FF5722"/>
+        android:textColor="#FF5722"
+        android:layout_marginTop="4dp"/>
+
+    <!-- Total Amount -->
     <TextView
         android:id="@+id/orderTotalAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Status: Pending"
+        android:text="Total: Rs. 5000"
         android:textSize="14sp"
-        android:textColor="#FF5722"/>
+        android:textColor="#333333"
+        android:layout_marginTop="2dp"/>
 </LinearLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="branches">
+        <item>Branch 1 - Colombo</item>
+        <item>Branch 2 - Galle</item>
+    </string-array>
+</resources>

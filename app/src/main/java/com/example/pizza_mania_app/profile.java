@@ -1,65 +1,153 @@
 package com.example.pizza_mania_app;
 
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class profile extends AppCompatActivity {
 
     private SQLiteDatabase db;
     private ImageView imgProfile;
-    private TextView tvUsername;
-    private LinearLayout llEditDetails, llManageAddresses, llSavedCards, llDefaultBranch;
+    private EditText etName, etPhone, etAddress, etPassword;
+    private Button btnSave;
 
-    private String loggedInEmail = "admin@pizza.com";
+    private int userId;
+    private byte[] profileImageBytes;
+
+    private static final int REQUEST_CAMERA = 101;
+    private static final int REQUEST_GALLERY = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Load the profile layout
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
 
-        // Initialize views
         imgProfile = findViewById(R.id.imgProfile);
-        tvUsername = findViewById(R.id.tvUsername);
-        llEditDetails = findViewById(R.id.llEditDetails);
-        llManageAddresses = findViewById(R.id.llManageAddresses);
-        llSavedCards = findViewById(R.id.llSavedCards);
-        llDefaultBranch = findViewById(R.id.llDefaultBranch);
+        etName = findViewById(R.id.etName);
+        etPhone = findViewById(R.id.etPhone);
+        etAddress = findViewById(R.id.etAddress);
+        etPassword = findViewById(R.id.etPassword);
+        btnSave = findViewById(R.id.btnSave);
 
-        // Open or create database
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
-        // Load logged-in user data
-        loadUserData();
-    }
-
-    /** Fetch user data from database and display in UI */
-    private void loadUserData() {
-        Cursor cursor = db.rawQuery("SELECT * FROM users WHERE email=?", new String[]{loggedInEmail});
-
-        if (cursor.moveToFirst()) {
-            String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-            String profilePic = cursor.getString(cursor.getColumnIndexOrThrow("profile_pic"));
-
-            tvUsername.setText(name);
-
-            // Set profile picture if available
-            if (profilePic != null && !profilePic.isEmpty()) {
-                int resId = getResources().getIdentifier(profilePic, "drawable", getPackageName());
-                if (resId != 0) imgProfile.setImageResource(resId);
-            }
-        } else {
-            Toast.makeText(this, "User not found!", Toast.LENGTH_SHORT).show();
+        // Get userId from Intent
+        userId = getIntent().getIntExtra("userId", -1);
+        if (userId == -1) {
+            Toast.makeText(this, "Invalid user", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
+        loadUserData();
+
+        // Change profile picture
+        imgProfile.setOnClickListener(v -> selectImage());
+
+        // Save changes
+        btnSave.setOnClickListener(v -> saveUserData());
+    }
+
+    /** Load user data into EditTexts and profile image */
+    private void loadUserData() {
+        Cursor cursor = db.rawQuery("SELECT * FROM users WHERE user_id=?", new String[]{String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            etName.setText(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+            etPhone.setText(cursor.getString(cursor.getColumnIndexOrThrow("phone")));
+            etAddress.setText(cursor.getString(cursor.getColumnIndexOrThrow("address")));
+            etPassword.setText(cursor.getString(cursor.getColumnIndexOrThrow("password")));
+            profileImageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow("profile_pic"));
+
+            if (profileImageBytes != null) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(profileImageBytes, 0, profileImageBytes.length);
+                imgProfile.setImageBitmap(bmp);
+            }
+        }
         cursor.close();
+    }
+
+    /** Open camera or gallery to select profile picture */
+    private void selectImage() {
+        String[] options = {"Camera", "Gallery"};
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Select Profile Picture")
+                .setItems(options, (dialog, which) -> {
+                    Intent intent;
+                    if (which == 0) {
+                        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, REQUEST_CAMERA);
+                    } else {
+                        intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, REQUEST_GALLERY);
+                    }
+                }).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            Bitmap bitmap = null;
+            if (requestCode == REQUEST_CAMERA) {
+                bitmap = (Bitmap) data.getExtras().get("data");
+            } else if (requestCode == REQUEST_GALLERY) {
+                Uri uri = data.getData();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (bitmap != null) {
+                imgProfile.setImageBitmap(bitmap);
+                profileImageBytes = bitmapToBytes(bitmap);
+            }
+        }
+    }
+
+    private byte[] bitmapToBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    /** Save updated details into DB */
+    private void saveUserData() {
+        String name = etName.getText().toString().trim();
+        String phone = etPhone.getText().toString().trim();
+        String address = etAddress.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+
+        if (name.isEmpty() || phone.isEmpty() || address.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("phone", phone);
+        values.put("address", address);
+        values.put("password", password);
+        if (profileImageBytes != null) values.put("profile_pic", profileImageBytes);
+
+        db.update("users", values, "user_id=?", new String[]{String.valueOf(userId)});
+        Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
     }
 }

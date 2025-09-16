@@ -23,8 +23,8 @@ public class welcomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Delete old database for fresh start (optional)
-        deleteDatabase("pizza_mania.db");
+        // ❌ Remove this line, it deletes the database every launch
+        // deleteDatabase("pizza_mania.db");
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome_page);
@@ -40,17 +40,11 @@ public class welcomePage extends AppCompatActivity {
 
         Button btnLoginWelcome = findViewById(R.id.btnLoginWelcome);
         Button btnSignUp = findViewById(R.id.btnSignUp);
-        TextView tvGuest = findViewById(R.id.tvGuest);
 
         btnLoginWelcome.setOnClickListener(v -> startActivity(new Intent(welcomePage.this, loginPage.class)));
         btnSignUp.setOnClickListener(v -> startActivity(new Intent(welcomePage.this, signUp.class)));
-        tvGuest.setOnClickListener(v -> {
-            Intent intent = new Intent(welcomePage.this, menu.class);
-            intent.putExtra("userRole", "guest");
-            intent.putExtra("branchId", 1); // default guest branch
-            startActivity(intent);
-        });
     }
+
 
     /** DB Creation + Sample Inserts */
     private void createDatabase() {
@@ -102,21 +96,25 @@ public class welcomePage extends AppCompatActivity {
                     "payment_status TEXT, " +
                     "FOREIGN KEY(order_id) REFERENCES orders(order_id))");
 
-            // Inside createDatabase()
-            db.execSQL("CREATE TABLE IF NOT EXISTS cart (" +
+            // Create carts table
+            db.execSQL("CREATE TABLE IF NOT EXISTS carts (" +
                     "cart_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "user_id INTEGER, " +
-                    "created_at TEXT, " +
-                    "FOREIGN KEY(user_id) REFERENCES users(user_id))");
+                    "user_id INTEGER NOT NULL, " +
+                    "created_at TEXT DEFAULT (datetime('now','localtime')), " +
+                    "FOREIGN KEY(user_id) REFERENCES users(user_id)" +
+                    ");");
 
+// Create cart_items table
             db.execSQL("CREATE TABLE IF NOT EXISTS cart_items (" +
                     "cart_item_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "cart_id INTEGER, " +
-                    "item_id INTEGER, " +
+                    "cart_id INTEGER NOT NULL, " +
+                    "item_id INTEGER NOT NULL, " +
                     "quantity INTEGER DEFAULT 1, " +
                     "checked INTEGER DEFAULT 0, " +  // for checkbox state
-                    "FOREIGN KEY(cart_id) REFERENCES cart(cart_id), " +
-                    "FOREIGN KEY(item_id) REFERENCES menu_items(item_id))");
+                    "FOREIGN KEY(cart_id) REFERENCES carts(cart_id), " +
+                    "FOREIGN KEY(item_id) REFERENCES menu_items(item_id)" +
+                    ");");
+
 
             // Menu table
             db.execSQL("CREATE TABLE IF NOT EXISTS menu_items (" +
@@ -167,6 +165,15 @@ public class welcomePage extends AppCompatActivity {
             values.put("phone", "0711111111");
             values.put("password", "admin123");
             values.put("role", "admin");
+            values.put("branch_id", 2);
+            db.insert("users", null, values);
+
+            values.clear();
+            values.put("name", "Admin User");
+            values.put("email", "admin123@pizza.com");
+            values.put("phone", "0711111111");
+            values.put("password", "123");
+            values.put("role", "admin");
             values.put("branch_id", 1);
             db.insert("users", null, values);
 
@@ -182,11 +189,22 @@ public class welcomePage extends AppCompatActivity {
 
             values.clear();
             values.put("name", "Customer");
-            values.put("email", "cus@pizza.com");
+            values.put("email", "cu");
             values.put("phone", "0722222222");
             values.put("password", "123");
             values.put("role", "customer");
+            values.put("address", "92 Raja Mawatha Rd, Dehiwala-Mount Lavinia");
             values.put("branch_id", 1);
+            db.insert("users", null, values);
+
+            values.clear();
+            values.put("name", "Customer");
+            values.put("email", "cus");
+            values.put("phone", "0722222222");
+            values.put("password", "123");
+            values.put("role", "customer");
+            values.put("address", "92 Raja Mawatha Rd, Dehiwala-Mount Lavinia");
+            values.put("branch_id", 2);
             db.insert("users", null, values);
 
             // Driver 2

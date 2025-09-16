@@ -8,14 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.pizza_mania_app.admin.AdminDashboardActivity;
 import com.example.pizza_mania_app.deliveryPartner.deliveryPartnerDashboard;
+
+import java.util.concurrent.Executors;
 
 public class loginPage extends AppCompatActivity {
 
@@ -25,19 +23,13 @@ public class loginPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_page);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainLogin), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
 
+        // Open database
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
         btnLogin.setOnClickListener(v -> {
@@ -53,18 +45,18 @@ public class loginPage extends AppCompatActivity {
     }
 
     private void loginUser(String email, String password) {
-        Cursor cursor = db.rawQuery(
-                "SELECT * FROM users WHERE email=? AND password=?",
-                new String[]{email, password});
+        Executors.newSingleThreadExecutor().execute(() -> {
+            // Query user in background
+            Cursor cursor = db.rawQuery(
+                    "SELECT user_id, role, name, address, branch_id FROM users WHERE email=? AND password=?",
+                    new String[]{email, password});
 
-        if (cursor.moveToFirst()) {
-            String role = cursor.getString(cursor.getColumnIndexOrThrow("role"));
-            String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-            int userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id"));
-            int userBranchId = cursor.getInt(cursor.getColumnIndexOrThrow("branch_id")); // <-- get branch id
+            boolean success = cursor.moveToFirst();
 
-            Toast.makeText(this, "Welcome " + name, Toast.LENGTH_SHORT).show();
+            int userId = -1, branchId = -1;
+            String role = null, name = null, address = null;
 
+<<<<<<< HEAD
             Intent intent;
             switch (role.toLowerCase()) {
                 case "admin":
@@ -87,15 +79,58 @@ public class loginPage extends AppCompatActivity {
                     Toast.makeText(this, "Unknown role: " + role, Toast.LENGTH_SHORT).show();
                     cursor.close();
                     return;
+=======
+            if (success) {
+                userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id"));
+                role = cursor.getString(cursor.getColumnIndexOrThrow("role"));
+                name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                address = cursor.getString(cursor.getColumnIndexOrThrow("address"));
+                branchId = cursor.getInt(cursor.getColumnIndexOrThrow("branch_id"));
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
             }
+            cursor.close();
 
-            startActivity(intent);
-            finish();
+            int finalUserId = userId;
+            int finalBranchId = branchId;
+            String finalRole = role;
+            String finalName = name;
+            String finalAddress = address;
 
-        } else {
-            Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
-        }
+            // Update UI on main thread
+            runOnUiThread(() -> {
+                if (success) {
+                    Toast.makeText(this, "Welcome " + finalName, Toast.LENGTH_SHORT).show();
 
-        cursor.close();
+                    Intent intent;
+                    switch (finalRole.toLowerCase()) {
+                        case "admin":
+                            intent = new Intent(loginPage.this, AdminDashboardActivity.class);
+                            intent.putExtra("userRole", "admin");
+                            intent.putExtra("branchId", finalBranchId);
+                            break;
+                        case "driver":
+                            intent = new Intent(loginPage.this, deliveryPartnerDashboard.class);
+                            intent.putExtra("partnerId", finalUserId);
+                            intent.putExtra("branchId", finalBranchId);
+                            break;
+                        case "customer":
+                            intent = new Intent(loginPage.this, com.example.pizza_mania_app.OrderSetupActivity.class);
+                            intent.putExtra("userRole", "customer");
+                            intent.putExtra("userId", String.valueOf(finalUserId));
+                            intent.putExtra("defaultBranchId", finalBranchId);
+                            intent.putExtra("defaultAddress", finalAddress);
+                            break;
+                        default:
+                            Toast.makeText(this, "Unknown role: " + finalRole, Toast.LENGTH_SHORT).show();
+                            return;
+                    }
+
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 }

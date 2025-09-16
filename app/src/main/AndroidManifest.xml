@@ -10,8 +10,8 @@
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:enableOnBackInvokedCallback="true"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -33,6 +33,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCldldEy5A5sk7K3-RkyHhoCH86XeToP8s" />
 
+        <activity
+            android:name=".helperClasses.SelectLocationActivity"
+            android:exported="false"
+            android:label="@string/title_activity_select_location" />
+        <activity
+            android:name=".OrderSetupActivity"
+            android:exported="false" />
         <activity
             android:name=".deliveryPartner.orderDetailsMaps"
             android:exported="false"
@@ -78,8 +85,12 @@
 
         <activity
             android:name=".admin.AdminDashboardActivity"
+<<<<<<< HEAD
             android:exported="false"
             tools:ignore="MissingClass" />
+=======
+            android:exported="false" />
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
         <activity
             android:name=".customer.orderInvoice"
             android:exported="false" />
@@ -105,7 +116,6 @@
         <activity
             android:name=".deliveryPartner.orderPayment"
             android:exported="false" />
-
         <activity
             android:name=".deliveryPartner.deliveryPartnerDashboard"
             android:exported="false" />

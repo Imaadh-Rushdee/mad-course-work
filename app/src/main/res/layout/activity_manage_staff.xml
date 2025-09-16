@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+<<<<<<< HEAD
     android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+=======
+    android:padding="24dp"
+    android:background="#FFFFFF">
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <!-- Staff ID -->
     <EditText
@@ -18,22 +23,44 @@
         android:id="@+id/etStaffName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:hint="Staff Name"/>
+=======
+        android:hint="Staff Name"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_bg"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <!-- Staff Role -->
     <EditText
         android:id="@+id/etStaffRole"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:hint="Staff Role"/>
+=======
+        android:hint="Role"
+        android:padding="16dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edittext_bg"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <!-- Buttons Row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:orientation="horizontal"
         android:layout_marginTop="8dp"
         android:weightSum="3">
+=======
+        android:text="Add Staff"
+        android:backgroundTint="#FF5722"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"
+        android:padding="14dp"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
         <Button
             android:id="@+id/btnAddStaff"
@@ -62,13 +89,22 @@
         android:id="@+id/btnViewStaff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:text="View Staff"
         android:layout_marginTop="8dp"/>
+=======
+        android:text="Update Staff"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"
+        android:padding="14dp"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <!-- Staff ListView -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:text="Staff List"
         android:textStyle="bold"
         android:layout_marginTop="16dp"/>
@@ -80,4 +116,10 @@
         android:layout_weight="1"
         android:dividerHeight="1dp"/>
 
+=======
+        android:text="Delete Staff"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF"
+        android:padding="14dp"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 </LinearLayout>

@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
-    android:background="#FFF3E0">
+    android:padding="24dp"
+    android:background="#FFFFFF">
 
     <!-- Customer ID (used for update/delete) -->
     <EditText
@@ -22,8 +22,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Customer Name"
+<<<<<<< HEAD
         android:padding="12dp"
         android:layout_marginBottom="12dp" />
+=======
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_bg"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <!-- Customer Phone -->
     <EditText
@@ -32,8 +38,14 @@
         android:layout_height="wrap_content"
         android:hint="Phone Number"
         android:inputType="phone"
+<<<<<<< HEAD
         android:padding="12dp"
         android:layout_marginBottom="16dp" />
+=======
+        android:padding="16dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edittext_bg"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <!-- Action Buttons -->
     <Button
@@ -42,8 +54,14 @@
         android:layout_height="wrap_content"
         android:text="Add Customer"
         android:backgroundTint="#FF5722"
+<<<<<<< HEAD
         android:textColor="@android:color/white"
         android:layout_marginBottom="12dp" />
+=======
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"
+        android:padding="14dp"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <Button
         android:id="@+id/btnUpdateCustomer"
@@ -51,8 +69,14 @@
         android:layout_height="wrap_content"
         android:text="Update Customer"
         android:backgroundTint="#FF9800"
+<<<<<<< HEAD
         android:textColor="@android:color/white"
         android:layout_marginBottom="12dp" />
+=======
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"
+        android:padding="14dp"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <Button
         android:id="@+id/btnDeleteCustomer"
@@ -60,6 +84,7 @@
         android:layout_height="wrap_content"
         android:text="Delete Customer"
         android:backgroundTint="#D32F2F"
+<<<<<<< HEAD
         android:textColor="@android:color/white"
         android:layout_marginBottom="16dp" />
 
@@ -90,4 +115,8 @@
         android:dividerHeight="1dp"
         android:background="@android:color/white" />
 
+=======
+        android:textColor="#FFFFFF"
+        android:padding="14dp"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 </LinearLayout>

@@ -2,12 +2,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+<<<<<<< HEAD
     android:padding="16dp">
+=======
+    android:padding="24dp"
+    android:background="#FFFFFF">
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <EditText
         android:id="@+id/etOrderId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:hint="Order ID (only for Update/Delete)"/>
 
     <EditText
@@ -15,29 +21,59 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Order Name"/>
+=======
+        android:hint="Order ID"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_bg"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <EditText
         android:id="@+id/etOrderStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:hint="Order Status (Pending/Completed)"/>
+=======
+        android:hint="Order Status"
+        android:padding="16dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edittext_bg"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <Button
         android:id="@+id/btnAddOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:text="Add Order"/>
+=======
+        android:text="Add Order"
+        android:backgroundTint="#FF5722"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"
+        android:padding="14dp"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <Button
         android:id="@+id/btnUpdateOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:text="Update Order"/>
+=======
+        android:text="Update Order"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"
+        android:padding="14dp"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
     <Button
         android:id="@+id/btnDeleteOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:text="Delete Order"/>
 
     <LinearLayout
@@ -69,4 +105,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+=======
+        android:text="Delete Order"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF"
+        android:padding="14dp"/>
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 </LinearLayout>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -5,15 +6,19 @@
     android:padding="12dp"
     android:layout_margin="8dp"
     android:background="@android:color/white"
-    android:elevation="4dp">
+    android:elevation="4dp"
+    android:gravity="center_vertical">
 
+    <!-- Item Image -->
     <ImageView
         android:id="@+id/itemImage"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/logo"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:contentDescription="Item Image" />
 
+    <!-- Item Details -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="0dp"
@@ -27,14 +32,16 @@
             android:layout_height="wrap_content"
             android:text="Pizza Name"
             android:textStyle="bold"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="#333333" />
 
         <TextView
             android:id="@+id/itemDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Description"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textColor="#666666" />
 
         <TextView
             android:id="@+id/itemPrice"
@@ -42,33 +49,51 @@
             android:layout_height="wrap_content"
             android:text="$0.00"
             android:textStyle="bold"
-            android:textSize="14sp" />
-
+            android:textSize="14sp"
+            android:textColor="#000000" />
     </LinearLayout>
 
+    <!-- Action Buttons -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:spacing="8dp">
 
         <Button
             android:id="@+id/btnAdd"
             android:text="Add"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF5722"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp" />
 
         <Button
             android:id="@+id/btnEdit"
             android:text="Edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:backgroundTint="#FFC107"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp" />
 
         <Button
             android:id="@+id/btnRemove"
             android:text="Remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:backgroundTint="#F44336"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp" />
     </LinearLayout>
 </LinearLayout>

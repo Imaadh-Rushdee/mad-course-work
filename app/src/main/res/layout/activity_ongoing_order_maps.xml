@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main">
+    android:orientation="vertical"
+    android:background="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FF5722"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="20px">
+        android:gravity="center_vertical"
+        android:padding="20dp">
 
-        <!-- App Logo on the left -->
         <ImageView
             android:id="@+id/logoImg"
-            android:layout_width="100px"
-            android:layout_height="100px"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="app-logo"
             android:src="@drawable/logo" />
 
-        <!-- Text in the middle -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
@@ -31,10 +30,9 @@
             android:gravity="center"
             android:text="Pizza Mania"
             android:textColor="#FFFFFF"
-            android:textSize="80px" /> <!-- custom font -->
-
+            android:textSize="28sp" />
     </LinearLayout>
-    <!-- Navigation Panel (Hidden by default) -->
+
     <LinearLayout
         android:id="@+id/navigationPanel"
         android:layout_width="match_parent"
@@ -50,17 +48,18 @@
             android:layout_height="wrap_content"
             android:text="Loading directions..."
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#FF5722"/>
 
         <TextView
             android:id="@+id/distanceToInstructionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textColor="#000000"/>
     </LinearLayout>
 
-    <!-- Map Fragment -->
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -68,7 +67,6 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- Status Information -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,6 +82,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:gravity="center"
+            android:textColor="#FF5722"
             android:padding="8dp" />
 
         <TextView
@@ -93,7 +92,8 @@
             android:text="Distance: Calculating..."
             android:textSize="16sp"
             android:gravity="center"
-            android:padding="4dp" />
+            android:padding="4dp"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/etaText"
@@ -102,20 +102,18 @@
             android:text="ETA: Calculating..."
             android:textSize="16sp"
             android:gravity="center"
-            android:padding="4dp" />
-
+            android:padding="4dp"
+            android:textColor="#000000" />
     </LinearLayout>
 
-    <!-- Order Status Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
         android:padding="20dp"
-        android:background="#F5F5F5">
+        android:background="#FFFFFF">
 
-        <!-- Ready Status -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -128,45 +126,45 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@drawable/ic_circle_grey"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerInside" />
 
             <Button
                 android:id="@+id/readyButton"
-                android:layout_width="167dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:minWidth="100dp"
+                android:backgroundTint="#FF5722"
                 android:text="Ready"
-                android:textSize="16sp" />
-
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:minWidth="100dp"/>
         </LinearLayout>
 
-        <!-- Completed Status -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginStart="16dp">
 
             <ImageView
                 android:id="@+id/completedImage"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@drawable/ic_circle_grey"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerInside" />
 
             <Button
                 android:id="@+id/completedButton"
-                android:layout_width="172dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:minWidth="100dp"
+                android:backgroundTint="#4CAF50"
                 android:text="Completed"
-                android:textSize="16sp" />
-
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:minWidth="100dp"/>
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>

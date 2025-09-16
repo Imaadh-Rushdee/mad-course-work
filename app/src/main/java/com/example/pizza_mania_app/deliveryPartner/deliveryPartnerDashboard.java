@@ -52,35 +52,33 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
         });
 
         partnerName = findViewById(R.id.driver_name);
-        profileImage = findViewById(R.id.profileImage);    // For displaying photo
+        profileImage = findViewById(R.id.profileImage);
         profileSpinner = findViewById(R.id.profileSpinner); // For menu dropdown
 
-        // Simple spinner setup
         String[] options = {"Menu", "Profile", "Logout"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.custom_spinner_layout, options);
         profileSpinner.setAdapter(adapter);
 
+
         profileSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 1) {
-                    // Profile - do whatever you want
-                    Toast.makeText(deliveryPartnerDashboard.this, "Profile clicked", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(deliveryPartnerDashboard.this, profile.class);
-                    startActivity(intent);
-
-                } else if (position == 2) {
-                    // Logout - go back to login
-                    finish();
+                switch (position) {
+                    case 1:
+                        Intent intent = new Intent(deliveryPartnerDashboard.this, profile.class);
+                        intent.putExtra("userId", partnerId);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        finish();
+                        break;
                 }
-                profileSpinner.setSelection(0); // Reset to "Menu"
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
+
 
         partnerId = getIntent().getIntExtra("partnerId", -1);
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);

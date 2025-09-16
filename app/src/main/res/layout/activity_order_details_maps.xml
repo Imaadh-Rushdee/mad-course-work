@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
     android:id="@+id/main"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
 
     <!-- App Header -->
     <LinearLayout
@@ -12,17 +13,15 @@
         android:background="#FF5722"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="20px">
+        android:padding="16dp">
 
-        <!-- App Logo on the left -->
         <ImageView
             android:id="@+id/logoImg"
-            android:layout_width="100px"
-            android:layout_height="100px"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="app-logo"
             android:src="@drawable/logo" />
 
-        <!-- Text in the middle -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
@@ -32,8 +31,7 @@
             android:gravity="center"
             android:text="Pizza Mania"
             android:textColor="#FFFFFF"
-            android:textSize="80px" /> <!-- custom font -->
-
+            android:textSize="28sp" />
     </LinearLayout>
 
     <!-- Order Details -->
@@ -41,14 +39,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="15dp">
+        android:layout_margin="12dp">
 
         <!-- Order ID -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/txtOrderId"
@@ -56,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:text="Order ID: "
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_weight="1" />
 
             <TextView
@@ -72,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/txtCustomerName"
@@ -81,7 +79,7 @@
                 android:layout_weight="1"
                 android:text="Customer Name: "
                 android:textStyle="bold"
-                android:textSize="18sp"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/customerName"
@@ -95,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/txtOrderItem"
@@ -104,7 +102,7 @@
                 android:layout_weight="1"
                 android:text="Cart: "
                 android:textStyle="bold"
-                android:textSize="18sp"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/orderItem"
@@ -118,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/txtAddress"
@@ -127,7 +125,7 @@
                 android:layout_weight="1"
                 android:text="Address: "
                 android:textStyle="bold"
-                android:textSize="18sp"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/address"
@@ -141,7 +139,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/txtTotalAmount"
@@ -150,7 +148,7 @@
                 android:layout_weight="1"
                 android:text="Total Amount: "
                 android:textStyle="bold"
-                android:textSize="18sp"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/totalAmount"
@@ -167,7 +165,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_margin="15dp"/>
+        android:layout_margin="12dp"/>
 
     <!-- Distance/ETA -->
     <TextView
@@ -185,7 +183,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="12dp">
 
         <Button
             android:id="@+id/backToHome"

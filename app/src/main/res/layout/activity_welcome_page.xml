@@ -11,11 +11,11 @@
     <!-- App Logo -->
     <ImageView
         android:id="@+id/logoImg"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:src="@drawable/logo"
         android:contentDescription="@string/app_logo"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="24dp" />
 
     <!-- App Title -->
     <TextView
@@ -24,39 +24,31 @@
         android:layout_height="wrap_content"
         android:text="@string/pizza_mania"
         android:textColor="#FF5722"
-        android:textSize="36sp"
+        android:textSize="32sp"
         android:fontFamily="@font/beachday"
-        android:layout_marginBottom="40dp"/>
+        android:layout_marginBottom="36dp" />
 
     <!-- Login Button -->
     <Button
         android:id="@+id/btnLoginWelcome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
         android:text="@string/login"
         android:backgroundTint="#FF5722"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:layout_marginBottom="15dp"/>
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"
+        android:stateListAnimator="@null" />
 
     <!-- Sign Up Button -->
     <Button
         android:id="@+id/btnSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
         android:text="@string/sign_up"
         android:backgroundTint="#4CAF50"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:layout_marginBottom="15dp"/>
-
-    <!-- Guest Option -->
-    <TextView
-        android:id="@+id/tvGuest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/continue_as_guest"
-        android:textColor="#FF5722"
         android:textSize="16sp"
-        android:layout_marginTop="20dp"/>
+        android:stateListAnimator="@null" />
+
 </LinearLayout>
