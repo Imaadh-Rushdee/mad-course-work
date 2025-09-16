@@ -3,6 +3,8 @@ package com.example.pizza_mania_app;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -28,8 +30,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class OrderSetupActivity extends AppCompatActivity {
 
@@ -49,12 +49,17 @@ public class OrderSetupActivity extends AppCompatActivity {
     private int selectedBranchId = 1;
     private String userId;  // Customer/User ID passed from previous activity
 
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_setup);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // Open or create database
+        db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
         // Receive user ID from Intent
         userId = getIntent().getStringExtra("userId");
@@ -83,6 +88,8 @@ public class OrderSetupActivity extends AppCompatActivity {
 
             if (checkedId == R.id.radioDelivery) {
                 getCurrentLocation();
+            } else if (checkedId == R.id.radioPickup) {
+                loadCustomerPickupInfo();
             }
         });
 
@@ -101,16 +108,15 @@ public class OrderSetupActivity extends AppCompatActivity {
                 }
                 launchMenu("Delivery", selectedBranchId, selectedAddress, selectedLatLng);
             } else if (radioPickup.isChecked()) {
-                String branchName = spinnerBranch.getSelectedItem().toString();
-                selectedBranchId = getBranchIdByName(branchName);
-                launchMenu("Pickup", selectedBranchId, branchName, null);
+                // Pickup uses customer info from DB
+                launchMenu("Pickup", selectedBranchId, selectedAddress, null);
             } else {
                 Toast.makeText(this, "Please select an order type", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    /*** Get current location using FusedLocationProviderClient (signUp style) ***/
+    /*** Get current location using FusedLocationProviderClient ***/
     private void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -147,6 +153,42 @@ public class OrderSetupActivity extends AppCompatActivity {
         return result;
     }
 
+    /*** Load customer address and branch from DB for pickup ***/
+    private void loadCustomerPickupInfo() {
+        // Query the users table for this user, only if role=customer
+        Cursor cursor = db.rawQuery(
+                "SELECT address, branch_id FROM users WHERE user_id=? AND role='customer'",
+                new String[]{userId});
+
+        if (cursor.moveToFirst()) {
+            selectedAddress = cursor.getString(0); // saved address
+            int branchIdFromDb = cursor.getInt(1);  // branch_id from DB
+            selectedBranchId = branchIdFromDb;
+
+            // Update UI
+            tvDeliveryAddress.setText(selectedAddress);
+
+            // Get branch name from spinner using branch ID
+            String branchName = getBranchNameById(branchIdFromDb);
+            ArrayAdapter adapter = (ArrayAdapter) spinnerBranch.getAdapter();
+            int spinnerPosition = adapter.getPosition(branchName);
+            if (spinnerPosition >= 0) spinnerBranch.setSelection(spinnerPosition);
+        } else {
+            Toast.makeText(this, "Customer info not found", Toast.LENGTH_SHORT).show();
+        }
+        cursor.close();
+    }
+
+    private String getBranchNameById(int branchId) {
+        // Match with spinner values or database
+        switch (branchId) {
+            case 1: return "Colombo";
+            case 2: return "Kandy";
+            default: return "Colombo";
+        }
+    }
+
+
     private void launchMenu(String orderType, int branchId, String address, LatLng latLng) {
         Intent intent = new Intent(OrderSetupActivity.this, menu.class);
 
@@ -154,16 +196,15 @@ public class OrderSetupActivity extends AppCompatActivity {
         intent.putExtra("userRole", "customer");
         intent.putExtra("branchId", branchId);
         intent.putExtra("orderType", orderType);
-
-        // Always send branch name
         intent.putExtra("branch", spinnerBranch.getSelectedItem().toString());
 
-        if (orderType.equalsIgnoreCase("Delivery")) {
-            intent.putExtra("defaultAddress", address);
-            if (latLng != null) {
-                intent.putExtra("lat", latLng.latitude);
-                intent.putExtra("lng", latLng.longitude);
-            }
+        // Pass the address
+        intent.putExtra("defaultAddress", address);
+
+        // Pass coordinates if available
+        if (latLng != null) {
+            intent.putExtra("lat", latLng.latitude);
+            intent.putExtra("lng", latLng.longitude);
         }
 
         startActivity(intent);

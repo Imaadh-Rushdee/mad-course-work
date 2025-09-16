@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="#FDFDFD"
-    tools:context=".OrderSetupActivity">
+    android:background="#FDFDFD">
 
     <!-- Order Type Selection -->
     <RadioGroup
@@ -56,7 +55,7 @@
 
         <TextView
             android:id="@+id/tvDeliveryAddress"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="No address selected"

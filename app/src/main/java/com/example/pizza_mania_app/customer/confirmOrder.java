@@ -142,8 +142,9 @@ public class confirmOrder extends AppCompatActivity {
         StringBuilder cartSummary = new StringBuilder();
         totalAmount = 0;
 
+        // FIXED: use 'name' column from menu_items instead of 'item_name'
         Cursor items = db.rawQuery(
-                "SELECT m.item_name, ci.quantity, m.price " +
+                "SELECT m.name, ci.quantity, m.price " +
                         "FROM carts c " +
                         "JOIN cart_items ci ON c.cart_id = ci.cart_id " +
                         "JOIN menu_items m ON ci.item_id = m.item_id " +

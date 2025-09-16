@@ -48,6 +48,9 @@ public class menu extends AppCompatActivity {
     private ImageView tempImageView;
     private byte[] selectedImageBytes;
 
+    // Store default address from previous activity
+    private String defaultAddress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +75,7 @@ public class menu extends AppCompatActivity {
         branchId = getIntent().getIntExtra("branchId", 0);
         orderType = getIntent().getStringExtra("orderType");
         branch = getIntent().getStringExtra("branch"); // branch name from OrderSetupActivity
+        defaultAddress = getIntent().getStringExtra("defaultAddress"); // <-- get address here
 
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
@@ -89,7 +93,7 @@ public class menu extends AppCompatActivity {
         // Customer: show cart button
         if ("customer".equalsIgnoreCase(userRole)) {
             cartImg.setVisibility(Button.VISIBLE);
-            cartImg.setOnClickListener(v -> openCart());
+            cartImg.setOnClickListener(v -> openCart()); // pass defaultAddress inside method
         } else {
             cartImg.setVisibility(Button.GONE);
         }
@@ -297,19 +301,19 @@ public class menu extends AppCompatActivity {
         Intent intent = new Intent(menu.this, cart.class);
         intent.putExtra("userId", userId);
         intent.putExtra("branchId", branchId);
-        intent.putExtra("branch", branch);               // Pass branch name
-        intent.putExtra("userAddress", getIntent().getStringExtra("defaultAddress"));
+        intent.putExtra("branch", branch);
+        intent.putExtra("userAddress", defaultAddress); // <-- pass address
         intent.putExtra("orderType", orderType);
 
         // Optional: pass LatLng
-        String address = getIntent().getStringExtra("defaultAddress");
-        if (address != null) {
-            LatLng latLng = GoogleMapsHelper.geocodeAddress(this, address);
+        if (defaultAddress != null) {
+            LatLng latLng = GoogleMapsHelper.geocodeAddress(this, defaultAddress);
             if (latLng != null) {
                 intent.putExtra("lat", latLng.latitude);
                 intent.putExtra("lng", latLng.longitude);
             }
         }
+
         startActivity(intent);
     }
 }
