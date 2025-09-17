@@ -47,7 +47,7 @@ public class OrderSetupActivity extends AppCompatActivity {
     private String selectedAddress = "";
     private LatLng selectedLatLng;
     private int selectedBranchId = 1;
-    private String userId;  // Customer/User ID passed from previous activity
+    private String userId;
 
     private SQLiteDatabase db;
 
@@ -57,14 +57,9 @@ public class OrderSetupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_setup);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        // Open or create database
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
-
-        // Receive user ID from Intent
         userId = getIntent().getStringExtra("userId");
 
-        // Bind views
         radioGroupOrderType = findViewById(R.id.radioGroupOrderType);
         radioDelivery = findViewById(R.id.radioDelivery);
         radioPickup = findViewById(R.id.radioPickup);
@@ -75,31 +70,24 @@ public class OrderSetupActivity extends AppCompatActivity {
         btnContinue = findViewById(R.id.btnContinue);
         spinnerBranch = findViewById(R.id.spinnerBranch);
 
-        // Setup spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.branches, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerBranch.setAdapter(adapter);
 
-        // Toggle Delivery/Pickup
         radioGroupOrderType.setOnCheckedChangeListener((group, checkedId) -> {
             layoutDelivery.setVisibility(checkedId == R.id.radioDelivery ? View.VISIBLE : View.GONE);
             layoutPickup.setVisibility(checkedId == R.id.radioPickup ? View.VISIBLE : View.GONE);
 
-            if (checkedId == R.id.radioDelivery) {
-                getCurrentLocation();
-            } else if (checkedId == R.id.radioPickup) {
-                loadCustomerPickupInfo();
-            }
+            if (checkedId == R.id.radioDelivery) getCurrentLocation();
+            else if (checkedId == R.id.radioPickup) loadCustomerPickupInfo();
         });
 
-        // Change address via map
         btnChangeAddress.setOnClickListener(v -> {
             Intent intent = new Intent(OrderSetupActivity.this, SelectLocationActivity.class);
             startActivityForResult(intent, MAP_REQUEST_CODE);
         });
 
-        // Continue button
         btnContinue.setOnClickListener(v -> {
             if (radioDelivery.isChecked()) {
                 if (selectedAddress.isEmpty()) {
@@ -108,7 +96,6 @@ public class OrderSetupActivity extends AppCompatActivity {
                 }
                 launchMenu("Delivery", selectedBranchId, selectedAddress, selectedLatLng);
             } else if (radioPickup.isChecked()) {
-                // Pickup uses customer info from DB
                 launchMenu("Pickup", selectedBranchId, selectedAddress, null);
             } else {
                 Toast.makeText(this, "Please select an order type", Toast.LENGTH_SHORT).show();
@@ -116,7 +103,6 @@ public class OrderSetupActivity extends AppCompatActivity {
         });
     }
 
-    /*** Get current location using FusedLocationProviderClient ***/
     private void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -130,7 +116,6 @@ public class OrderSetupActivity extends AppCompatActivity {
             if (location != null) {
                 selectedLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 selectedAddress = getAddressFromLocation(location);
-
                 tvDeliveryAddress.setText(selectedAddress);
                 Toast.makeText(this, "Location detected: " + selectedAddress, Toast.LENGTH_SHORT).show();
             } else {
@@ -144,31 +129,24 @@ public class OrderSetupActivity extends AppCompatActivity {
         try {
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                result = addresses.get(0).getAddressLine(0);
-            }
+            if (addresses != null && !addresses.isEmpty()) result = addresses.get(0).getAddressLine(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
 
-    /*** Load customer address and branch from DB for pickup ***/
     private void loadCustomerPickupInfo() {
-        // Query the users table for this user, only if role=customer
         Cursor cursor = db.rawQuery(
                 "SELECT address, branch_id FROM users WHERE user_id=? AND role='customer'",
                 new String[]{userId});
 
         if (cursor.moveToFirst()) {
-            selectedAddress = cursor.getString(0); // saved address
-            int branchIdFromDb = cursor.getInt(1);  // branch_id from DB
+            selectedAddress = cursor.getString(0);
+            int branchIdFromDb = cursor.getInt(1);
             selectedBranchId = branchIdFromDb;
-
-            // Update UI
             tvDeliveryAddress.setText(selectedAddress);
 
-            // Get branch name from spinner using branch ID
             String branchName = getBranchNameById(branchIdFromDb);
             ArrayAdapter adapter = (ArrayAdapter) spinnerBranch.getAdapter();
             int spinnerPosition = adapter.getPosition(branchName);
@@ -180,7 +158,6 @@ public class OrderSetupActivity extends AppCompatActivity {
     }
 
     private String getBranchNameById(int branchId) {
-        // Match with spinner values or database
         switch (branchId) {
             case 1: return "Colombo";
             case 2: return "Kandy";
@@ -188,20 +165,15 @@ public class OrderSetupActivity extends AppCompatActivity {
         }
     }
 
-
     private void launchMenu(String orderType, int branchId, String address, LatLng latLng) {
         Intent intent = new Intent(OrderSetupActivity.this, menu.class);
-
         intent.putExtra("userId", userId);
         intent.putExtra("userRole", "customer");
         intent.putExtra("branchId", branchId);
         intent.putExtra("orderType", orderType);
         intent.putExtra("branch", spinnerBranch.getSelectedItem().toString());
-
-        // Pass the address
         intent.putExtra("defaultAddress", address);
 
-        // Pass coordinates if available
         if (latLng != null) {
             intent.putExtra("lat", latLng.latitude);
             intent.putExtra("lng", latLng.longitude);
@@ -209,7 +181,6 @@ public class OrderSetupActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
-
 
     private int getBranchIdByName(String branchName) {
         switch (branchName) {
@@ -236,11 +207,8 @@ public class OrderSetupActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation();
-            } else {
-                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
-            }
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) getCurrentLocation();
+            else Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
         }
     }
 }

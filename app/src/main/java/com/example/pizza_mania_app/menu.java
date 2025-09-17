@@ -42,13 +42,10 @@ public class menu extends AppCompatActivity {
     private String orderType;
     private Button btnNewItem;
     private ImageButton cartImg;
-
     private static final int REQUEST_CAMERA = 100;
     private static final int REQUEST_GALLERY = 200;
     private ImageView tempImageView;
     private byte[] selectedImageBytes;
-
-    // Store default address from previous activity
     private String defaultAddress;
 
     @Override
@@ -57,32 +54,27 @@ public class menu extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu);
 
-        // Handle system bars padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Initialize views
         menuContainer = findViewById(R.id.menuContainer);
         btnNewItem = findViewById(R.id.btnNewItem);
         cartImg = findViewById(R.id.cartImg);
 
-        // Get extras from previous activity
         userId = getIntent().getStringExtra("userId");
         userRole = getIntent().getStringExtra("userRole");
         branchId = getIntent().getIntExtra("branchId", 0);
         orderType = getIntent().getStringExtra("orderType");
-        branch = getIntent().getStringExtra("branch"); // branch name from OrderSetupActivity
-        defaultAddress = getIntent().getStringExtra("defaultAddress"); // <-- get address here
+        branch = getIntent().getStringExtra("branch");
+        defaultAddress = getIntent().getStringExtra("defaultAddress");
 
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
-        // Load menu items for selected branch
         loadMenuItems();
 
-        // Admin: show Add New Item button
         if ("admin".equalsIgnoreCase(userRole)) {
             btnNewItem.setVisibility(Button.VISIBLE);
             btnNewItem.setOnClickListener(v -> showAddOrEditDialog(null, null, 0, null, null));
@@ -90,10 +82,9 @@ public class menu extends AppCompatActivity {
             btnNewItem.setVisibility(Button.GONE);
         }
 
-        // Customer: show cart button
         if ("customer".equalsIgnoreCase(userRole)) {
             cartImg.setVisibility(Button.VISIBLE);
-            cartImg.setOnClickListener(v -> openCart()); // pass defaultAddress inside method
+            cartImg.setOnClickListener(v -> openCart());
         } else {
             cartImg.setVisibility(Button.GONE);
         }
@@ -102,14 +93,12 @@ public class menu extends AppCompatActivity {
     private void loadMenuItems() {
         menuContainer.removeAllViews();
         Cursor cursor = db.rawQuery("SELECT * FROM menu_items WHERE branch_id=?", new String[]{String.valueOf(branchId)});
-
         while (cursor.moveToNext()) {
             int itemId = cursor.getInt(cursor.getColumnIndexOrThrow("item_id"));
             String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
             String desc = cursor.getString(cursor.getColumnIndexOrThrow("description"));
             double price = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
             byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow("image"));
-
             addMenuItem(itemId, name, desc, price, imageBytes);
         }
         cursor.close();
@@ -117,7 +106,6 @@ public class menu extends AppCompatActivity {
 
     private void addMenuItem(int itemId, String name, String desc, double price, byte[] imageBytes) {
         LinearLayout card = (LinearLayout) getLayoutInflater().inflate(R.layout.menu_item, menuContainer, false);
-
         TextView tvName = card.findViewById(R.id.itemName);
         TextView tvDesc = card.findViewById(R.id.itemDesc);
         TextView tvPrice = card.findViewById(R.id.itemPrice);
@@ -141,7 +129,6 @@ public class menu extends AppCompatActivity {
             btnAdd.setVisibility(Button.GONE);
             btnEdit.setVisibility(Button.VISIBLE);
             btnRemove.setVisibility(Button.VISIBLE);
-
             btnEdit.setOnClickListener(v -> showAddOrEditDialog(name, desc, price, itemId, imageBytes));
             btnRemove.setOnClickListener(v -> {
                 new AlertDialog.Builder(this)
@@ -159,7 +146,6 @@ public class menu extends AppCompatActivity {
             btnAdd.setVisibility(Button.VISIBLE);
             btnEdit.setVisibility(Button.GONE);
             btnRemove.setVisibility(Button.GONE);
-
             btnAdd.setOnClickListener(v -> addToCart(itemId));
         }
 
@@ -221,7 +207,7 @@ public class menu extends AppCompatActivity {
             values.put("name", name);
             values.put("description", desc);
             values.put("price", price);
-            values.put("branch_id", branchId); // Correct branchId for this menu
+            values.put("branch_id", branchId);
             if (selectedImageBytes != null) values.put("image", selectedImageBytes);
 
             if (itemId == null) db.insert("menu_items", null, values);
@@ -278,10 +264,8 @@ public class menu extends AppCompatActivity {
     private void addToCart(int itemId) {
         Cursor cursor = db.rawQuery("SELECT cart_id FROM carts WHERE user_id=?", new String[]{userId});
         int cartId;
-
-        if (cursor.moveToFirst()) {
-            cartId = cursor.getInt(cursor.getColumnIndexOrThrow("cart_id"));
-        } else {
+        if (cursor.moveToFirst()) cartId = cursor.getInt(cursor.getColumnIndexOrThrow("cart_id"));
+        else {
             ContentValues cartValues = new ContentValues();
             cartValues.put("user_id", userId);
             cartId = (int) db.insert("carts", null, cartValues);
@@ -302,10 +286,9 @@ public class menu extends AppCompatActivity {
         intent.putExtra("userId", userId);
         intent.putExtra("branchId", branchId);
         intent.putExtra("branch", branch);
-        intent.putExtra("userAddress", defaultAddress); // <-- pass address
+        intent.putExtra("userAddress", defaultAddress);
         intent.putExtra("orderType", orderType);
 
-        // Optional: pass LatLng
         if (defaultAddress != null) {
             LatLng latLng = GoogleMapsHelper.geocodeAddress(this, defaultAddress);
             if (latLng != null) {

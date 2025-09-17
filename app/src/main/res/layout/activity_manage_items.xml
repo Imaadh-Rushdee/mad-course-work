@@ -6,7 +6,6 @@
     android:padding="16dp"
     android:background="#F3F4F6">
 
-    <!-- Item ID (for search/update by ID) -->
     <EditText
         android:id="@+id/etItemId"
         android:layout_width="match_parent"
@@ -17,7 +16,6 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/edittext_bg"/>
 
-    <!-- Item Name -->
     <EditText
         android:id="@+id/etItemName"
         android:layout_width="match_parent"
@@ -27,7 +25,6 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/edittext_bg"/>
 
-    <!-- Item Price -->
     <EditText
         android:id="@+id/etItemPrice"
         android:layout_width="match_parent"
@@ -38,7 +35,6 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/edittext_bg"/>
 
-    <!-- Buttons Row 1 (Add + Read) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,7 +63,6 @@
             android:layout_marginStart="5dp"/>
     </LinearLayout>
 
-    <!-- Buttons Row 2 (Update + Delete) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -96,7 +91,6 @@
             android:layout_marginStart="5dp"/>
     </LinearLayout>
 
-    <!-- Buttons Row 3 (Search) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -125,7 +119,6 @@
             android:layout_marginStart="5dp"/>
     </LinearLayout>
 
-    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerItems"
         android:layout_width="match_parent"

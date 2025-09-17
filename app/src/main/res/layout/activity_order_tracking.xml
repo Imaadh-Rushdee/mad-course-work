@@ -11,7 +11,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Order Info -->
         <TextView
             android:id="@+id/tvOrderId"
             android:layout_width="match_parent"
@@ -37,7 +36,6 @@
             android:textSize="16sp"
             android:paddingBottom="16dp" />
 
-        <!-- Status Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +44,6 @@
             android:padding="16dp"
             android:background="#F5F5F5">
 
-            <!-- Order Ready -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -70,7 +67,6 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <!-- Order Picked Up -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -94,7 +90,6 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <!-- On The Way -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -121,4 +116,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </ScrollView>

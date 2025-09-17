@@ -24,7 +24,7 @@ public class ManageItemsActivity extends AppCompatActivity {
 
     com.example.pizza_mania_app.admin.DatabaseHelper db;
 
-    long selectedId = -1; // to keep track of selected item ID
+    long selectedId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class ManageItemsActivity extends AppCompatActivity {
 
         db = new com.example.pizza_mania_app.admin.DatabaseHelper(this);
 
-        etItemId = findViewById(R.id.etItemId); // <-- add this EditText in XML
+        etItemId = findViewById(R.id.etItemId);
         etItemName = findViewById(R.id.etItemName);
         etItemPrice = findViewById(R.id.etItemPrice);
 
@@ -41,8 +41,8 @@ public class ManageItemsActivity extends AppCompatActivity {
         btnRead = findViewById(R.id.btnReadItem);
         btnUpdate = findViewById(R.id.btnUpdateItem);
         btnDelete = findViewById(R.id.btnDeleteItem);
-        btnSearchById = findViewById(R.id.btnSearchById);     // <-- add in XML
-        btnSearchByName = findViewById(R.id.btnSearchByName); // <-- add in XML
+        btnSearchById = findViewById(R.id.btnSearchById);
+        btnSearchByName = findViewById(R.id.btnSearchByName);
 
         recyclerView = findViewById(R.id.recyclerItems);
 
@@ -64,7 +64,7 @@ public class ManageItemsActivity extends AppCompatActivity {
         btnSearchById.setOnClickListener(v -> searchItemById());
         btnSearchByName.setOnClickListener(v -> searchItemByName());
 
-        loadItems(); // load all items at start
+        loadItems();
     }
 
     private void addItem() {

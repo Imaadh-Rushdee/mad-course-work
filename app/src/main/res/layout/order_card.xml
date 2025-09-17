@@ -12,7 +12,6 @@
     android:focusable="true"
     android:elevation="4dp">
 
-    <!-- Order ID -->
     <TextView
         android:id="@+id/cardOrderId"
         android:layout_width="wrap_content"
@@ -22,7 +21,6 @@
         android:textSize="16sp"
         android:textColor="#333333"/>
 
-    <!-- Customer Name -->
     <TextView
         android:id="@+id/orderCustomerName"
         android:layout_width="wrap_content"
@@ -32,7 +30,6 @@
         android:textColor="#666666"
         android:layout_marginTop="4dp"/>
 
-    <!-- Customer Address -->
     <TextView
         android:id="@+id/orderCustomerAddress"
         android:layout_width="wrap_content"
@@ -42,7 +39,6 @@
         android:textColor="#666666"
         android:layout_marginTop="2dp"/>
 
-    <!-- Order Status -->
     <TextView
         android:id="@+id/tvOrderStatus"
         android:layout_width="wrap_content"
@@ -52,7 +48,6 @@
         android:textColor="#FF5722"
         android:layout_marginTop="4dp"/>
 
-    <!-- Total Amount -->
     <TextView
         android:id="@+id/orderTotalAmount"
         android:layout_width="wrap_content"
@@ -61,4 +56,5 @@
         android:textSize="14sp"
         android:textColor="#333333"
         android:layout_marginTop="2dp"/>
+
 </LinearLayout>

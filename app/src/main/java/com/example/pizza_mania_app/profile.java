@@ -48,7 +48,6 @@ public class profile extends AppCompatActivity {
 
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
-        // Get userId from Intent
         userId = getIntent().getIntExtra("userId", -1);
         if (userId == -1) {
             Toast.makeText(this, "Invalid user", Toast.LENGTH_SHORT).show();
@@ -58,14 +57,10 @@ public class profile extends AppCompatActivity {
 
         loadUserData();
 
-        // Change profile picture
         imgProfile.setOnClickListener(v -> selectImage());
-
-        // Save changes
         btnSave.setOnClickListener(v -> saveUserData());
     }
 
-    /** Load user data into EditTexts and profile image */
     private void loadUserData() {
         Cursor cursor = db.rawQuery("SELECT * FROM users WHERE user_id=?", new String[]{String.valueOf(userId)});
         if (cursor.moveToFirst()) {
@@ -83,7 +78,6 @@ public class profile extends AppCompatActivity {
         cursor.close();
     }
 
-    /** Open camera or gallery to select profile picture */
     private void selectImage() {
         String[] options = {"Camera", "Gallery"};
         new android.app.AlertDialog.Builder(this)
@@ -128,7 +122,6 @@ public class profile extends AppCompatActivity {
         return stream.toByteArray();
     }
 
-    /** Save updated details into DB */
     private void saveUserData() {
         String name = etName.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();

@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:background="#FFFFFF">
 
-    <!-- App Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,14 +33,12 @@
             android:textSize="28sp" />
     </LinearLayout>
 
-    <!-- Order Details -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="12dp">
 
-        <!-- Order ID -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +62,6 @@
                 android:textStyle="bold"/>
         </LinearLayout>
 
-        <!-- Customer Name -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,7 +84,6 @@
                 android:text="John Cena"/>
         </LinearLayout>
 
-        <!-- Cart Items -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,7 +106,6 @@
                 android:text="Sausage Pizza(2)" />
         </LinearLayout>
 
-        <!-- Address -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -134,7 +128,6 @@
                 android:text="Colombo, Mount Lavinia, No 63"/>
         </LinearLayout>
 
-        <!-- Total Amount -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -159,7 +152,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Map Fragment -->
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -167,7 +159,6 @@
         android:layout_height="200dp"
         android:layout_margin="12dp"/>
 
-    <!-- Distance/ETA -->
     <TextView
         android:id="@+id/txtDistanceTime"
         android:layout_width="match_parent"
@@ -177,7 +168,6 @@
         android:textSize="16sp"
         android:padding="10dp"/>
 
-    <!-- Action Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

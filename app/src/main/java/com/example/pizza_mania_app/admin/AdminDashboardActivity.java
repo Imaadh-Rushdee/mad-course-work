@@ -13,25 +13,22 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     Button btnOrders, btnMenu, btnUsers, btnTransactions;
 
-    int userId, branchId; // coming from Intent
+    int userId, branchId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        // --- Get userId and branchId from Intent ---
         Intent intent = getIntent();
         userId = intent.getIntExtra("userId", -1);
         branchId = intent.getIntExtra("branchId", -1);
 
-        // --- Init Views ---
         btnOrders = findViewById(R.id.btnOrders);
         btnMenu = findViewById(R.id.btnMenu);
         btnUsers = findViewById(R.id.btnUsers);
         btnTransactions = findViewById(R.id.btnTransactions);
 
-        // --- Navigation with userId + branchId passed along ---
         btnOrders.setOnClickListener(v -> {
             Intent i = new Intent(this, ManageOrdersActivity.class);
             i.putExtra("userId", userId);

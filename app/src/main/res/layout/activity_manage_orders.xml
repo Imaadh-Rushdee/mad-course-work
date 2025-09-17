@@ -5,7 +5,6 @@
     android:padding="24dp"
     android:background="#FFFFFF">
 
-    <!-- Order ID -->
     <EditText
         android:id="@+id/etOrderId"
         android:layout_width="match_parent"
@@ -15,7 +14,6 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/edittext_bg" />
 
-    <!-- Order Name -->
     <EditText
         android:id="@+id/etOrderName"
         android:layout_width="match_parent"
@@ -25,7 +23,6 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/edittext_bg" />
 
-    <!-- Order Status -->
     <EditText
         android:id="@+id/etOrderStatus"
         android:layout_width="match_parent"
@@ -35,7 +32,6 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/edittext_bg" />
 
-    <!-- Buttons -->
     <Button
         android:id="@+id/btnAddOrder"
         android:layout_width="match_parent"
@@ -66,7 +62,6 @@
         android:layout_marginBottom="20dp"
         android:padding="14dp" />
 
-    <!-- Filter Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -95,11 +90,9 @@
             android:text="All" />
     </LinearLayout>
 
-    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerOrders"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
 </LinearLayout>

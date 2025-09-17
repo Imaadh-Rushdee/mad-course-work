@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.pizza_mania_app.R;
+import com.example.pizza_mania_app.admin.Order;
+import com.example.pizza_mania_app.admin.OrderAdapter;
+
 import java.util.List;
 
 public class ManageOrdersActivity extends AppCompatActivity {
@@ -18,7 +21,7 @@ public class ManageOrdersActivity extends AppCompatActivity {
     Button btnAdd, btnUpdate, btnDelete, btnViewPending, btnViewCompleted, btnViewAll;
     RecyclerView recyclerOrders;
 
-    com.example.pizza_mania_app.admin.OrderDatabaseHelper dbHelper;
+    com.example.pizza_mania_app.OrderDatabaseHelper dbHelper;
     OrderAdapter adapter;
 
     @SuppressLint("MissingInflatedId")
@@ -38,7 +41,7 @@ public class ManageOrdersActivity extends AppCompatActivity {
         btnViewAll = findViewById(R.id.btnViewAll);
         recyclerOrders = findViewById(R.id.recyclerOrders);
 
-        dbHelper = new com.example.pizza_mania_app.admin.OrderDatabaseHelper(this);
+        dbHelper = new com.example.pizza_mania_app.OrderDatabaseHelper(this);
 
         recyclerOrders.setLayoutManager(new LinearLayoutManager(this));
         adapter = new OrderAdapter(dbHelper.getAllOrders());

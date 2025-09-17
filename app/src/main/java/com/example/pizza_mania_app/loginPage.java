@@ -30,7 +30,6 @@ public class loginPage extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
 
-        // Open database
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
         btnLogin.setOnClickListener(v -> {
@@ -49,9 +48,9 @@ public class loginPage extends AppCompatActivity {
         Intent intent = new Intent(this, signUp.class);
         startActivity(intent);
     }
+
     private void loginUser(String email, String password) {
         Executors.newSingleThreadExecutor().execute(() -> {
-            // Query user in background
             Cursor cursor = db.rawQuery(
                     "SELECT user_id, role, name, address, branch_id FROM users WHERE email=? AND password=?",
                     new String[]{email, password});
@@ -76,7 +75,6 @@ public class loginPage extends AppCompatActivity {
             String finalName = name;
             String finalAddress = address;
 
-            // Update UI on main thread
             runOnUiThread(() -> {
                 if (success) {
                     Toast.makeText(this, "Welcome " + finalName, Toast.LENGTH_SHORT).show();

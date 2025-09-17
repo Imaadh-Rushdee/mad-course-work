@@ -32,20 +32,15 @@ public class orderPayment extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_order_payment);
 
-        // Handle system bars padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Get order ID from intent
-        orderId = getIntent().getIntExtra("orderId",-1);
-
-        // Open database
+        orderId = getIntent().getIntExtra("orderId", -1);
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
-        // Initialize views
         txtOrderId = findViewById(R.id.orderId);
         txtCustomerName = findViewById(R.id.customerName);
         txtOrderItem = findViewById(R.id.orderItem);
@@ -57,14 +52,10 @@ public class orderPayment extends AppCompatActivity {
         btnPaymentComplete = findViewById(R.id.btnPaymentComplete);
         btnDownloadReceipt = findViewById(R.id.btnDownloadReceipt);
 
-        // Populate the UI with order details
         setDetails();
     }
 
-    /**
-     * Fetch order details from the database and populate UI fields
-     */
-    public void setDetails() {
+    private void setDetails() {
         Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE order_id=?",
                 new String[]{String.valueOf(orderId)});
         if(cursor.moveToFirst()) {
@@ -80,21 +71,16 @@ public class orderPayment extends AppCompatActivity {
         cursor.close();
     }
 
-    /**
-     * Called when "Payment Complete" button is clicked
-     * Updates the order status in the database
-     */
     public void completePayment(View view) {
         ContentValues values = new ContentValues();
-        values.put("order_status", "paid"); // You can also create a separate column for payment_status
+        values.put("order_status", "paid");
         int rows = db.update("orders", values, "order_id = ?", new String[]{String.valueOf(orderId)});
 
         if(rows > 0){
             Toast.makeText(this, "Payment Completed", Toast.LENGTH_SHORT).show();
-            // Return to dashboard after payment
             Intent intent = new Intent(this, deliveryPartnerDashboard.class);
             startActivity(intent);
-            finish(); // Close this activity
+            finish();
         } else {
             Toast.makeText(this, "Error updating payment", Toast.LENGTH_SHORT).show();
         }
@@ -107,8 +93,6 @@ public class orderPayment extends AppCompatActivity {
             String customer = cursor.getString(cursor.getColumnIndexOrThrow("customer_name"));
             String items = cursor.getString(cursor.getColumnIndexOrThrow("order_cart"));
             double total = cursor.getDouble(cursor.getColumnIndexOrThrow("total"));
-
-            // TODO: Generate PDF using PdfDocument or iText
             Toast.makeText(this, "Receipt PDF generation not implemented yet", Toast.LENGTH_SHORT).show();
         }
         cursor.close();

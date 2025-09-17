@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class ManageStaffActivity extends AppCompatActivity {
 
     EditText etStaffId, etStaffName, etStaffRole;
-    Button btnAddStaff, btnUpdateStaff, btnDeleteStaff,btnViewStaff;
+    Button btnAddStaff, btnUpdateStaff, btnDeleteStaff, btnViewStaff;
     ListView lvStaff;
     com.example.pizza_mania_app.admin.DatabaseHelper dbHelper;
     ArrayList<String> staffList;
@@ -41,25 +41,20 @@ public class ManageStaffActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, staffList);
         lvStaff.setAdapter(adapter);
 
-        loadStaffList(); // Load all staff into ListView
+        loadStaffList();
 
-        // Clicking on a staff in the list will populate ID, Name, Role
         lvStaff.setOnItemClickListener((parent, view, position, id) -> {
             String selected = staffList.get(position);
-            // Expected format: "ID:1 Name:John Role:Manager"
             String[] parts = selected.split(" ");
             etStaffId.setText(parts[0].split(":")[1]);
             etStaffName.setText(parts[1].split(":")[1]);
             etStaffRole.setText(parts[2].split(":")[1]);
         });
 
-        Button btnViewStaff = findViewById(R.id.btnViewStaff);
         btnViewStaff.setOnClickListener(v -> {
             startActivity(new Intent(ManageStaffActivity.this, ViewStaffActivity.class));
         });
 
-
-        // ADD STAFF
         btnAddStaff.setOnClickListener(v -> {
             String name = etStaffName.getText().toString().trim();
             String role = etStaffRole.getText().toString().trim();
@@ -76,13 +71,12 @@ public class ManageStaffActivity extends AppCompatActivity {
                 etStaffId.setText(String.valueOf(staffId));
                 etStaffName.setText("");
                 etStaffRole.setText("");
-                loadStaffList(); // Refresh list
+                loadStaffList();
             } else {
                 Toast.makeText(this, "Error adding staff", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // UPDATE STAFF
         btnUpdateStaff.setOnClickListener(v -> {
             String idStr = etStaffId.getText().toString().trim();
             String name = etStaffName.getText().toString().trim();
@@ -103,7 +97,6 @@ public class ManageStaffActivity extends AppCompatActivity {
             }
         });
 
-        // DELETE STAFF
         btnDeleteStaff.setOnClickListener(v -> {
             String idStr = etStaffId.getText().toString().trim();
 

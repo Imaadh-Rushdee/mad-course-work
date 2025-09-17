@@ -12,7 +12,6 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- Profile Picture -->
         <ImageView
             android:id="@+id/imgProfile"
             android:layout_width="120dp"
@@ -24,7 +23,6 @@
             android:contentDescription="Profile Picture"
             android:scaleType="centerCrop"/>
 
-        <!-- Editable Fields -->
         <EditText
             android:id="@+id/etName"
             android:layout_width="match_parent"
@@ -69,7 +67,6 @@
             android:background="@drawable/edittext_bg"
             android:textSize="16sp"/>
 
-        <!-- Save Button -->
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
@@ -82,4 +79,5 @@
             android:elevation="4dp"/>
 
     </LinearLayout>
+
 </ScrollView>

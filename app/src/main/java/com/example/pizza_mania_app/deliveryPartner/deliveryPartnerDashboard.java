@@ -9,12 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +34,7 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
     private int partnerBranchId;
     private TextView partnerName;
 
-    private ImageView profileImage;   // For showing the photo
+    private ImageView profileImage;
     private Spinner profileSpinner;
 
     @Override
@@ -53,12 +51,11 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
 
         partnerName = findViewById(R.id.driver_name);
         profileImage = findViewById(R.id.profileImage);
-        profileSpinner = findViewById(R.id.profileSpinner); // For menu dropdown
+        profileSpinner = findViewById(R.id.profileSpinner);
 
         String[] options = {"Menu", "Profile", "Logout"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.custom_spinner_layout, options);
         profileSpinner.setAdapter(adapter);
-
 
         profileSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -74,17 +71,16 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
                         break;
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
-
 
         partnerId = getIntent().getIntExtra("partnerId", -1);
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
         setPartnerData(partnerId);
         setOrderData();
     }
+
     private void setPartnerData(int partnerId) {
         Cursor cursor = db.rawQuery("SELECT * FROM users WHERE user_id=?", new String[]{String.valueOf(partnerId)});
         if (cursor.moveToFirst()) {
@@ -95,7 +91,7 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
             partnerName.setText(name);
             partnerBranchId = cursor.getInt(cursor.getColumnIndexOrThrow("branch_id"));
 
-            int picIndex = cursor.getColumnIndex("profile_pic"); // safer than getColumnIndexOrThrow
+            int picIndex = cursor.getColumnIndex("profile_pic");
             if (picIndex != -1) {
                 String profilePicUrl = cursor.getString(picIndex);
                 if (profilePicUrl != null && !profilePicUrl.isEmpty()) {
@@ -109,20 +105,21 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
                     profileImage.setImageResource(R.drawable.profile);
                 }
             } else {
-                profileImage.setImageResource(R.drawable.profile); // fallback
+                profileImage.setImageResource(R.drawable.profile);
             }
         }
         cursor.close();
     }
+
     public void refreshButton(View view){
         setOrderData();
     }
+
     private void setOrderData() {
         LinearLayout container = findViewById(R.id.ordersContainer);
         container.removeAllViews();
 
-        // Fix column name and query
-        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE order_status=? AND order_type=? AND branch_id=?", new String[]{"ready","delivery",String.valueOf(partnerBranchId)});// Example: only pending deliveries
+        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE order_status=? AND order_type=? AND branch_id=?", new String[]{"ready","delivery",String.valueOf(partnerBranchId)});
 
         while (cursor.moveToNext()) {
             int orderId = cursor.getInt(cursor.getColumnIndexOrThrow("order_id"));

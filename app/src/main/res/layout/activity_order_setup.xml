@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:theme="@style/Theme.Pizzamaniaapp.Light">
-    <!-- Order Type Selection -->
+
     <RadioGroup
         android:id="@+id/radioGroupOrderType"
         android:layout_width="0dp"
@@ -34,7 +34,6 @@
             android:padding="8dp"/>
     </RadioGroup>
 
-    <!-- Delivery Section -->
     <LinearLayout
         android:id="@+id/layoutDelivery"
         android:layout_width="0dp"
@@ -74,7 +73,6 @@
             android:layout_marginTop="8dp"/>
     </LinearLayout>
 
-    <!-- Pickup Section -->
     <LinearLayout
         android:id="@+id/layoutPickup"
         android:layout_width="0dp"
@@ -103,7 +101,6 @@
             android:layout_marginTop="8dp"/>
     </LinearLayout>
 
-    <!-- Continue Button -->
     <Button
         android:id="@+id/btnContinue"
         android:layout_width="0dp"
@@ -118,6 +115,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

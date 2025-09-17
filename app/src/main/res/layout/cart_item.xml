@@ -7,7 +7,6 @@
     android:gravity="center_vertical"
     android:background="@drawable/item_bg">
 
-    <!-- Item Image -->
     <ImageView
         android:id="@+id/itemImage"
         android:layout_width="80dp"
@@ -17,14 +16,12 @@
         android:background="@drawable/circle_bg"
         android:contentDescription="Item Image" />
 
-    <!-- Checkbox -->
     <CheckBox
         android:id="@+id/cbSelect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp" />
 
-    <!-- Item Details -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -59,4 +56,5 @@
             android:textColor="#666666"
             android:layout_marginTop="2dp" />
     </LinearLayout>
+
 </LinearLayout>

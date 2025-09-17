@@ -4,5 +4,5 @@
     android:layout_height="wrap_content"
     android:padding="8dp"
     android:textSize="20sp"
-    android:textColor="@android:color/white"
+    android:theme="@style/Theme.Pizzamaniaapp.Light"
     android:gravity="center_vertical|center_horizontal" />

@@ -154,13 +154,13 @@ public class ongoingOrderMaps extends FragmentActivity implements OnMapReadyCall
             driverMarker.setPosition(driverLatLng);
         }
 
-        // Zoom to fit driver and customer
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(driverLatLng);
         builder.include(customerLocation);
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 150));
 
-        // Enable complete button if driver is within 100 meters
+
         float[] results = new float[1];
         Location.distanceBetween(driverLatLng.latitude, driverLatLng.longitude,
                 customerLocation.latitude, customerLocation.longitude, results);
@@ -202,7 +202,7 @@ public class ongoingOrderMaps extends FragmentActivity implements OnMapReadyCall
         intent.putExtra("orderId", orderId);
         startActivity(intent);
 
-        finish(); // Close ongoingOrderMaps activity
+        finish();
     }
 
 

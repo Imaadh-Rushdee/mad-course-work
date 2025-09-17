@@ -45,5 +45,4 @@
         <item>Pick-up</item>
     </string-array>
     <string name="title_activity_select_location">SelectLocationActivity</string>
-    <!-- Branch options for pickup -->
 </resources>

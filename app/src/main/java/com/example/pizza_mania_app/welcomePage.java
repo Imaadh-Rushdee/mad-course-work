@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,9 +22,6 @@ public class welcomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // ❌ Remove this line, it deletes the database every launch
-        // deleteDatabase("pizza_mania.db");
-
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome_page);
 
@@ -35,7 +31,6 @@ public class welcomePage extends AppCompatActivity {
             return insets;
         });
 
-        // Initialize DB
         createDatabase();
 
         Button btnLoginWelcome = findViewById(R.id.btnLoginWelcome);
@@ -45,19 +40,15 @@ public class welcomePage extends AppCompatActivity {
         btnSignUp.setOnClickListener(v -> startActivity(new Intent(welcomePage.this, signUp.class)));
     }
 
-
-    /** DB Creation + Sample Inserts */
     private void createDatabase() {
         try {
             db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
-            // Branch table
             db.execSQL("CREATE TABLE IF NOT EXISTS branches (" +
                     "branch_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "branch_name TEXT NOT NULL, " +
                     "branch_address TEXT)");
 
-            // Users table
             db.execSQL("CREATE TABLE IF NOT EXISTS users (" +
                     "user_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "name TEXT NOT NULL, " +
@@ -70,7 +61,6 @@ public class welcomePage extends AppCompatActivity {
                     "branch_id INTEGER, " +
                     "FOREIGN KEY(branch_id) REFERENCES branches(branch_id))");
 
-            // Orders table
             db.execSQL("CREATE TABLE IF NOT EXISTS orders (" +
                     "order_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "customer_name TEXT, " +
@@ -87,7 +77,6 @@ public class welcomePage extends AppCompatActivity {
                     "branch_id INTEGER, " +
                     "FOREIGN KEY(branch_id) REFERENCES branches(branch_id))");
 
-            // Payments table
             db.execSQL("CREATE TABLE IF NOT EXISTS payments (" +
                     "payment_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "order_id INTEGER, " +
@@ -96,27 +85,21 @@ public class welcomePage extends AppCompatActivity {
                     "payment_status TEXT, " +
                     "FOREIGN KEY(order_id) REFERENCES orders(order_id))");
 
-            // Create carts table
             db.execSQL("CREATE TABLE IF NOT EXISTS carts (" +
                     "cart_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "user_id INTEGER NOT NULL, " +
                     "created_at TEXT DEFAULT (datetime('now','localtime')), " +
-                    "FOREIGN KEY(user_id) REFERENCES users(user_id)" +
-                    ");");
+                    "FOREIGN KEY(user_id) REFERENCES users(user_id))");
 
-// Create cart_items table
             db.execSQL("CREATE TABLE IF NOT EXISTS cart_items (" +
                     "cart_item_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "cart_id INTEGER NOT NULL, " +
                     "item_id INTEGER NOT NULL, " +
                     "quantity INTEGER DEFAULT 1, " +
-                    "checked INTEGER DEFAULT 0, " +  // for checkbox state
+                    "checked INTEGER DEFAULT 0, " +
                     "FOREIGN KEY(cart_id) REFERENCES carts(cart_id), " +
-                    "FOREIGN KEY(item_id) REFERENCES menu_items(item_id)" +
-                    ");");
+                    "FOREIGN KEY(item_id) REFERENCES menu_items(item_id))");
 
-
-            // Menu table
             db.execSQL("CREATE TABLE IF NOT EXISTS menu_items (" +
                     "item_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "name TEXT, " +
@@ -126,7 +109,14 @@ public class welcomePage extends AppCompatActivity {
                     "branch_id INTEGER, " +
                     "FOREIGN KEY(branch_id) REFERENCES branches(branch_id))");
 
-            // Insert sample data if tables empty
+            db.execSQL("DELETE FROM cart_items");
+            db.execSQL("DELETE FROM carts");
+            db.execSQL("DELETE FROM payments");
+            db.execSQL("DELETE FROM orders");
+            db.execSQL("DELETE FROM menu_items");
+            db.execSQL("DELETE FROM users");
+            db.execSQL("DELETE FROM branches");
+
             insertSampleBranches();
             insertSampleUsers();
             insertSampleOrders();
@@ -140,94 +130,79 @@ public class welcomePage extends AppCompatActivity {
     }
 
     private void insertSampleBranches() {
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM branches", null);
-        if (cursor.moveToFirst() && cursor.getInt(0) == 0) {
-            ContentValues values = new ContentValues();
-            values.put("branch_name", "Colombo Branch");
-            values.put("branch_address", "Colombo 07, Sri Lanka");
-            db.insert("branches", null, values);
+        ContentValues values = new ContentValues();
+        values.put("branch_name", "Colombo Branch");
+        values.put("branch_address", "Colombo 07, Sri Lanka");
+        db.insert("branches", null, values);
 
-            values.clear();
-            values.put("branch_name", "Galle Branch");
-            values.put("branch_address", "Kandy City, Sri Lanka");
-            db.insert("branches", null, values);
-        }
-        cursor.close();
+        values.clear();
+        values.put("branch_name", "Galle Branch");
+        values.put("branch_address", "Galle City, Sri Lanka");
+        db.insert("branches", null, values);
     }
 
     private void insertSampleUsers() {
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM users", null);
-        if (cursor.moveToFirst() && cursor.getInt(0) == 0) {
-            ContentValues values = new ContentValues();
-            // Admin
-            values.put("name", "Admin User");
-            values.put("email", "admin@pizza.com");
-            values.put("phone", "0711111111");
-            values.put("password", "admin123");
-            values.put("role", "admin");
-            values.put("branch_id", 2);
-            db.insert("users", null, values);
+        ContentValues values = new ContentValues();
+        values.put("name", "Admin User");
+        values.put("email", "admin@pizza.com");
+        values.put("phone", "0711111111");
+        values.put("password", "admin123");
+        values.put("role", "admin");
+        values.put("branch_id", 2);
+        db.insert("users", null, values);
 
-            values.clear();
-            values.put("name", "Admin User");
-            values.put("email", "admin123@pizza.com");
-            values.put("phone", "0711111111");
-            values.put("password", "123");
-            values.put("role", "admin");
-            values.put("branch_id", 1);
-            db.insert("users", null, values);
+        values.clear();
+        values.put("name", "Admin User");
+        values.put("email", "admin123@pizza.com");
+        values.put("phone", "0711111111");
+        values.put("password", "123");
+        values.put("role", "admin");
+        values.put("branch_id", 1);
+        db.insert("users", null, values);
 
-            // Driver 1
-            values.clear();
-            values.put("name", "Driver One");
-            values.put("email", "driver@pizza.com");
-            values.put("phone", "0722222222");
-            values.put("password", "driver123");
-            values.put("role", "driver");
-            values.put("branch_id", 1);
-            db.insert("users", null, values);
+        values.clear();
+        values.put("name", "Driver One");
+        values.put("email", "driver@pizza.com");
+        values.put("phone", "0722222222");
+        values.put("password", "driver123");
+        values.put("role", "driver");
+        values.put("branch_id", 1);
+        db.insert("users", null, values);
 
-            values.clear();
-            values.put("name", "Customer");
-            values.put("email", "cu");
-            values.put("phone", "0722222222");
-            values.put("password", "123");
-            values.put("role", "customer");
-            values.put("address", "92 Raja Mawatha Rd, Dehiwala-Mount Lavinia");
-            values.put("branch_id", 1);
-            db.insert("users", null, values);
+        values.clear();
+        values.put("name", "Customer");
+        values.put("email", "cu");
+        values.put("phone", "0722222222");
+        values.put("password", "123");
+        values.put("role", "customer");
+        values.put("address", "92 Raja Mawatha Rd, Dehiwala-Mount Lavinia");
+        values.put("branch_id", 1);
+        db.insert("users", null, values);
 
-            values.clear();
-            values.put("name", "Customer");
-            values.put("email", "cus");
-            values.put("phone", "0722222222");
-            values.put("password", "123");
-            values.put("role", "customer");
-            values.put("address", "92 Raja Mawatha Rd, Dehiwala-Mount Lavinia");
-            values.put("branch_id", 2);
-            db.insert("users", null, values);
+        values.clear();
+        values.put("name", "Customer");
+        values.put("email", "cus");
+        values.put("phone", "0722222222");
+        values.put("password", "123");
+        values.put("role", "customer");
+        values.put("address", "92 Raja Mawatha Rd, Dehiwala-Mount Lavinia");
+        values.put("branch_id", 2);
+        db.insert("users", null, values);
 
-            // Driver 2
-            values.clear();
-            values.put("name", "Driver Two");
-            values.put("email", "driver2@pizza.com");
-            values.put("phone", "0733333333");
-            values.put("password", "driver456");
-            values.put("role", "driver");
-            values.put("branch_id", 2);
-            db.insert("users", null, values);
-        }
-        cursor.close();
+        values.clear();
+        values.put("name", "Driver Two");
+        values.put("email", "driver2@pizza.com");
+        values.put("phone", "0733333333");
+        values.put("password", "driver456");
+        values.put("role", "driver");
+        values.put("branch_id", 2);
+        db.insert("users", null, values);
     }
 
     private void insertSampleOrders() {
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM orders", null);
-        if (cursor.moveToFirst() && cursor.getInt(0) == 0) {
-            insertOrder("Test Customer 1", "1x Margherita, 2x Pepperoni", 6.6844, 80.4152, 1500, "Cash on Delivery", 1);
-            insertOrder("Test Customer 2", "2x Veggie, 1x Hawaiian", 6.9000, 79.8700, 2200, "Card", 1);
-            insertOrder("Test Customer 3", "3x Cheese, 1x BBQ Chicken", 6.9150, 79.8500, 3100, "Cash on Delivery", 2);
-        }
-        cursor.close();
+        insertOrder("Test Customer 1", "1x Margherita, 2x Pepperoni", 6.6844, 80.4152, 1500, "Cash on Delivery", 1);
+        insertOrder("Test Customer 2", "2x Veggie, 1x Hawaiian", 6.9000, 79.8700, 2200, "Card", 1);
+        insertOrder("Test Customer 3", "3x Cheese, 1x BBQ Chicken", 6.9150, 79.8500, 3100, "Cash on Delivery", 2);
     }
 
     private void insertOrder(String name, String cart, double lat, double lng, double total, String paymentMethod, int branchId) {
@@ -248,30 +223,26 @@ public class welcomePage extends AppCompatActivity {
     }
 
     private void insertSampleMenuItems() {
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM menu_items", null);
-        if (cursor.moveToFirst() && cursor.getInt(0) == 0) {
-            ContentValues values = new ContentValues();
-            // Colombo branch
-            values.put("name", "Margherita Pizza");
-            values.put("description", "Classic cheese & tomato");
-            values.put("price", 1200);
-            values.put("branch_id", 1);
-            db.insert("menu_items", null, values);
+        ContentValues values = new ContentValues();
+        values.put("name", "Margherita Pizza");
+        values.put("description", "Classic cheese & tomato");
+        values.put("price", 1200);
+        values.put("branch_id", 1);
+        db.insert("menu_items", null, values);
 
-            values.put("name", "Pepperoni Pizza");
-            values.put("description", "Loaded with pepperoni");
-            values.put("price", 1500);
-            values.put("branch_id", 1);
-            db.insert("menu_items", null, values);
+        values.clear();
+        values.put("name", "Pepperoni Pizza");
+        values.put("description", "Loaded with pepperoni");
+        values.put("price", 1500);
+        values.put("branch_id", 1);
+        db.insert("menu_items", null, values);
 
-            // Kandy branch
-            values.put("name", "BBQ Chicken Pizza");
-            values.put("description", "Chicken + BBQ sauce");
-            values.put("price", 1800);
-            values.put("branch_id", 2);
-            db.insert("menu_items", null, values);
-        }
-        cursor.close();
+        values.clear();
+        values.put("name", "BBQ Chicken Pizza");
+        values.put("description", "Chicken + BBQ sauce");
+        values.put("price", 1800);
+        values.put("branch_id", 2);
+        db.insert("menu_items", null, values);
     }
 
     public SQLiteDatabase getDatabase() { return db; }

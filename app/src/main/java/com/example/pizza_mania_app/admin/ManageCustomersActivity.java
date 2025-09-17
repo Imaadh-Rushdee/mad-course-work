@@ -46,19 +46,16 @@ public class ManageCustomersActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, customerList);
         lvCustomers.setAdapter(adapter);
 
-        loadCustomerList(); // Load all customers into ListView
+        loadCustomerList();
 
-        // Clicking on a customer will fill ID, Name, Phone
         lvCustomers.setOnItemClickListener((parent, view, position, id) -> {
             String selected = customerList.get(position);
-            // Format: "ID:1 Name:John Phone:123456789"
             String[] parts = selected.split(" ");
             etCustomerId.setText(parts[0].split(":")[1]);
             etCustomerName.setText(parts[1].split(":")[1]);
             etCustomerPhone.setText(parts[2].split(":")[1]);
         });
 
-        // ADD CUSTOMER
         btnAddCustomer.setOnClickListener(v -> {
             String name = etCustomerName.getText().toString().trim();
             String phone = etCustomerPhone.getText().toString().trim();
@@ -80,7 +77,6 @@ public class ManageCustomersActivity extends AppCompatActivity {
             }
         });
 
-        // UPDATE CUSTOMER
         btnUpdateCustomer.setOnClickListener(v -> {
             String idStr = etCustomerId.getText().toString().trim();
             String name = etCustomerName.getText().toString().trim();
@@ -100,7 +96,6 @@ public class ManageCustomersActivity extends AppCompatActivity {
             }
         });
 
-        // DELETE CUSTOMER
         btnDeleteCustomer.setOnClickListener(v -> {
             String idStr = etCustomerId.getText().toString().trim();
             if (idStr.isEmpty()) {
@@ -120,7 +115,6 @@ public class ManageCustomersActivity extends AppCompatActivity {
             }
         });
 
-        // SEARCH CUSTOMER BY NAME
         btnSearchCustomer.setOnClickListener(v -> {
             String name = etSearchName.getText().toString().trim();
             if (name.isEmpty()) {
@@ -131,7 +125,6 @@ public class ManageCustomersActivity extends AppCompatActivity {
         });
     }
 
-    // Load all customers
     private void loadCustomerList() {
         customerList.clear();
         Cursor cursor = dbHelper.getAllCustomers();
@@ -147,7 +140,6 @@ public class ManageCustomersActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    // Load customers by search
     private void loadCustomerList(String nameSearch) {
         customerList.clear();
         Cursor cursor = dbHelper.searchCustomersByName(nameSearch);

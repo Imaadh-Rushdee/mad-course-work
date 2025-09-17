@@ -9,7 +9,6 @@
     android:elevation="4dp"
     android:gravity="center_vertical">
 
-    <!-- Item Image -->
     <ImageView
         android:id="@+id/itemImage"
         android:layout_width="80dp"
@@ -18,7 +17,6 @@
         android:scaleType="centerCrop"
         android:contentDescription="Item Image" />
 
-    <!-- Item Details -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="0dp"
@@ -53,7 +51,6 @@
             android:textColor="#000000" />
     </LinearLayout>
 
-    <!-- Action Buttons -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
@@ -96,4 +93,5 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="6dp" />
     </LinearLayout>
+
 </LinearLayout>
