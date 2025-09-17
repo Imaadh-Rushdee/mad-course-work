@@ -38,7 +38,6 @@ public class confirmOrder extends AppCompatActivity {
     private int selectedBranchId = -1;
 
     private static final int REQUEST_SELECT_LOCATION = 1001;
-    // these will be set either by map picker or by geocoding the address
     private double selectedLat = 0.0, selectedLng = 0.0;
 
     @Override
@@ -54,11 +53,10 @@ public class confirmOrder extends AppCompatActivity {
         btnConfirmOrder = findViewById(R.id.btnConfirmOrder);
         btnChangeAddress = findViewById(R.id.btnChangeAddress);
 
-        // Get intent extras
         userId = getIntent().getStringExtra("userId");
         orderType = getIntent().getStringExtra("orderType");
-        String address = getIntent().getStringExtra("userAddress"); // initial address text
-        int branchIdFromMenu = getIntent().getIntExtra("branchId", -1); // from menu
+        String address = getIntent().getStringExtra("userAddress");
+        int branchIdFromMenu = getIntent().getIntExtra("branchId", -1);
 
         if (userId == null || address == null || orderType == null) {
             Toast.makeText(this, "Missing order information!", Toast.LENGTH_SHORT).show();
@@ -67,12 +65,9 @@ public class confirmOrder extends AppCompatActivity {
         }
 
         tvAddress.setText(address);
-
-        // load totals & branches
         loadTotalAmount();
         loadBranches(branchIdFromMenu);
 
-        // open map to change address (returns selected_address, latitude, longitude)
         btnChangeAddress.setOnClickListener(v -> {
             Intent intent = new Intent(this, SelectLocationActivity.class);
             startActivityForResult(intent, REQUEST_SELECT_LOCATION);
@@ -81,7 +76,6 @@ public class confirmOrder extends AppCompatActivity {
         btnConfirmOrder.setOnClickListener(v -> {
             String finalAddress = tvAddress.getText() != null ? tvAddress.getText().toString().trim() : "";
 
-            // For Pickup → branch is mandatory
             if ("Pickup".equalsIgnoreCase(orderType)) {
                 int position = spinnerBranch.getSelectedItemPosition();
                 if (position < 0 || position >= branchIds.size()) {
@@ -91,12 +85,10 @@ public class confirmOrder extends AppCompatActivity {
                 selectedBranchId = branchIds.get(position);
             }
 
-            // Ensure lat/lng correspond to finalAddress:
             double[] latLng = resolveLatLngForAddress(finalAddress);
             double latitude = latLng[0];
             double longitude = latLng[1];
 
-            // Insert order with lat/lng
             insertOrder(finalAddress, selectedBranchId, latitude, longitude);
         });
     }
@@ -128,6 +120,9 @@ public class confirmOrder extends AppCompatActivity {
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow("branch_id"));
             String name = cursor.getString(cursor.getColumnIndexOrThrow("branch_name"));
+            if ("Kandy".equalsIgnoreCase(name)) {
+                name = "Galle";
+            }
             branchIds.add(id);
             branchNames.add(name);
         }
@@ -137,30 +132,20 @@ public class confirmOrder extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerBranch.setAdapter(adapter);
 
-        // Preselect the branch passed from menu
         if (branchIdFromMenu > 0) {
             int index = branchIds.indexOf(branchIdFromMenu);
             if (index >= 0) spinnerBranch.setSelection(index);
         }
     }
 
-    /**
-     * Resolve lat/lng for the given address. Order of attempts:
-     *  1) If user already picked location via map picker, use selectedLat/selectedLng
-     *  2) Try Geocoder on finalAddress
-     *  3) Try Geocoder on user's saved address in users table
-     *  4) If all fail return {0.0, 0.0} and show a toast warning
-     */
     private double[] resolveLatLngForAddress(String finalAddress) {
         double lat = selectedLat;
         double lng = selectedLng;
 
-        // 1) If map picker already provided coordinates, use them
         if (lat != 0.0 || lng != 0.0) {
             return new double[]{lat, lng};
         }
 
-        // Helper: attempt geocode for a given address string
         java.util.function.Function<String, double[]> tryGeocode = (addr) -> {
             if (addr == null || addr.trim().isEmpty()) return new double[]{0.0, 0.0};
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -176,11 +161,9 @@ public class confirmOrder extends AppCompatActivity {
             return new double[]{0.0, 0.0};
         };
 
-        // 2) Try finalAddress
         double[] res = tryGeocode.apply(finalAddress);
         if (res[0] != 0.0 || res[1] != 0.0) return res;
 
-        // 3) Try user's saved address from users table
         Cursor c = db.rawQuery("SELECT address FROM users WHERE user_id=?", new String[]{userId});
         if (c.moveToFirst()) {
             String userAddr = c.getString(0);
@@ -194,13 +177,11 @@ public class confirmOrder extends AppCompatActivity {
         }
         c.close();
 
-        // 4) failed to resolve
         Toast.makeText(this, "Warning: couldn't resolve coordinates for address. Saved as 0,0", Toast.LENGTH_SHORT).show();
         return new double[]{0.0, 0.0};
     }
 
     private void insertOrder(String address, int branchId, double latitude, double longitude) {
-        // Build cart summary and recalc total
         StringBuilder cartSummary = new StringBuilder();
         double calcTotal = 0;
 
@@ -218,16 +199,13 @@ public class confirmOrder extends AppCompatActivity {
                 double price = items.getDouble(2);
                 double itemTotal = price * qty;
                 calcTotal += itemTotal;
-
                 cartSummary.append(itemName).append(" x ").append(qty)
                         .append(" (Rs.").append(itemTotal).append(")\n");
             } while (items.moveToNext());
         }
         items.close();
 
-        // Use calcTotal (consistent)
         ContentValues orderValues = new ContentValues();
-        // store customer name or id as you prefer; here store user_id as text
         orderValues.put("customer_name", userId);
         orderValues.put("order_cart", cartSummary.toString());
         orderValues.put("order_address", address);
@@ -241,9 +219,7 @@ public class confirmOrder extends AppCompatActivity {
         long orderId = db.insert("orders", null, orderValues);
 
         if (orderId != -1) {
-            // clear cart items for user
             db.execSQL("DELETE FROM cart_items WHERE cart_id IN (SELECT cart_id FROM carts WHERE user_id=?)", new String[]{userId});
-
             Toast.makeText(this, "Order Confirmed!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, orderTracking.class);
             intent.putExtra("orderId", orderId);
@@ -254,7 +230,6 @@ public class confirmOrder extends AppCompatActivity {
         }
     }
 
-    // Handle result from map picker - map should return selected_address, latitude, longitude
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -262,7 +237,6 @@ public class confirmOrder extends AppCompatActivity {
             String selectedAddress = data.getStringExtra("selected_address");
             selectedLat = data.getDoubleExtra("latitude", 0.0);
             selectedLng = data.getDoubleExtra("longitude", 0.0);
-
             if (selectedAddress != null) tvAddress.setText(selectedAddress);
         }
     }
