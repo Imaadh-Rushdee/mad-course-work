@@ -16,19 +16,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Pizzamaniaapp">
+        android:theme="@style/Theme.Pizzamaniaapp.Light">
 
-        <!--
-             TODO: Before you run your application, you need a Google Maps API key.
-
-             To get one, follow the directions here:
-
-                https://developers.google.com/maps/documentation/android-sdk/get-api-key
-
-             Once you have your API key (it starts with "AIza"), define a new property in your
-             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
-             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
-        -->
+        <!-- Google Maps API key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCldldEy5A5sk7K3-RkyHhoCH86XeToP8s" />
@@ -51,46 +41,43 @@
         <activity
             android:name=".profile"
             android:exported="false" />
-        <!--admin-->
-        <activity android:name=".admin.ItemAdapter"
+
+        <!-- Admin Activities -->
+        <activity
+            android:name=".admin.ItemAdapter"
             android:exported="false"
             tools:ignore="Instantiatable" />
-        <activity android:name=".admin.ManageItemsActivity"
+        <activity
+            android:name=".admin.ManageItemsActivity"
             android:exported="false" />
-
-        <activity android:name=".admin.Item"
+        <activity
+            android:name=".admin.Item"
             android:exported="false"
             tools:ignore="Instantiatable,MissingClass" />
-        <activity android:name=".admin.ManageCustomersActivity"
+        <activity
+            android:name=".admin.ManageCustomersActivity"
             android:exported="false" />
-        <activity android:name=".admin.ManageOrdersActivity"
+        <activity
+            android:name=".admin.ManageOrdersActivity"
             android:exported="false" />
-        <activity android:name=".admin.ManageStaffActivity"
+        <activity
+            android:name=".admin.ManageStaffActivity"
             android:exported="false" />
-        <activity android:name=".admin.ManageTransactionsActivity"
+        <activity
+            android:name=".admin.ManageTransactionsActivity"
             android:exported="false" />
-        <activity android:name=".admin.ViewStaffActivity" />
-
-
+        <activity
+            android:name=".admin.ViewStaffActivity"
+            android:exported="false" />
         <activity
             android:name=".admin.transactions"
             android:exported="false" />
-        <activity android:name=".admin.ReportsActivity"
-            tools:ignore="Instantiatable" />
-        <activity
-            android:name=".admin.Order"
-            android:exported="false" />
-
-
-
         <activity
             android:name=".admin.AdminDashboardActivity"
-<<<<<<< HEAD
             android:exported="false"
             tools:ignore="MissingClass" />
-=======
-            android:exported="false" />
->>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
+
+        <!-- Customer Activities -->
         <activity
             android:name=".customer.orderInvoice"
             android:exported="false" />
@@ -103,6 +90,7 @@
         <activity
             android:name=".customer.cart"
             android:exported="false" />
+
         <activity
             android:name=".menu"
             android:exported="false" />
@@ -113,6 +101,8 @@
         <activity
             android:name=".loginPage"
             android:exported="false" />
+
+        <!-- Delivery Partner Activities -->
         <activity
             android:name=".deliveryPartner.orderPayment"
             android:exported="false" />
@@ -120,14 +110,12 @@
             android:name=".deliveryPartner.deliveryPartnerDashboard"
             android:exported="false" />
 
-
-
+        <!-- Welcome (Launcher) Activity -->
         <activity
             android:name=".welcomePage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

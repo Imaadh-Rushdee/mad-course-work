@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-<<<<<<< HEAD
     android:padding="16dp"
     android:background="#F3F4F6">
 
@@ -11,30 +10,22 @@
     <EditText
         android:id="@+id/etItemId"
         android:layout_width="match_parent"
-=======
-    android:background="#FFFFFF"
-    android:padding="16dp">
-
-    <TextView
-        android:layout_width="wrap_content"
->>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
         android:layout_height="wrap_content"
         android:hint="Item ID"
         android:inputType="number"
         android:padding="10dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/edittext_bg"/>
 
-<<<<<<< HEAD
     <!-- Item Name -->
-=======
->>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
     <EditText
         android:id="@+id/etItemName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Item Name"
         android:padding="10dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/edittext_bg"/>
 
     <!-- Item Price -->
     <EditText
@@ -44,114 +35,65 @@
         android:hint="Item Price"
         android:inputType="numberDecimal"
         android:padding="10dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_bg"/>
 
-<<<<<<< HEAD
-    <!-- Buttons Row 1 -->
+    <!-- Buttons Row 1 (Add + Read) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2"
         android:layout_marginBottom="10dp">
-=======
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal"
-        android:weightSum="4"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
->>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
         <Button
             android:id="@+id/btnAddItem"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:text="Add"
-            android:backgroundTint="#4CAF50"
-            android:textColor="@android:color/white"
-            android:layout_marginEnd="5dp" />
-=======
-            android:layout_marginEnd="4dp"
             android:backgroundTint="#FF5722"
-            android:text="Add"
             android:textColor="#FFFFFF"
-            android:gravity="center"
-            android:ellipsize="none"
-            android:singleLine="true"/>
->>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
+            android:layout_marginEnd="5dp"/>
 
         <Button
             android:id="@+id/btnReadItem"
             android:layout_width="0dp"
-<<<<<<< HEAD
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_weight="1"
             android:text="Read All"
             android:backgroundTint="#2196F3"
-            android:textColor="@android:color/white"
-            android:layout_marginStart="5dp" />
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="5dp"/>
     </LinearLayout>
 
-    <!-- Buttons Row 2 -->
+    <!-- Buttons Row 2 (Update + Delete) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2"
         android:layout_marginBottom="10dp">
-=======
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="#FF9800"
-            android:text="Read"
-            android:textColor="#FFFFFF"
-            android:gravity="center"
-            android:ellipsize="none"
-            android:singleLine="true"/>
->>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
         <Button
             android:id="@+id/btnUpdateItem"
             android:layout_width="0dp"
-<<<<<<< HEAD
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Update"
-            android:backgroundTint="#FF9800"
-            android:textColor="@android:color/white"
-            android:layout_marginEnd="5dp" />
-=======
             android:layout_height="56dp"
             android:layout_weight="1"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="#4CAF50"
             android:text="Update"
+            android:backgroundTint="#4CAF50"
             android:textColor="#FFFFFF"
-            android:gravity="center"
-            android:ellipsize="none"
-            android:singleLine="true"/>
->>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
+            android:layout_marginEnd="5dp"/>
 
         <Button
             android:id="@+id/btnDeleteItem"
             android:layout_width="0dp"
-<<<<<<< HEAD
-            android:layout_height="wrap_content"
-=======
             android:layout_height="56dp"
->>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
             android:layout_weight="1"
             android:text="Delete"
-<<<<<<< HEAD
             android:backgroundTint="#F44336"
-            android:textColor="@android:color/white"
-            android:layout_marginStart="5dp" />
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="5dp"/>
     </LinearLayout>
 
     <!-- Buttons Row 3 (Search) -->
@@ -165,47 +107,33 @@
         <Button
             android:id="@+id/btnSearchById"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_weight="1"
             android:text="Search by ID"
             android:backgroundTint="#9C27B0"
-            android:textColor="@android:color/white"
-            android:layout_marginEnd="5dp" />
+            android:textColor="#FFFFFF"
+            android:layout_marginEnd="5dp"/>
 
         <Button
             android:id="@+id/btnSearchByName"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_weight="1"
             android:text="Search by Name"
             android:backgroundTint="#009688"
-            android:textColor="@android:color/white"
-            android:layout_marginStart="5dp" />
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="5dp"/>
     </LinearLayout>
 
     <!-- RecyclerView -->
-=======
-            android:textColor="#FFFFFF"
-            android:gravity="center"
-            android:ellipsize="none"
-            android:singleLine="true"/>
-    </LinearLayout>
-
->>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerItems"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-<<<<<<< HEAD
         android:background="#FFFFFF"
         android:padding="8dp"
-        android:overScrollMode="never"
-        android:scrollbars="vertical" />
-
-=======
-        android:layout_marginTop="16dp"
         android:clipToPadding="false"
-        android:paddingBottom="16dp"/>
->>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
+        android:overScrollMode="never"
+        android:scrollbars="vertical"/>
 </LinearLayout>
