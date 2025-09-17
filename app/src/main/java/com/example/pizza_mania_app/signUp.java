@@ -10,6 +10,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,9 +24,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+<<<<<<< HEAD
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.gms.common.api.Status;
+=======
 import com.example.pizza_mania_app.helperClasses.SelectLocationActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
 
 import java.util.List;
 import java.util.Locale;
@@ -65,6 +75,40 @@ public class signUp extends AppCompatActivity {
         Button btnPickLocation = findViewById(R.id.btnPickLocation);
         TextView tvLogin = findViewById(R.id.tvLogin);
 
+<<<<<<< HEAD
+        // Initialize the new Places API
+        //Animation Places = null;
+        if (!Places.isInitialized()) {
+            Places.initializeWithNewPlacesApiEnabled (getApplicationContext(), "AIzaSyCldldEy5A5sk7K3-RkyHhoCH86XeToP8s");
+        }
+
+        // Autocomplete fragment
+        AutocompleteSupportFragment autocompleteFragment =
+                (AutocompleteSupportFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.autocomplete_fragment);
+
+        autocompleteFragment.setPlaceFields(Arrays.asList(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.ADDRESS
+        ));
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                selectedAddress = place.getAddress();
+                Log.d("SignUpPlace", "Selected Address: " + selectedAddress);
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.e("SignUpPlaceError", "Places API error: " + status.getStatusMessage());
+                Toast.makeText(signUp.this, "Error fetching address", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+=======
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
         db = openOrCreateDatabase("pizza_mania.db", MODE_PRIVATE, null);
 
         // Create table if not exists

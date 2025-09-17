@@ -51,15 +51,46 @@
         <activity
             android:name=".profile"
             android:exported="false" />
+        <!--admin-->
+        <activity android:name=".admin.ItemAdapter"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".admin.ManageItemsActivity"
+            android:exported="false" />
+
+        <activity android:name=".admin.Item"
+            android:exported="false"
+            tools:ignore="Instantiatable,MissingClass" />
+        <activity android:name=".admin.ManageCustomersActivity"
+            android:exported="false" />
+        <activity android:name=".admin.ManageOrdersActivity"
+            android:exported="false" />
+        <activity android:name=".admin.ManageStaffActivity"
+            android:exported="false" />
+        <activity android:name=".admin.ManageTransactionsActivity"
+            android:exported="false" />
+        <activity android:name=".admin.ViewStaffActivity" />
+
+
         <activity
             android:name=".admin.transactions"
             android:exported="false" />
+        <activity android:name=".admin.ReportsActivity"
+            tools:ignore="Instantiatable" />
         <activity
-            android:name=".admin.orders"
+            android:name=".admin.Order"
             android:exported="false" />
+
+
+
         <activity
             android:name=".admin.AdminDashboardActivity"
+<<<<<<< HEAD
+            android:exported="false"
+            tools:ignore="MissingClass" />
+=======
             android:exported="false" />
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
         <activity
             android:name=".customer.orderInvoice"
             android:exported="false" />
@@ -88,6 +119,9 @@
         <activity
             android:name=".deliveryPartner.deliveryPartnerDashboard"
             android:exported="false" />
+
+
+
         <activity
             android:name=".welcomePage"
             android:exported="true">

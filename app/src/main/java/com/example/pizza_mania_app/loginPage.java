@@ -56,12 +56,37 @@ public class loginPage extends AppCompatActivity {
             int userId = -1, branchId = -1;
             String role = null, name = null, address = null;
 
+<<<<<<< HEAD
+            Intent intent;
+            switch (role.toLowerCase()) {
+                case "admin":
+                    intent = new Intent(loginPage.this, AdminDashboardActivity.class);
+                    intent.putExtra("userRole", "admin");
+                    intent.putExtra("branchId", userBranchId); // pass branchId
+                    break;
+                case "driver":
+                    intent = new Intent(loginPage.this, deliveryPartnerDashboard.class);
+                    intent.putExtra("partnerId", userId);
+                    intent.putExtra("branchId", userBranchId); // optional for driver
+                    break;
+                case "customer":
+                    intent = new Intent(loginPage.this, menu.class);
+                    intent.putExtra("userRole", "customer");
+                    intent.putExtra("userId", userId);
+                    intent.putExtra("branchId", userBranchId); // pass branchId
+                    break;
+                default:
+                    Toast.makeText(this, "Unknown role: " + role, Toast.LENGTH_SHORT).show();
+                    cursor.close();
+                    return;
+=======
             if (success) {
                 userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id"));
                 role = cursor.getString(cursor.getColumnIndexOrThrow("role"));
                 name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
                 address = cursor.getString(cursor.getColumnIndexOrThrow("address"));
                 branchId = cursor.getInt(cursor.getColumnIndexOrThrow("branch_id"));
+>>>>>>> af993f447922affb6505f6cff4cb07fa7d88a245
             }
             cursor.close();
 
