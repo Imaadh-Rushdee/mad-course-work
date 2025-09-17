@@ -1,110 +1,104 @@
 package com.example.pizza_mania_app.admin;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.view.Gravity;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.pizza_mania_app.OrderDatabaseHelper;
 import com.example.pizza_mania_app.R;
-import com.example.pizza_mania_app.admin.Order;
-import com.example.pizza_mania_app.admin.OrderAdapter;
 
 import java.util.List;
 
 public class ManageOrdersActivity extends AppCompatActivity {
 
-    EditText etOrderName, etOrderStatus, etOrderId;
-    Button btnAdd, btnUpdate, btnDelete, btnViewPending, btnViewCompleted, btnViewAll;
-    RecyclerView recyclerOrders;
+    private OrderDatabaseHelper dbHelper;
+    private LinearLayout llOrdersContainer;
+    private int branchId; // admin's branch
 
-    com.example.pizza_mania_app.OrderDatabaseHelper dbHelper;
-    OrderAdapter adapter;
-
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_orders);
 
-        etOrderName = findViewById(R.id.etOrderName);
-        etOrderStatus = findViewById(R.id.etOrderStatus);
-        etOrderId = findViewById(R.id.etOrderId);
-        btnAdd = findViewById(R.id.btnAddOrder);
-        btnUpdate = findViewById(R.id.btnUpdateOrder);
-        btnDelete = findViewById(R.id.btnDeleteOrder);
-        btnViewPending = findViewById(R.id.btnViewPending);
-        btnViewCompleted = findViewById(R.id.btnViewCompleted);
-        btnViewAll = findViewById(R.id.btnViewAll);
-        recyclerOrders = findViewById(R.id.recyclerOrders);
+        llOrdersContainer = findViewById(R.id.llOrdersContainer);
+        dbHelper = new OrderDatabaseHelper(this);
 
-        dbHelper = new com.example.pizza_mania_app.OrderDatabaseHelper(this);
+        // Get branchId from intent or default
+        branchId = getIntent().getIntExtra("branch_id", -1);
 
-        recyclerOrders.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new OrderAdapter(dbHelper.getAllOrders());
-        recyclerOrders.setAdapter(adapter);
-
-        btnAdd.setOnClickListener(v -> {
-            String name = etOrderName.getText().toString();
-            String status = etOrderStatus.getText().toString();
-            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(status)) {
-                Toast.makeText(this, "Enter Name and Status", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            long id = dbHelper.addOrder(name, status);
-            Toast.makeText(this, "Order Added (ID: " + id + ")", Toast.LENGTH_SHORT).show();
-            refreshAll();
-        });
-
-        btnUpdate.setOnClickListener(v -> {
-            String idStr = etOrderId.getText().toString();
-            String name = etOrderName.getText().toString();
-            String status = etOrderStatus.getText().toString();
-            if (TextUtils.isEmpty(idStr) || TextUtils.isEmpty(name) || TextUtils.isEmpty(status)) {
-                Toast.makeText(this, "Enter ID, Name, Status", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            int updated = dbHelper.updateOrder(Long.parseLong(idStr), name, status);
-            if (updated > 0) {
-                Toast.makeText(this, "Order Updated", Toast.LENGTH_SHORT).show();
-                refreshAll();
-            } else {
-                Toast.makeText(this, "Order not found", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnDelete.setOnClickListener(v -> {
-            String idStr = etOrderId.getText().toString();
-            if (TextUtils.isEmpty(idStr)) {
-                Toast.makeText(this, "Enter Order ID", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            int deleted = dbHelper.deleteOrder(Long.parseLong(idStr));
-            if (deleted > 0) {
-                Toast.makeText(this, "Order Deleted", Toast.LENGTH_SHORT).show();
-                refreshAll();
-            } else {
-                Toast.makeText(this, "Order not found", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnViewPending.setOnClickListener(v -> {
-            List<Order> pending = dbHelper.getPendingOrders();
-            adapter.updateList(pending);
-        });
-
-        btnViewCompleted.setOnClickListener(v -> {
-            List<Order> completed = dbHelper.getCompletedOrders();
-            adapter.updateList(completed);
-        });
-
-        btnViewAll.setOnClickListener(v -> refreshAll());
+        showPendingOrders(branchId);
     }
 
-    private void refreshAll() {
-        adapter.updateList(dbHelper.getAllOrders());
+    private void showPendingOrders(int branchId) {
+        llOrdersContainer.removeAllViews();
+
+        List<Order> pendingOrders = dbHelper.getPendingOrdersByBranch(branchId);
+
+        if (pendingOrders.isEmpty()) {
+            TextView empty = new TextView(this);
+            empty.setText("No pending orders");
+            empty.setGravity(Gravity.CENTER);
+            empty.setPadding(0, 50, 0, 0);
+            llOrdersContainer.addView(empty);
+            return;
+        }
+
+        for (Order order : pendingOrders) {
+            LinearLayout orderLayout = new LinearLayout(this);
+            orderLayout.setOrientation(LinearLayout.VERTICAL);
+            orderLayout.setPadding(24, 24, 24, 24);
+            orderLayout.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
+
+            TextView tvOrder = new TextView(this);
+            tvOrder.setText("Order ID: " + order.getId() +
+                    "\nName: " + order.getName() +
+                    "\nStatus: " + order.getStatus());
+            tvOrder.setPadding(0, 0, 0, 16);
+            orderLayout.addView(tvOrder);
+
+            LinearLayout btnLayout = new LinearLayout(this);
+            btnLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            Button btnReady = new Button(this);
+            btnReady.setText("Order Ready");
+            btnReady.setOnClickListener(v -> {
+                dbHelper.updateOrderStatus(order.getId(), "completed");
+                Toast.makeText(this, "Order marked as ready", Toast.LENGTH_SHORT).show();
+                showPendingOrders(branchId);
+            });
+
+            Button btnReject = new Button(this);
+            btnReject.setText("Reject");
+            btnReject.setOnClickListener(v -> {
+                dbHelper.deleteOrder(order.getId());
+                Toast.makeText(this, "Order rejected", Toast.LENGTH_SHORT).show();
+                showPendingOrders(branchId);
+            });
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
+            );
+            params.setMargins(8, 0, 8, 0);
+            btnReady.setLayoutParams(params);
+            btnReject.setLayoutParams(params);
+
+            btnLayout.addView(btnReady);
+            btnLayout.addView(btnReject);
+            orderLayout.addView(btnLayout);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(0, 0, 0, 24);
+            orderLayout.setLayoutParams(layoutParams);
+
+            llOrdersContainer.addView(orderLayout);
+        }
     }
 }

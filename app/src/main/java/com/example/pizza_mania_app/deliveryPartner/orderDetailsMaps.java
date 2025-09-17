@@ -62,7 +62,7 @@ public class orderDetailsMaps extends AppCompatActivity implements OnMapReadyCal
     private Marker driverMarker, customerMarker;
     private Polyline routePolyline;
     private LatLng customerLocation, driverLocation;
-    private int orderId;
+    private int orderId, partnerId;
     private boolean routeRequested = false;
     private ExecutorService executorService;
     private Handler mainHandler;
@@ -75,7 +75,7 @@ public class orderDetailsMaps extends AppCompatActivity implements OnMapReadyCal
         txtDistanceTime = findViewById(R.id.txtDistanceTime);
         acceptBtn = findViewById(R.id.acceptOrder);
         orderId = getIntent().getIntExtra("orderId", -1);
-
+        partnerId = getIntent().getIntExtra("partnerId", -1);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         executorService = Executors.newSingleThreadExecutor();
         mainHandler = new Handler(Looper.getMainLooper());
@@ -112,6 +112,7 @@ public class orderDetailsMaps extends AppCompatActivity implements OnMapReadyCal
                             Intent intent = new Intent(this, ongoingOrderMaps.class);
                             intent.putExtra("orderId", orderId);
                             intent.putExtra("driverLat", driverLat);
+                            intent.putExtra("partnerId",partnerId);
                             intent.putExtra("driverLng", driverLng);
                             intent.putExtra("customerLat", customerLocation.latitude);
                             intent.putExtra("customerLng", customerLocation.longitude);

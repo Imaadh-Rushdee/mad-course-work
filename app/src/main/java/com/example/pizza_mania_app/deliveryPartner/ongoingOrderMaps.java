@@ -37,6 +37,7 @@ public class ongoingOrderMaps extends FragmentActivity implements OnMapReadyCall
     private static final int LOCATION_PERMISSION_REQUEST = 1001;
 
     private GoogleMap mMap;
+    private int partnerId;
     private TextView statusText;
     private Button readyButton, completedButton;
     private ImageView readyImage, completeImage;
@@ -57,6 +58,7 @@ public class ongoingOrderMaps extends FragmentActivity implements OnMapReadyCall
         // Receive customer location properly from Intent
         double customerLat = getIntent().getDoubleExtra("customerLat", 0.0);
         double customerLng = getIntent().getDoubleExtra("customerLng", 0.0);
+        partnerId = getIntent().getIntExtra("partnerId", 1);
         customerLocation = new LatLng(customerLat, customerLng);
 
         statusText = findViewById(R.id.statusText);
@@ -200,6 +202,7 @@ public class ongoingOrderMaps extends FragmentActivity implements OnMapReadyCall
         // Pass the orderId (make sure orderId is sent from previous activity)
         int orderId = getIntent().getIntExtra("orderId", -1);
         intent.putExtra("orderId", orderId);
+        intent.putExtra("partnerId", partnerId);
         startActivity(intent);
 
         finish();

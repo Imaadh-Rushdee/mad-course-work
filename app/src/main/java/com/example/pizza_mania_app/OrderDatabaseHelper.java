@@ -13,12 +13,12 @@ import java.util.List;
 
 public class OrderDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "orders.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "pizza_mania.db";
+    private static final int DATABASE_VERSION = 2;
     private static final String TABLE_ORDERS = "orders";
     private static final String COL_ID = "id";
-    private static final String COL_NAME = "name";
-    private static final String COL_STATUS = "status";
+    private static final String COL_NAME = "customer_name";
+    private static final String COL_ORDER_STATUS = "order_status";
 
     public OrderDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -29,65 +29,59 @@ public class OrderDatabaseHelper extends SQLiteOpenHelper {
         String createTable = "CREATE TABLE " + TABLE_ORDERS + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_NAME + " TEXT, " +
-                COL_STATUS + " TEXT)";
+                COL_ORDER_STATUS + " TEXT, " +
+                "branch_id INTEGER)";
         db.execSQL(createTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ORDERS);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + TABLE_ORDERS + " ADD COLUMN " + COL_ORDER_STATUS + " TEXT DEFAULT 'pending'");
+        }
     }
 
-    public long addOrder(String name, String status) {
+    // Add a new order
+    public long addOrder(String name, String status, int branchId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_NAME, name);
-        values.put(COL_STATUS, status);
+        values.put(COL_ORDER_STATUS, status);
+        values.put("branch_id", branchId);
         return db.insert(TABLE_ORDERS, null, values);
     }
 
-    public int updateOrder(long id, String name, String status) {
+    // Update order status
+    public int updateOrderStatus(long id, String status) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COL_NAME, name);
-        values.put(COL_STATUS, status);
+        values.put(COL_ORDER_STATUS, status);
         return db.update(TABLE_ORDERS, values, COL_ID + "=?", new String[]{String.valueOf(id)});
     }
 
+    // Delete order
     public int deleteOrder(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_ORDERS, COL_ID + "=?", new String[]{String.valueOf(id)});
     }
 
-    public List<Order> getAllOrders() {
+    // Get pending orders for a specific branch
+    public List<Order> getPendingOrdersByBranch(int branchId) {
         List<Order> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_ORDERS, null);
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_ORDERS + " WHERE " + COL_ORDER_STATUS + "=? AND branch_id=?",
+                new String[]{"pending", String.valueOf(branchId)}
+        );
+
         if (cursor.moveToFirst()) {
             do {
-                list.add(new Order(cursor.getLong(0), cursor.getString(1), cursor.getString(2)));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return list;
-    }
-
-    public List<Order> getPendingOrders() {
-        return getOrdersByStatus("Pending");
-    }
-
-    public List<Order> getCompletedOrders() {
-        return getOrdersByStatus("Completed");
-    }
-
-    private List<Order> getOrdersByStatus(String status) {
-        List<Order> list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_ORDERS + " WHERE " + COL_STATUS + "=?", new String[]{status});
-        if (cursor.moveToFirst()) {
-            do {
-                list.add(new Order(cursor.getLong(0), cursor.getString(1), cursor.getString(2)));
+                list.add(new Order(
+                        cursor.getLong(cursor.getColumnIndexOrThrow("id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COL_ORDER_STATUS))
+                ));
             } while (cursor.moveToNext());
         }
         cursor.close();

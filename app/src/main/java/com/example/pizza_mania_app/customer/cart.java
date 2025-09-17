@@ -1,6 +1,5 @@
 package com.example.pizza_mania_app.customer;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,7 +28,6 @@ public class cart extends AppCompatActivity {
     private TextView tvTotal, tvOrderType, tvAddress, tvBranch;
     private Button btnBack, btnPlaceOrder;
     private String userId, orderType, address, branch;
-    private double lat = 0.0, lng = 0.0;
 
     private final HashMap<Integer, Double> itemTotals = new HashMap<>();
 
@@ -43,8 +41,6 @@ public class cart extends AppCompatActivity {
         orderType = getIntent().getStringExtra("orderType");
         address = getIntent().getStringExtra("userAddress");
         branch = getIntent().getStringExtra("branch");
-        lat = getIntent().getDoubleExtra("lat", 0.0);
-        lng = getIntent().getDoubleExtra("lng", 0.0);
 
         cartContainer = findViewById(R.id.cartContainer);
         tvTotal = findViewById(R.id.tvTotal);
@@ -69,12 +65,25 @@ public class cart extends AppCompatActivity {
                 Toast.makeText(this, "Please select at least one item.", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             Intent intent = new Intent(cart.this, confirmOrder.class);
             intent.putExtra("userId", userId);
             intent.putExtra("orderType", orderType);
             intent.putExtra("userAddress", address);
+            intent.putExtra("branchId", getBranchIdFromName(branch)); // pass branch ID
             startActivity(intent);
         });
+    }
+
+    private int getBranchIdFromName(String branchName) {
+        if (branchName == null) return -1;
+        Cursor cursor = db.rawQuery("SELECT branch_id FROM branches WHERE branch_name=?", new String[]{branchName});
+        int id = -1;
+        if (cursor.moveToFirst()) {
+            id = cursor.getInt(0);
+        }
+        cursor.close();
+        return id;
     }
 
     private void loadCartItems(String userId) {

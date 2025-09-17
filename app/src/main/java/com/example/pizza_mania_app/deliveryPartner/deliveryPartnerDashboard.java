@@ -153,6 +153,7 @@ public class deliveryPartnerDashboard extends AppCompatActivity {
     private void onClickOrder(int clickedOrderId) {
         Intent intent = new Intent(this, orderDetailsMaps.class);
         intent.putExtra("orderId", clickedOrderId);
+        intent.putExtra("partnerId", partnerId);
         startActivity(intent);
     }
 }

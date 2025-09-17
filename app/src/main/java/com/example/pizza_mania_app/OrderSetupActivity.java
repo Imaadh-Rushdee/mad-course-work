@@ -94,9 +94,9 @@ public class OrderSetupActivity extends AppCompatActivity {
                     Toast.makeText(this, "Please select a delivery address", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                launchMenu("Delivery", selectedBranchId, selectedAddress, selectedLatLng);
+                launchMenu("delivery", selectedBranchId, selectedAddress, selectedLatLng);
             } else if (radioPickup.isChecked()) {
-                launchMenu("Pickup", selectedBranchId, selectedAddress, null);
+                launchMenu("pickup", selectedBranchId, selectedAddress, null);
             } else {
                 Toast.makeText(this, "Please select an order type", Toast.LENGTH_SHORT).show();
             }
