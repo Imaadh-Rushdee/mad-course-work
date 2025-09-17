@@ -148,7 +148,7 @@ public class welcomePage extends AppCompatActivity {
             db.insert("branches", null, values);
 
             values.clear();
-            values.put("branch_name", "Kandy Branch");
+            values.put("branch_name", "Galle Branch");
             values.put("branch_address", "Kandy City, Sri Lanka");
             db.insert("branches", null, values);
         }
